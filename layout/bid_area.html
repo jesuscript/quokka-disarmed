@@ -1,0 +1,28 @@
+<template name="bid_area">
+  <section id="bid-area" class="chrome-padded">
+    <div class="field">
+      <label for="stake">
+        Stake
+      </label>
+      <input type="text" id="stake" class="numeric-input"/>
+    </div>
+    <div class="field">
+      <label for="range-size">
+        Range size
+      </label>
+      <span class="indicator">{{range_size}}</span>
+    </div>
+    <div class="field">
+      <label for="chance">
+        Chance to win
+      </label>
+      <span class="indicator">{{chance_to_win}}</span>
+    </div>
+    <div class="field">
+      <label for="reward">
+        Reward
+      </label>
+      <span class="indicator"></span>
+    </div>
+  </section>
+</template>
