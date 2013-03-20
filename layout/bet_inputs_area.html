@@ -1,10 +1,10 @@
-<template name="bid_area">
-  <section id="bid-inputs-area" class="chrome-padded">
+<template name="bet_inputs_area">
+  <section id="bet-inputs-area" class="chrome-padded">
     <div class="field">
       <label for="stake">
         Stake
       </label>
-      <input type="text" id="stake" class="numeric-input"/>
+      <input type="text" id="stake" class="numeric-input" value="{{current_stake}}"/>
     </div>
     <div class="field">
       <label for="range-size">
@@ -20,12 +20,12 @@
     </div>
     <div class="field">
       <label for="reward">
-        Reward
+        Potential reward
       </label>
-      <span class="indicator"></span>
+      <span class="indicator">{{reward}}</span>
+    </div>
+    <div class="field">
+      <a class="btn bet-btn btn-inverse" href="#">Bet</a>
     </div>
   </section>
-  <div class="slider-container">
-    <div id="bid-slider"></div>
-  </div>
 </template>
