@@ -1,6 +1,8 @@
 Meteor.startup(function(){
   var player;
-  
+
+
+  /*
   if(Session.get("player_id") === undefined){
     player = collections.Players.findOne();
 
@@ -10,4 +12,5 @@ Meteor.startup(function(){
       Session.set("player_id", player._id);
     }
   }
+  */
 });

@@ -1,0 +1,3 @@
+memorise = function(funcs){
+
+}

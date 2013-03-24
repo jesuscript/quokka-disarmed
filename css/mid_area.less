@@ -1,34 +1,59 @@
+@import "lib/mixins.less";
+
 #mid-area{
     width: 1011px;
     margin: 0 auto;
 }
 #bet-inputs-area{
-    width: 210px;
+    width: 250px;
     float:left;
     label{
         display: inline-block;
         width: 110px;
         text-align: right;
         padding-right: 10px;
+        font-size: 14px;
     }
     label, input[type="text"], .indicator{
-        vertical-align:middle;
         margin: 0;
+    }
+    label[for="bet-inputs-stake"]{
+        font-size:18px;
+        font-weight: bold;
+        height: 30px;
+        line-height: 30px;
     }
     .field{
         margin-bottom: 10px;
+        .clearfix();
     }
-    .bet-btn{
+    .bet-btn, .new-game-btn{
         display:block;
-        margin-top: 20px;
+    }
+    .indicator, .sub-block{
+        float: right;
+        width: 110px;
+        word-wrap: break-word;
     }
     .indicator{
         font-size: 18px;
     }
+    #bet-inputs-stake-indicator{
+        width: 100px;
+        line-height: 24px;
+        text-align: center;
+        font-weight:normal;
+        font-size: 14px;
+    }
+    .button-container{
+        height: 30px;
+        margin-top: 20px;
+    }
 }
 
 .slider-container{
-    width: 750px;
+    width: 710px;
     float: right;
     margin-top: 70px;
 }
+

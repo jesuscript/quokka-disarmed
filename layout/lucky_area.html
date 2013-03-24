@@ -1,0 +1,10 @@
+<template name="lucky_area">
+  <div id="lucky-area" class="chrome-padded {{ area_class }}">
+    {{#if spinning}}
+    {{#constant}} <span class="spinning-number"></span> {{/constant}}
+    {{/if}}
+    {{#if lucky_number}}
+    <span class="lucky-number badge badge-success">{{lucky_number}}</span>
+    {{/if}}
+  </div>
+</template>
