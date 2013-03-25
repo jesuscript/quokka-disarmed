@@ -37,7 +37,7 @@
     },
     reward: function(){
       return Math.round(Session.get("current_stake") * (1 / getChanceToWin(true)) * 100000000) /
-        100000000;
+        100000000; //TODO create a function to do that shared between client and server
     }
   });
 
@@ -50,14 +50,15 @@
         $("#bet-inputs-stake-indicator").show("slide", {direction: "left"}, 200);
 
         $("#bet-inputs-area .bet-btn").parent().fadeOut(400, function(){
-          Meteor.call("submitBet", function(err, result){
-            Session.set("bet", {
-              status: "processed",
-              result: result
-            });
+          Meteor.call("submitBet", Session.get("current_player_id"), Session.get("current_stake"),
+                      BetSlider.getSliderVals(), function(err, result){
+                        Session.set("bet", {
+                          status: "processed",
+                          result: result
+                        });
 
-            $("#bet-inputs-area .new-game-btn").parent().fadeIn(400);
-          });
+                        $("#bet-inputs-area .new-game-btn").parent().fadeIn(400);
+                      });
         });
       });
     },

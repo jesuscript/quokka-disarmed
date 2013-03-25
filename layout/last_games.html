@@ -1,0 +1,52 @@
+<template name="last_games">
+  <section id="last-games" class="chrome-padded">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <th>
+          Username
+        </th>
+        <th>
+          Range
+        </th>
+        <th>
+          Lucky number
+        </th>
+        <th>
+          Amount
+        </th>
+        <th>
+          Reward
+        </th>
+        <th>
+          Date and time
+        </th>
+      </thead>
+      <tbody>
+        {{#each games}}
+        <tr>
+            <td>
+              {{username}}
+            </td>
+            <td>
+              {{#with range}}
+              [{{min}}, {{max}}]
+              {{/with}}
+            </td>
+            <td>
+              {{lucky_number}}
+            </td>
+            <td>
+              {{amount}}
+            </td>
+            <td>
+              {{reward}}
+            </td>
+            <td>
+              {{date_and_time timestamp}}
+            </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </section>
+</template>

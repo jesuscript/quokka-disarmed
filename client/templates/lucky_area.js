@@ -22,24 +22,31 @@
         return bet.result.lucky_number;
       }
     },
-    area_class: function(){
+    area_class: function(){ // TODO try out my memorise thingy
       var status = Session.get("bet") && Session.get("bet").status;
       var visible = Session.get("lucky_area_visible");
 
-      if(status == "new" && visible) return "animated-hide";
-      if(status == "submitted"){
+      if(status == "new"){
+        if(visible){
+          setTimeout(function(){
+            Session.set("lucky_area_visible", false);
+          }, 500);
+          return "animated-hide";
+        }else{
+          return "hidden-d";
+        }
+      }
+      if(status == "submitted" || Session.get("lucky_area_spinning")){
         Session.set("lucky_area_visible", true);
         return "animated-show";
       }
       if(status == "processed") return "";
-
-      return "hidden-d";
     }
   });
 
 
   function handleSpinning(){
-    var min_spin_time = 1000;
+    var min_spin_time = 500;
     var spinned_for = 0;
     var spin_delay = 50;
     var bet = Session.get("bet");

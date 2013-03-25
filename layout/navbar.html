@@ -1,10 +1,46 @@
 <template name="navbar">
-  <div class="navbar">
+  <div class="navbar" id="navbar">
     <div class="navbar-inner">
       <a class="brand" href="#">QUOKKA</a>
       <ul class="nav">
-        
+        <li class="divider-vertical"></li>
+        {{#if signed_in }}
+        <li>
+          <p class="navbar-text username">
+            {{username}}
+          </p>
+        </li>
+        <li>
+          <p class="navbar-text">
+            Balance: {{balance}}
+          </p>
+        </li>
+        {{else}}
+        <li>
+          <a class="signin-btn" href="#">Sign in</a>
+        </li>
+        <li>
+          <a class="signup-btn" href="#">New account</a>
+        </li>
+        {{/if}}
       </ul>
     </div>
   </div>
+</template>
+
+<template name="signup_dialog">
+  <div id="signup-dialog" class="fade-in">
+    <div class="shroud">
+    </div>
+    <div class="modal chrome-padded">
+      <div class="field">
+        <input type="text" placeholder="username" class="username"/>
+      </div>
+      <a class="submit-btn btn btn-inverse">Sign up</a>
+      <a class="cancel">Cancel</a>
+    </div>
+  </div>
+</template>
+
+<template name="signin">
 </template>

@@ -1,0 +1,26 @@
+.fade-in{
+    -webkit-animation: fade-in 500ms;
+    -webkit-animation-fill-mode: forwards;
+}
+.fade-out{
+    -webkit-animation: fade-out 500ms;
+    -webkit-animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes fade-in{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fade-out{
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
+}
