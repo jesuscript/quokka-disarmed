@@ -13,3 +13,17 @@ templateHelpers.memorise = function(funcs){
   return wrapped;
 }
 
+/*
+var foo = templateHelpers.memorise({
+  a: function(last_value){
+    if(last_value)  return ++last_value;
+    return 1;
+  }
+});
+
+
+console.log(foo.a());
+console.log(foo.a());
+console.log(foo.a());
+console.log(foo.a())
+*/
