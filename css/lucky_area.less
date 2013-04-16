@@ -3,13 +3,6 @@
     text-align: center;
     height: 40px;
     position: relative;
-    &.animated-show{
-        -webkit-animation: slide-right 500ms;
-    }
-    &.animated-hide{
-        -webkit-animation: slide-left 500ms;
-        -webkit-animation-fill-mode: forwards;
-    }
     .spinning-number, .lucky-number{
         font-size:18px;
         line-height: 40px;
@@ -17,20 +10,3 @@
     }
 }
 
-@-webkit-keyframes slide-right{
-    from {
-        left: -100%;
-    }
-    to{
-        left: 0px;
-    }
-}
-
-@-webkit-keyframes slide-left{
-    from{
-        left: 0px;
-    }
-    to{
-        left: -100%;
-    }
-}

@@ -6,6 +6,13 @@
     -webkit-animation: fade-out 500ms;
     -webkit-animation-fill-mode: forwards;
 }
+.slide-right{
+    -webkit-animation: slide-right 500ms;
+}
+.animated-hide{
+    -webkit-animation: slide-left 500ms;
+    -webkit-animation-fill-mode: forwards;
+}
 
 @-webkit-keyframes fade-in{
     from{
@@ -22,5 +29,23 @@
     }
     to{
         opacity: 0;
+    }
+}
+
+@-webkit-keyframes slide-right{
+    from {
+        left: -100%;
+    }
+    to{
+        left: 0px;
+    }
+}
+
+@-webkit-keyframes slide-left{
+    from{
+        left: 0px;
+    }
+    to{
+        left: -100%;
     }
 }

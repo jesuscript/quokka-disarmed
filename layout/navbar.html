@@ -4,7 +4,7 @@
       <a class="brand" href="#">QUOKKA</a>
       <ul class="nav">
         <li class="divider-vertical"></li>
-        {{#if signed_in }}
+        {{#if currentUser }}
         <li>
           <p class="navbar-text username">
             {{username}}
@@ -20,7 +20,7 @@
           <a class="signin-btn" href="#">Sign in</a>
         </li>
         <li>
-          <a class="signup-btn" href="#">New account</a>
+          <a class="signup-btn" href="#">Create account</a>
         </li>
         {{/if}}
       </ul>
@@ -32,11 +32,17 @@
   <div id="signup-dialog" class="fade-in">
     <div class="shroud">
     </div>
-    <div class="modal chrome-padded">
+    <div class="modal chrome-padded animated-show">
       <div class="field">
-        <input type="text" placeholder="username" class="username"/>
+        <input type="text" placeholder="username" name="username"/>
       </div>
-      <a class="submit-btn btn btn-inverse">Sign up</a>
+      <div class="field">
+        <input type="password" placeholder="password" name="password"/>
+      </div>
+      <div class="field">
+        <input type="text" placeholder="email (optional)" name="email"/>
+      </div>
+      <a class="submit-btn btn btn-inverse">Create</a>
       <a class="cancel">Cancel</a>
     </div>
   </div>

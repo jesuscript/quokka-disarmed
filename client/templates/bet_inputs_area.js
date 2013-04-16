@@ -30,14 +30,17 @@
       }
     },
     range_size: function(){
-      return getRangeSize();
+      var vals = BetSlider.getSliderVals();
+      return vals ? vals.max - vals.min + 1 : 0;
     },
-    chance_to_win: function(){
-      return Math.round(getChanceToWin() * 10000) / 100 + "%";
-    },
-    reward: function(){
-      return Math.round(Session.get("current_stake") * (1 / getChanceToWin(true)) * 100000000) /
-        100000000; //TODO create a function to do that shared between client and server
+    max_reward: function(){
+      var range = BetSlider.getSliderVals();
+
+      if(range){
+        var claim = Game.claim(Session.get("current_stake"), range.min, range.max);
+        
+        return Math.round(claim * 100000000) / 100000000;
+      }
     }
   });
 
@@ -47,19 +50,22 @@
     },
     "click .bet-btn": function(){
       $("#bet-inputs-stake").hide("slide", {direction: "left"}, 200, function(){
+        var range = BetSlider.getSliderVals();
+          
         $("#bet-inputs-stake-indicator").show("slide", {direction: "left"}, 200);
 
-        $("#bet-inputs-area .bet-btn").parent().fadeOut(400, function(){
-          Meteor.call("submitBet", Session.get("current_player_id"), Session.get("current_stake"),
-                      BetSlider.getSliderVals(), function(err, result){
-                        Session.set("bet", {
-                          status: "processed",
-                          result: result
-                        });
+        $("#bet-inputs-area .bet-btn").parent().addClass("fade-out");
 
-                        $("#bet-inputs-area .new-game-btn").parent().fadeIn(400);
-                      });
-        });
+        Meteor.call(
+          "submitBet",
+          Session.get("current_stake"),
+          range.min,
+          range.max,
+          function(err, response){
+            //codez here?
+          }
+        );
+
       });
     },
     "click .new-game-btn": function(){
@@ -70,7 +76,6 @@
           Session.set("bet",{
             status: "new"
           });
-          Session.set("current_stake", 0);
           
           $("#bet-inputs-area .bet-btn").parent().fadeIn(400);
         });
@@ -86,20 +91,6 @@
     }
   });
 
-  function getRangeSize(){
-    var vals = BetSlider.getSliderVals();
-    return vals ? vals.max - vals.min + 1 : 0;
-  }
-
-  function getChanceToWin(computing_reward){
-    var vals = BetSlider.getSliderVals();
-
-    if(vals){
-      return getRangeSize() / (computing_reward ? 100 : 101)
-    }else{
-      return 0;
-    }
-  }
 })();
 
 
