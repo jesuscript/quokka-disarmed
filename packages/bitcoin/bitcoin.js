@@ -1,0 +1,1 @@
+BITCOIN = Npm.require('bitcoin'); 

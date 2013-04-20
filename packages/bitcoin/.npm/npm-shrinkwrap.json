@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "bitcoin": {
+      "version": "1.6.2",
+      "from": "https://registry.npmjs.org/bitcoin/-/bitcoin-1.6.2.tgz",
+      "resolved": "https://registry.npmjs.org/bitcoin/-/bitcoin-1.6.2.tgz",
+      "dependencies": {
+        "deprecate": {
+          "version": "0.1.0",
+          "from": "deprecate@0.1.0",
+          "resolved": "https://registry.npmjs.org/deprecate/-/deprecate-0.1.0.tgz"
+        }
+      }
+    }
+  }
+}
