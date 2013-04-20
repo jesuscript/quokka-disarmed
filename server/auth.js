@@ -24,7 +24,7 @@ Accounts.validateNewUser(function(user){
     if(!validEmail(user.emails[0].address)){
         throw new Meteor.Error(417, "Inavalid email address")
     }
-      */
+    */
     
     return true;
 });

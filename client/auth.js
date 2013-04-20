@@ -26,8 +26,9 @@ _.extend(Auth,{
 Meteor.startup(function(){
     //Deps.autorun(function(){
         if(!Meteor.loggingIn()){
+            if(Meteor.user())
             Auth.signinAnonymously();
         }
-        console.log("huy");
+        
     //});
 });
