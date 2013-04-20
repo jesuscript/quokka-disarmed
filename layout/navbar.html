@@ -15,6 +15,9 @@
             Balance: {{balance}}
           </p>
         </li>
+        <li>
+          <a class="signout-btn" href="#">Sign out</a>
+        </li>
         {{else}}
         <li>
           <a class="signin-btn" href="#">Sign in</a>
@@ -29,18 +32,24 @@
 </template>
 
 <template name="signup_dialog">
-  <div id="signup-dialog" class="fade-in">
+  <div id="signup-dialog" class="fade-in auth-dialog">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded animated-show">
+      {{#if error}}
+      <div class="alert alert-error">
+        {{error}}
+      </div>
+      {{/if}}
       <div class="field">
-        <input type="text" placeholder="username" name="username"/>
+        <input type="text" placeholder="Username" name="username"/>
+      </div>
+      <div class="field with-hint">
+        <input type="password" placeholder="Password" name="password"/>
+        <span class="hint">Must be at least 6 characters long</span>
       </div>
       <div class="field">
-        <input type="password" placeholder="password" name="password"/>
-      </div>
-      <div class="field">
-        <input type="text" placeholder="email (optional)" name="email"/>
+        <input type="text" placeholder="Email (optional)" name="email"/>
       </div>
       <a class="submit-btn btn btn-inverse">Create</a>
       <a class="cancel">Cancel</a>
@@ -48,5 +57,24 @@
   </div>
 </template>
 
-<template name="signin">
+<template name="signin_dialog">
+  <div id="signin-dialog" class="fade-in auth-dialog">
+    <div class="shroud">
+    </div>
+    <div class="modal chrome-padded animated-show">
+      {{#if error}}
+      <div class="alert alert-error fade-in">
+        {{error}}
+      </div>
+      {{/if}}
+      <div class="field">
+        <input type="text" placeholder="Username or email" name="user"/>
+      </div>
+      <div class="field">
+        <input type="password" placeholder="Password" name="password"/>
+      </div>
+      <a class="submit-btn btn btn-inverse">Sign in</a>
+      <a class="cancel">Cancel</a>
+    </div>
+  </div>
 </template>
