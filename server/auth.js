@@ -1,5 +1,10 @@
 Accounts.onCreateUser(function(options,user){
-    user.balance = 10;
+    _.extend(user,{
+        anonymous: options.anonymous,
+        balance: 10
+    });
+
+
     return user;
 });
 
@@ -15,10 +20,11 @@ Accounts.validateNewUser(function(user){
     if(user.email && Meteor.users.find({emails: {$elemMatch: {address: user.email}}}).count()){
         throw new Meteor.Error(412, "Email already exists");
     }
-      */  
+
     if(!validEmail(user.emails[0].address)){
         throw new Meteor.Error(417, "Inavalid email address")
     }
+      */
     
     return true;
 });

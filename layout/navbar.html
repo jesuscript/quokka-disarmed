@@ -7,7 +7,11 @@
         {{#if currentUser }}
         <li>
           <p class="navbar-text username">
+            {{#if anonymous}}
+            Anonymous
+            {{else}}
             {{username}}
+            {{/if}}
           </p>
         </li>
         <li>
@@ -15,9 +19,18 @@
             Balance: {{balance}}
           </p>
         </li>
+        {{#if anonymous}}
+        <li>
+          <a class="signin-btn" href="#">Sign in</a>
+        </li>
+        <li>
+          <a class="signup-btn" href="#">Create account</a>
+        </li>
+        {{else}}
         <li>
           <a class="signout-btn" href="#">Sign out</a>
         </li>
+        {{/if}}
         {{else}}
         <li>
           <a class="signin-btn" href="#">Sign in</a>
