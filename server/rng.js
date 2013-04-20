@@ -2,8 +2,6 @@
 // returns an int in the range of 1-100
 // THIS BLOCKS ON IO SO NEED TO REWRITE
 
-
-
 if (Meteor.isServer) {
 
   Meteor.methods({
