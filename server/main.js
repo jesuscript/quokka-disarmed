@@ -1,4 +1,5 @@
 var connect = Npm.require('connect');
+
 __meteor_bootstrap__.app
   .use(connect.query())
   .use(function(req, res, next) {
@@ -6,9 +7,15 @@ __meteor_bootstrap__.app
     if (req.url.search(/^\/[a-fA-F0-9]{64}$/) == 0) {
       // console.log('valid hash '+ req.url.substr(1,64) +  'found in URL, moving on');
       // if btc account exists
-      //var account = Accounts.find({hash: req.url.substr(1,64)}, {fields: {address: 1}}); // TODO: is this async?
+      var Fibers = Npm.require('fibers');
+      Fibers(function() {
+        console.log('fuck node and fuck favicons');
+      }).run(); 
+      console.log(Meteor.users.find({hash: req.url.substr(1,64)}, {fields: {depositAddress: 1}}));
       // else (doens't exist)
         // generate
+      secret = req.url.substr(1,64);  
+      console.log("A"); 
       next();
     } else {
       console.log('invalid URL, generating....');
@@ -22,3 +29,5 @@ __meteor_bootstrap__.app
       });
     }
   });
+
+    
