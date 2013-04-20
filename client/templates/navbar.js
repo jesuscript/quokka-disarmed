@@ -66,8 +66,8 @@ Template.signup_dialog.events({
             Accounts.createUser({
                 username: $("#signup-dialog [name=username]").val(),
                 password: password,
-                email: $("#signup-dialog [name=email]").val() //,
-                //secret: "captchure the url"
+                email: $("#signup-dialog [name=email]").val(),
+                token: Auth.getToken
             },function(err){
                 if(err){
                     Session.set("signup_error", err);

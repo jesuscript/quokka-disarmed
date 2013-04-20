@@ -1,7 +1,8 @@
 Accounts.onCreateUser(function(options,user){
     _.extend(user,{
         anonymous: options.anonymous,
-        balance: 10
+        balance: 10,
+        token: options.token
     });
 
 
@@ -17,14 +18,14 @@ Accounts.validateNewUser(function(user){
         throw new Meteor.Error(400, "Empty username");
     }
     /*
-    if(user.email && Meteor.users.find({emails: {$elemMatch: {address: user.email}}}).count()){
-        throw new Meteor.Error(412, "Email already exists");
-    }
+      if(user.email && Meteor.users.find({emails: {$elemMatch: {address: user.email}}}).count()){
+      throw new Meteor.Error(412, "Email already exists");
+      }
+    */
 
     if(!validEmail(user.emails[0].address)){
         throw new Meteor.Error(417, "Inavalid email address")
     }
-    */
     
     return true;
 });

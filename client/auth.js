@@ -1,13 +1,17 @@
 Auth = {};
 
 _.extend(Auth,{
+    createUser: function(options,callback){
+        
+    },
     signupAnonymously: function(){
         var token = this.getToken();
         
         Accounts.createUser({
             username: token,
             password: token,
-            anonymous: true
+            anonymous: true,
+            token: token
         });
     },
     signinAnonymously: function(){
@@ -24,11 +28,11 @@ _.extend(Auth,{
 });
 
 Meteor.startup(function(){
-    //Deps.autorun(function(){
-        if(!Meteor.loggingIn()){
-            if(Meteor.user())
-            Auth.signinAnonymously();
+    Deps.autorun(function(){
+        var user =Meteor.user()
+            
+        if(!Meteor.loggingIn() && (!user || user.token != Auth.getToken())){
+            //Auth.signinAnonymously();
         }
-        
-    //});
+    });
 });
