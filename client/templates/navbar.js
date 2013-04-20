@@ -3,6 +3,9 @@ Template.navbar.helpers({
     username: function(){
         return Meteor.user().username;
     },
+    anonymous: function(){
+        return Meteor.user().anonymous;
+    },
     balance: function(){
         return Meteor.user().balance;
     }
@@ -18,7 +21,9 @@ Template.navbar.events({
         Session.set("signin_error");
     },
     "click .signout-btn": function(){
-        Meteor.logout();
+        Meteor.logout(function(){
+            Auth.signupAnonymously();
+        });
     }
 });
 
@@ -116,7 +121,7 @@ function removeDialog(tmpl, callback){
         Spark.finalize(node);
         $(node).remove();
 
-        callback();
+        callback && callback();
     }, 500);
 }
 
