@@ -67,7 +67,7 @@ Template.signup_dialog.events({
                 username: $("#signup-dialog [name=username]").val(),
                 password: password,
                 email: $("#signup-dialog [name=email]").val(),
-                token: Auth.getToken
+                token: Auth.getToken()
             },function(err){
                 if(err){
                     Session.set("signup_error", err);

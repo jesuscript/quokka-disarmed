@@ -5,7 +5,6 @@ Accounts.onCreateUser(function(options,user){
         token: options.token
     });
 
-
     return user;
 });
 
@@ -17,16 +16,15 @@ Accounts.validateNewUser(function(user){
     if(user.username === undefined || user.username.length < 1){
         throw new Meteor.Error(400, "Empty username");
     }
-    /*
-      if(user.email && Meteor.users.find({emails: {$elemMatch: {address: user.email}}}).count()){
-      throw new Meteor.Error(412, "Email already exists");
-      }
-    */
 
-    if(!validEmail(user.emails[0].address)){
+    if(user.emails && user.emails.length && !validEmail(user.emails[0].address)){
         throw new Meteor.Error(417, "Inavalid email address")
     }
-    
+
+    if(Meteor.users.findOne({token: user.token})){
+        throw new Meteor.Error(401, "Reserved URL");
+    }
+
     return true;
 });
 
@@ -35,4 +33,3 @@ function validEmail(email){
 
     return re.test(email);
 }
-
