@@ -1,10 +1,14 @@
-<template name="switchAnonymousAccDialog">
+<template name="switchAccDialog">
     <div id="switch-anonymous-acc-dialog" class="fade-in auth-dialog">
         <div class="shroud">
         </div>
         <div class="modal chrome-padded">
             <div class="field important">
+                {{#if anonymous}}
                 You are about to switch to another anonymous account. [TODO: improve the copy]
+                {{else}}
+                You are about to switch to an anonymous account.
+                {{/if}}
             </div>
             <a class="js-confirm btn btn-inverse pull-left half">Confirm</a>
             <a class="js-cancel btn pull-right half">Cancel</a>
@@ -12,16 +16,3 @@
     </div>
 </template>
 
-<template name="switchProtectedAccDialog">
-    <div id="switch-protected-acc-dialog" class="fade-in auth-dialog">
-        <div class="shroud">
-        </div>
-        <div class="modal chrome-padded">
-            <div class="field important">
-                You are about to start playing anonymously. [TODO: improve the copy]
-            </div>
-            <a class="js-confirm btn btn-inverse pull-left half">Confirm</a>
-            <a class="js-cancel btn pull-right half">Cancel</a>
-        </div>
-    </div>
-</template>

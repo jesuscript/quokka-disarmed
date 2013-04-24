@@ -36,7 +36,8 @@ Meteor.startup(function(){
     Deps.autorun(function(){
         if(Session.get("auth_lock") || Meteor.loggingIn()) return;
 
-        Session.set("auth_lock", true);
+        //TODO: good for now, but should find a better way of handling that motherfuck
+        Session.set("auth_lock", true); 
         
         var user = Meteor.user();
 
@@ -44,9 +45,9 @@ Meteor.startup(function(){
             if(user.token == Auth.getToken()) return;
 
             if(user.anonymous){
-                $("body").append(Meteor.render( Template.switchAnonymousAccDialog ));
+                $("body").append(Meteor.render( Template.switchAccDialog ));
             }else{
-                $("body").append(Meteor.render( Template.switchProtectedAccDialog ))
+                $("body").append(Meteor.render( Template.switchAccDialog ))
             }
         }else{
             Auth.playAnonymously();

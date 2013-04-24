@@ -1,4 +1,10 @@
-var events = {
+Template.switchAccDialog.helpers({
+    "anonymous": function(){
+        return Meteor.user() && Meteor.user().anonymous
+    }
+});
+
+Template.switchAccDialog.events({
     "click .js-cancel, click .shroud": function(e,tmpl){
         e.preventDefault();
         
@@ -16,9 +22,6 @@ var events = {
 
         TemplateHelpers.removeDialog(tmpl);
     }
-};
+});
 
-Template.switchAnonymousAccDialog.events(events);
-
-Template.switchProtectedAccDialog.events(events);
 

@@ -1,9 +1,18 @@
 Accounts.onCreateUser(function(options,user){
-    _.extend(user,{
-        anonymous: !!options.anonymous,
-        balance: 10,
-        token: options.token
-    });
+    if(options.anonymous){
+        _.extend(user,{
+            balance: 10,
+            token: options.token
+        });
+    }else if(Meteor.user()){
+        user = _.extend(Meteor.user(), {
+            username: user.username,
+            services: user.services,
+            emails: user.emails
+        });
+    }
+
+    user.anonymous = !!options.anonymous;
 
     return user;
 });
@@ -24,6 +33,8 @@ Accounts.validateNewUser(function(user){
     if(Meteor.users.findOne({token: user.token, anonymous: false})){
         throw new Meteor.Error(401, "Reserved URL");
     }
+
+    Meteor.users.remove({_id: user._id});
 
     return true;
 });
