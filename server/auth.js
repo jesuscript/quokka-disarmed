@@ -1,7 +1,7 @@
 Accounts.onCreateUser(function(options,user){
     if(options.anonymous){
         _.extend(user,{
-            balance: 10,
+            balance: 0,
             token: options.token
         });
     }else if(Meteor.user()){

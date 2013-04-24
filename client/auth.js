@@ -4,32 +4,40 @@ Auth = {
         var token = this.getToken();
 
         Meteor.loginWithPassword(token, token, function(err){
-            if(err && err.error == 403){
-                Accounts.createUser({
-                    username: token,
-                    password: token,
-                    anonymous: true,
-                    token: token
-                },function(err){
-                    if(err && err.error == 401){
-                        console.log("signup error: ", err);
-                    }
-                });
+            if(err){
+                if(err.error == 403){
+                    Accounts.createUser({
+                        username: token,
+                        password: token,
+                        anonymous: true,
+                        token: token
+                    },function(err){
+                        if(err){
+                            if(err.error == 401){
+                                $("body").append(Meteor.render( Template.reservedTokenDialog ))
+                            }else{
+                                console.log("unhandled signup error ", err);
+                            }
+                        }
+                    });
+                }else{
+                    console.log("unhandled signin error: ", err);
+                }
             }
-            console.log("signin err: ", err);
+            
         });
     },
     getToken: function(){
-        var re = re = /[^/]*$/;
-        var url = document.URL;
-        return url.match(re)[0].substr(0,64);
-    },
-    showPlayAnonymouslyDialog: function(){
-        console.log("TODO: showPlayAnonymouslyDialog");
-    },
-    showReservedUrlDialog: function(){
-        console.log("TODO: showReservedUrlDialog ");
-    }
+        var re = /[^/]*$/;
+    var url = document.URL;
+    return url.match(re)[0].substr(0,64);
+},
+showPlayAnonymouslyDialog: function(){
+    console.log("TODO: showPlayAnonymouslyDialog");
+},
+showReservedUrlDialog: function(){
+    console.log("TODO: showReservedUrlDialog ");
+}
 };
 
 Meteor.startup(function(){
