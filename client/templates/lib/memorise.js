@@ -1,4 +1,4 @@
-templateHelpers.memorise = function(funcs){
+TemplateHelpers.memorise = function(funcs){
   var wrapped = {};
 
   _.each(funcs, function(val, key){

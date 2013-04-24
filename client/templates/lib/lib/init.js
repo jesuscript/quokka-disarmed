@@ -1,1 +1,1 @@
-templateHelpers = {};
+TemplateHelpers = {};

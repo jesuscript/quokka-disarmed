@@ -1,30 +1,28 @@
 Auth = {
-    signupError: null,
-    signinError: null,
-    signupAnonymously: function(){
-        var self = this;
-        var token = this.getToken();
-        
-        Accounts.createUser({
-            username: token,
-            password: token,
-            anonymous: true,
-            token: token
-        },function(err){
-            self.signupError = err;
-        });
-    },
-    signinAnonymously: function(){
+    playAnonymously: function(){
         var self = this;
         var token = this.getToken();
 
-        Meteor.loginWithPassword(token, token,function(err){
-            self.error = err;
+        Meteor.loginWithPassword(token, token, function(err){
+            if(err && err.error == 403){
+                Accounts.createUser({
+                    username: token,
+                    password: token,
+                    anonymous: true,
+                    token: token
+                },function(err){
+                    if(err && err.error == 401){
+                        console.log("signup error: ", err);
+                    }
+                });
+            }
+            console.log("signin err: ", err);
         });
     },
     getToken: function(){
+        var re = re = /[^/]*$/;
         var url = document.URL;
-        return url.slice(url.length - 64, url.length);
+        return url.match(re)[0].substr(0,64);
     },
     showPlayAnonymouslyDialog: function(){
         console.log("TODO: showPlayAnonymouslyDialog");
@@ -36,7 +34,9 @@ Auth = {
 
 Meteor.startup(function(){
     Deps.autorun(function(){
-        if(Meteor.loggingIn()) return;
+        if(Session.get("auth_lock") || Meteor.loggingIn()) return;
+
+        Session.set("auth_lock", true);
         
         var user = Meteor.user();
 
@@ -44,27 +44,12 @@ Meteor.startup(function(){
             if(user.token == Auth.getToken()) return;
 
             if(user.anonymous){
-                console.log("TODO: dialog You are about to switch to a different account Yes/No");
+                $("body").append(Meteor.render( Template.switchAnonymousAccDialog ));
             }else{
-                console.log("TODO: dialog Please sign out if you want to play anonymously");
+                $("body").append(Meteor.render( Template.switchProtectedAccDialog ))
             }
-
         }else{
-            if(Auth.signupError){
-                if(Auth.signupError.error == 401){
-                    console.log("TODO dialog [sign in][play anonymously]");
-                }else{
-                    console.log("unhandled signup error", Auth.sinupError);
-                }
-            }else if (Auth.sininError){
-                if(Auth.signinError.error == 403){
-                    Auth.signupAnonymously();
-                }else{
-                    console.log("unhandled signin error", Auth.sinupError);
-                }
-            }else{
-                Auth.signinAnonymously();
-            }
+            Auth.playAnonymously();
         }
     });
 });

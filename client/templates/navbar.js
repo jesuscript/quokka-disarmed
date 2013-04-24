@@ -22,7 +22,7 @@ Template.navbar.events({
     },
     "click .signout-btn": function(){
         Meteor.logout(function(){
-            Auth.signupAnonymously();
+            Auth.playAnonymously();
         });
     }
 });
@@ -50,7 +50,7 @@ Template.signup_dialog.helpers({
 
 Template.signup_dialog.events({
     "click .cancel, click .shroud": function(e, tmpl){
-        removeDialog(tmpl,function(){
+        TemplateHelpers.removeDialog(tmpl,function(){
             Session.set("signup_error");
         });
     },
@@ -73,7 +73,7 @@ Template.signup_dialog.events({
                     Session.set("signup_error", err);
                 }else{
                     Session.set("signup_error");
-                    removeDialog(tmpl);
+                    TemplateHelpers.removeDialog(tmpl);
                 }
             });
         }
@@ -92,7 +92,7 @@ Template.signin_dialog.helpers({
 
 Template.signin_dialog.events({
     "click .cancel, click .shroud": function(e, tmpl){
-        removeDialog(tmpl, function(){
+        TemplateHelpers.removeDialog(tmpl, function(){
             Session.set("signin_error");
         });
     },
@@ -104,7 +104,7 @@ Template.signin_dialog.events({
                 Session.set("signin_error", err);
             }else{
                 Session.set("signin_error");
-                removeDialog(tmpl);
+                TemplateHelpers.removeDialog(tmpl);
             }
         });
     }
@@ -112,16 +112,4 @@ Template.signin_dialog.events({
 
 
 
-function removeDialog(tmpl, callback){
-    var node = tmpl.firstNode;
-
-    $(node).addClass("fade-out");
-    
-    setTimeout(function(){
-        Spark.finalize(node);
-        $(node).remove();
-
-        callback && callback();
-    }, 500);
-}
 

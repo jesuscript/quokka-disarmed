@@ -1,6 +1,6 @@
 Accounts.onCreateUser(function(options,user){
     _.extend(user,{
-        anonymous: options.anonymous,
+        anonymous: !!options.anonymous,
         balance: 10,
         token: options.token
     });
@@ -21,7 +21,7 @@ Accounts.validateNewUser(function(user){
         throw new Meteor.Error(417, "Inavalid email address")
     }
 
-    if(Meteor.users.findOne({token: user.token})){
+    if(Meteor.users.findOne({token: user.token, anonymous: false})){
         throw new Meteor.Error(401, "Reserved URL");
     }
 
