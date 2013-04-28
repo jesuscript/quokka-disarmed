@@ -1,10 +1,10 @@
 <template name="navbar">
   <div class="navbar" id="navbar">
     <div class="navbar-inner">
-      <a class="brand" href="#">QUOKKA</a>
+      <a class="brand" href="#">BITTHEODDS</a>
       <ul class="nav">
         <li class="divider-vertical"></li>
-        {{#if currentUser }}
+        {{#if currentUser }} {{! Meteor handlebar helper, returns Meteor.user() }}
         <li>
           <p class="navbar-text username">
             {{#if anonymous}}

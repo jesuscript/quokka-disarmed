@@ -1,6 +1,6 @@
 
 // returns an int in the range of 1-100
-// THIS BLOCKS ON IO SO NEED TO REWRITE
+// THIS BLOCKS ON IO 
 
 if (Meteor.isServer) {
 

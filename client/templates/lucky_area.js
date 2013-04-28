@@ -13,7 +13,7 @@
   Template.lucky_area.helpers({
     spinning: function(){
       return Session.get("lucky_area_spinning") ||
-        Session.get("bet") && Session.get("bet").status == "submitte"; 
+        Session.get("bet") && Session.get("bet").status == "submitted"; 
     },
     lucky_number: function(){
       var bet = Session.get("bet");
@@ -53,12 +53,9 @@
 
     var spin = function(){
       var bet_in = Session.get("bet");
-
       if(spinned_for < min_spin_time || (bet_in && bet_in.status == "submitted")){
         $(".spinning-number").text(Math.floor(Math.random()*101));
-        
         spinned_for += spin_delay;
-        setTimeout(function(){spin()}, spin_delay);
       }else{
         Session.set("lucky_area_spinning", false); // stop spinning
       }
