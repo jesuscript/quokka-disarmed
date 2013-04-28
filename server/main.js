@@ -1,3 +1,4 @@
+// triggers page redirect on load, guaranteeing unique token
 var connect = Npm.require('connect');
 var fibers = Npm.require('fibers');
 
@@ -26,3 +27,12 @@ __meteor_bootstrap__.app.use(connect.query()).use(function(req, res, next) {
     }
 });
 
+
+// creates btcd connection object
+// TODO: currently pointing at testnet connection details
+var btcdClient = new BITCOIN.Client({ //none of this is accessible from outside the local machine
+  host: 'localhost',
+  port: 18332, 
+  user: 'bitcoinrpc',
+  pass: 'pass'
+});

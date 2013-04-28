@@ -1,5 +1,4 @@
-#TODO: need to finish this
-#  Folder Structure
+#  Project Structure
 
 ##Hierarchy
 
@@ -11,25 +10,38 @@ README.md -- to make github happy
 * /.meteor -- meteor engine
 
 * /client 
- * /stylesheets -- page.css for global layout, app.css for everything else
- * /views -- broken down by template, with page.html/page.js as the topmost file
- * app.js -- the main code base
- * methods.js -- client methods
- * scheduler.js -- calls to Meteor.setInterval()
- * startup.js -- the Meteor.startup() block
+ * /lib -- client-side js libraries
+ * /lib/lib -- jquery libraries
+ * /templates -- js for each one of the handlebar templates
+ * /templates/lib -- shared js between templates
+ * auth.js -- client-side authentication framework
+ * bet_slider.js -- the lucky slider client side code
+ * main.js -- 'playpen' area, should be blank most of the time
 
-* /common
- * collections.js -- Collections declarations
+* /css -- all css goes there
+ * /lib -- shared css functionnality
+ * /jqrangeslider -- the lucky slider theme
+ * application.css -- application-wide css file
 
-* /lib -- Third party libraries
- * logger.js -- Observatory initialization
+* /db
+ * collections.js -- collections publishing and security
+ * helpers.js -- helpers for db-related functions
 
-* /public -- web assets
+* /layout -- HTML files, one per handlebar block
 
-* /server -- 
- * methods.js -- server side methods called using Meteor.call()
- * publishing.js -- Collection publishing and security
- * scheduler.js -- calls to Meteor.setInterval()
- * startup.js -- the Meteor.startup() block
+* /lib -- shared client & server third party .js libraries
+
+* /packages -- mandatory location of npm dependencies
+ * /bitcoin -- npm-bitcoin pulled from npm repo by meteor
+
+* /public -- web assets that end up in static/cacheable
+ * /img -- images
+
+* /server -- server only code
+ * /methods -- server methods and their specific functions, callable by the client side
+ * auth.js -- user creation and validation
+ * main.js -- server startup: page redirection, io connection strings, etc (executed once on initial page load)
+ * scheduler.js -- calls to Meteor.setInterval() - NOT IMPLEMENTED YET
+
 
 

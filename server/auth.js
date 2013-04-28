@@ -1,9 +1,11 @@
 Accounts.onCreateUser(function(options,user){
     if(options.anonymous){
+        console.log('CREATING USER');
         _.extend(user,{
             balance: 0,
-            token: options.token
-        });
+            token: options.token,
+            depositAddress: getNewBitcoinAddress()
+    });
     }else if(Meteor.user()){
         user = _.extend(Meteor.user(), {
             username: user.username,
@@ -27,7 +29,7 @@ Accounts.validateNewUser(function(user){
     }
 
     if(user.emails && user.emails.length && !validEmail(user.emails[0].address)){
-        throw new Meteor.Error(417, "Inavalid email address")
+        throw new Meteor.Error(417, "Invalid email address")
     }
 
     if(Meteor.users.findOne({token: user.token, anonymous: false})){
@@ -42,4 +44,8 @@ Accounts.validateNewUser(function(user){
 function validEmail(email){
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
+}
+
+function getNewBitcoinAddress() {
+    return 'abc'
 }

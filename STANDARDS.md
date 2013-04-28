@@ -1,11 +1,10 @@
-#TODO: need to finish this
 #  Standards
 
-* Files == under\_scores\_everywhere
-* Templates == cameCase
-* .js functions == camelCase, acronyms in UPPERCASE
-* .js variables == under\_scores, all lowercase, '\_private\_variable' or 'jquery'
-* .js Classes == Client (singular)
-* selectors == class-name
-* Mongo fields == this_field
+* Files == under\_scores\_everywhere, all lowercase except for human-readable files
+* Templates == camelCase, acronyms in UPPERCASE
+* js functions == camelCase, acronyms in UPPERCASE
+* js variables == camelCase, acronyms in UPPERCASE
+* js Classes == Clients (plural)
+* css selectors == class-name
+* Mongo fields == camelCase, acronyms in UPPERCASE
 

@@ -1,3 +1,4 @@
+//TODO: get this into its proper folder
 Game = {
   maxRange: 99,
   commission: 0.02, // %

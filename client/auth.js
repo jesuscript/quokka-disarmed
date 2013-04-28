@@ -27,18 +27,22 @@ Auth = {
             
         });
     },
+
     getToken: function(){
         var re = /[^/]*$/;
-    var url = document.URL;
-    return url.match(re)[0].substr(0,64);
-},
-showPlayAnonymouslyDialog: function(){
-    console.log("TODO: showPlayAnonymouslyDialog");
-},
-showReservedUrlDialog: function(){
-    console.log("TODO: showReservedUrlDialog ");
-}
+        var url = document.URL;
+        return url.match(re)[0].substr(0,64);
+    },
+
+    showPlayAnonymouslyDialog: function(){
+        console.log("TODO: showPlayAnonymouslyDialog");
+    },
+
+    showReservedUrlDialog: function(){
+        console.log("TODO: showReservedUrlDialog ");
+    }
 };
+
 
 Meteor.startup(function(){
     Deps.autorun(function(){

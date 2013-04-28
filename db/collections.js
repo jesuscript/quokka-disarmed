@@ -10,9 +10,9 @@ if(Meteor.isServer){
     Meteor.publish("games", function(){
         return collections.Games.find({},{sort: {timestamp: -1}, limit: 100}); //TODO sort by date
     });
-    Meteor.publish("userData", function(){
+    Meteor.publish("userData", function(){  // built-in meteor collection
         return Meteor.users.find({_id: this.userId},
-                                 {fields: {'balance': 1, 'anonymous': 1, 'token': 1}});
+                                 {fields: {'balance': 1, 'anonymous': 1, 'token': 1, 'depositAddress': 1}});
     });
 }
 
