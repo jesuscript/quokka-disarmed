@@ -1,22 +1,19 @@
 Accounts.onCreateUser(function(options,user){
-    if(options.anonymous){
-        console.log('CREATING USER');
-        _.extend(user,{
-            balance: 0,
-            token: options.token,
-            depositAddress: getNewBitcoinAddress()
+  if(options.anonymous){
+    _.extend(user,{
+        balance: 0,
+        token: options.token,
+        depositAddress: getNewBitcoinAddress()
     });
-    }else if(Meteor.user()){
-        user = _.extend(Meteor.user(), {
-            username: user.username,
-            services: user.services,
-            emails: user.emails
-        });
-    }
-
-    user.anonymous = !!options.anonymous;
-
-    return user;
+  }else if(Meteor.user()){
+    user = _.extend(Meteor.user(), {
+        username: user.username,
+        services: user.services,
+        emails: user.emails
+    });
+  }
+  user.anonymous = !!options.anonymous;
+  return user;
 });
 
 Accounts.validateNewUser(function(user){
@@ -41,11 +38,20 @@ Accounts.validateNewUser(function(user){
     return true;
 });
 
+
 function validEmail(email){
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 }
 
+
 function getNewBitcoinAddress() {
-    return 'abc'
+  var Future = Npm.require("fibers/future");
+  var fut = new Future();
+  btcdClient.getNewAddress(function(err, data) {
+    if (err) return console.log(err);
+    fut.ret(data);
+  });
+  return fut.wait();
 }
+
