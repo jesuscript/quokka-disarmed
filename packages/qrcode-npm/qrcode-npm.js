@@ -1,1 +1,0 @@
-QRCODE = Npm.require('qrcode-npm'); 
