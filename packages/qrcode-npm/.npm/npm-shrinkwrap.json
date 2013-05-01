@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "qrcode-npm": {
+      "version": "0.0.3",
+      "from": "qrcode-npm@0.0.3"
+    }
+  }
+}
