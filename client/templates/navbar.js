@@ -1,4 +1,3 @@
-
 Template.navbar.helpers({
     username: function(){
         return Meteor.user().username;
@@ -35,7 +34,6 @@ Template.signin_dialog.rendered = function(){
 
 Template.signup_dialog.rendered = function(){
     $(".auth-dialog input").first().focus();
-    
 }
 
 Template.signup_dialog.helpers({

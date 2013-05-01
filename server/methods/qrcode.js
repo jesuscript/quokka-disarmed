@@ -1,5 +1,5 @@
 Meteor.methods({
-  displayQRTest: function(){
+  getQrImg: function(){
   	var qr = QRCODE.qrcode(5, 'M');
 		qr.addData('bitcoin:' + Meteor.user().depositAddress + '?label=bittheodds.com');
 		qr.make();
