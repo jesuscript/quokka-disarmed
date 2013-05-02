@@ -6,7 +6,7 @@ Template.navbar.helpers({
         return Meteor.user().anonymous;
     },
     balance: function(){
-        return Meteor.user().balance;
+        return intToBtc(Meteor.user().balance);
     }
 });
 
