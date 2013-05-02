@@ -1,4 +1,4 @@
-Template.qrCode.helpers({
+Template.qrcode_dialog.helpers({
   qrCode: function(){
     Meteor.call('getQrImg', function(err, qrCode) {
       if (err) console.log(err);
@@ -12,9 +12,8 @@ Template.qrCode.helpers({
   }
 });
 
-Template.qrCode.events({
+Template.qrcode_dialog.events({
 	'click #dia-close-btn, click .close, click .shroud': function(e, tmpl){
-		e.preventDefault();
 		TemplateHelpers.removeDialog(tmpl);
 	}
 });

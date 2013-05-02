@@ -1,5 +1,5 @@
-<template name="qrCode">
-    <div id="qr_code" class="fade-in qr-code-dialog">
+<template name="qrcode_dialog">
+    <div id="qrcode-dialog" class="fade-in">
         <div class="shroud">
         </div>
         <div class="modal chrome-padded">
@@ -9,9 +9,9 @@
             </div>
             <div class="field">
                 {{{qrCode}}}
+                <h4>{{depositAddress}}</h4>
             </div>
-            <h4>{{depositAddress}}</h4>
-             <div class="modal-footer">
+            <div class="modal-footer">
               <a href="#" id="dia-close-btn" class="btn">Close</a>
             </div>
         </div>

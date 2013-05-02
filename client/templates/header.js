@@ -7,7 +7,7 @@ Template.header.helpers({
 
 Template.header.events({
   'click img' : function () {
-	  $("body").append(Meteor.render(Template.qrCode))
+	  $("body").append(Meteor.render(Template.qrcode_dialog))
 	}
 });
 
