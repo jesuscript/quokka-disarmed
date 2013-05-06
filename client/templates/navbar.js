@@ -13,6 +13,7 @@ Template.navbar.helpers({
 Template.navbar.events({
     "click .withdraw-btn": function(){
         $("body").append(Meteor.render( Template.withdraw_dialog ));
+        Session.set("withdraw_error");
     },
     "click .signup-btn": function(){
         $("body").append(Meteor.render( Template.signup_dialog ));
@@ -30,6 +31,10 @@ Template.navbar.events({
 });
 
 
+Template.navbar.rendered = function(){ 
+  (function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/9ZCCMSCPqP7NR9ZWuQzteQ.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})()
+}
+
 Template.signin_dialog.rendered = function(){ 
     $(".auth-dialog input").first().focus();
     
@@ -38,6 +43,11 @@ Template.signin_dialog.rendered = function(){
 Template.signup_dialog.rendered = function(){
     $(".auth-dialog input").first().focus();
 }
+
+Template.withdraw_dialog.rendered = function(){
+    $(".withdraw-dialog input").first().focus();
+}
+
 
 Template.signup_dialog.helpers({
     error: function(){
@@ -82,69 +92,34 @@ Template.signup_dialog.events({
 });
 
 Template.signin_dialog.helpers({
-    error: function(){
-        var err = Session.get("signin_error");
-        if(err){
-            if(err.error ==400) return "Empty username or email";
-            return Session.get("signin_error").reason;
-        }
+  error: function(){
+    var err = Session.get("signin_error");
+    if(err){
+      if(err.error ==400) return "Empty username or email"; // TODO: what's this for?
+      return Session.get("signin_error").reason;
     }
+  }
 });
 
 Template.signin_dialog.events({
     "click .cancel, click .shroud": function(e, tmpl){
-        TemplateHelpers.removeDialog(tmpl, function(){
-            Session.set("signin_error");
-        });
+      TemplateHelpers.removeDialog(tmpl, function(){
+        Session.set("signin_error");
+      });
     },
     "click .submit-btn": function(e, tmpl){
-        var user = $("#signin-dialog [name=user]").val();
-        var password = $("#signin-dialog [name=password]").val();
-        Meteor.loginWithPassword(user, password,function(err){
-            if(err){
-                Session.set("signin_error", err);
-            }else{
-                Session.set("signin_error");
-                TemplateHelpers.removeDialog(tmpl);
-            }
-        });
+      var user = $("#signin-dialog [name=user]").val();
+      var password = $("#signin-dialog [name=password]").val();
+      Meteor.loginWithPassword(user, password,function(err){
+        if(err){
+          Session.set("signin_error", err);
+        }else{
+          Session.set("signin_error");
+          TemplateHelpers.removeDialog(tmpl);
+        }
+      });
     }
 });
 
-
-// TODO: not sure how to improve this, but it sure is ugly. See issue #15.
-Template.withdraw_dialog.helpers({
-  depositsConfirmed: function(){
-    Meteor.call('areDepositsConfirmed', function(err, depositsConfirmed) {
-      if (err) console.log(err);
-      Session.set('depositsConfirmed', depositsConfirmed);
-    }); 
-    if (Session.get('depositsConfirmed'))
-      return Session.get('depositsConfirmed');
-  },
-  outstandingDeposits: function(){
-    Meteor.call('getOutstandingDeposits', function(err, outstandingDeposits) {
-      if (err) console.log(err);
-      Session.set('outstandingDeposits', outstandingDeposits);
-    }); 
-    if (Session.get('outstandingDeposits'))
-      return intToBtc(Session.get('outstandingDeposits'));
-  },
-  timeToValidateDeposits: function(){
-    Meteor.call('getTimeToValidateDeposits', function(err, timeToValidateDeposits) {
-      if (err) console.log(err);
-      Session.set('timeToValidateDeposits', timeToValidateDeposits);
-    }); 
-    if (Session.get('timeToValidateDeposits'))
-      return Session.get('timeToValidateDeposits');
-  }
-});
-
-
-Template.withdraw_dialog.events({
-    'click #dia-close-btn, click .close, click .shroud': function(e, tmpl){
-        TemplateHelpers.removeDialog(tmpl);
-    }
-});
 
 

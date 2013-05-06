@@ -21,3 +21,6 @@ if(Meteor.isClient){
     Meteor.subscribe("games");
     Meteor.subscribe("userData");
 }
+
+// the user shouldn't have the right to modify anything within their user profiles
+Meteor.users.deny({update: function () { return true; }});

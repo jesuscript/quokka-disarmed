@@ -1,7 +1,7 @@
 <template name="navbar">
   <div class="navbar" id="navbar">
     <div class="navbar-inner">
-      <a class="brand" href="#">BITTHEODDS</a>
+      <a class="brand" href="#">฿ITTHEODDS</a>
       <ul class="nav">
         <li class="divider-vertical"></li>
         {{#if currentUser }} {{! Meteor handlebar helper, returns Meteor.user() }}
@@ -16,7 +16,7 @@
         </li>
         <li>
           <p class="navbar-text">
-            Balance: {{balance}}
+            Balance: ฿{{balance}}
           </p>
         </li>
         {{#if anonymous}}
@@ -41,6 +41,9 @@
         {{/if}}
         <li>
           <a class="withdraw-btn" href="#">Withdraw</a>
+        </li>
+        <li>
+          <a href="javascript:void(0)" data-uv-lightbox="classic_widget" data-uv-mode="full" data-uv-primary-color="#cc6d00" data-uv-link-color="#007dbf" data-uv-default-mode="support" data-uv-forum-id="205470">Feedback &amp; Support</a>
         </li>
       </ul>
     </div>
@@ -95,38 +98,4 @@
   </div>
 </template>
 
-
-<template name="withdraw_dialog">
-  <div id="withdraw-dialog" class="fade-in">
-    <div class="shroud">
-    </div>
-    <div class="modal chrome-padded">
-      {{#if depositsConfirmed}}
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Withdraw funds</h3>
-      </div>
-      <div class="modal-body">
-        interface here
-      </div>
-      <div class="modal-footer">
-        <a href="#" id="dia-close-btn" class="btn">Close</a>
-      </div>
-      {{else}}
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Please wait</h3>
-      </div>
-      <div class="modal-body">
-        <p>You recently sent funds to your deposit address.</p>
-        <p>Before you can withdraw these funds as well as any associated winnings, you must first wait for them to be confirmed by the bitcoin network.</p>
-        <p>A total of BTC {{outstandingDeposits}} still needs to be confirmed. Withdrawals will be available to you in approximately {{timeToValidateDeposits}} minutes.</p>
-      </div>
-      <div class="modal-footer">
-        <a href="#" id="dia-close-btn" class="btn">Close</a>
-      </div>      
-      {{/if}}
-    </div>
-  </div>
-</template>
 

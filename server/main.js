@@ -1,3 +1,6 @@
+// set up SMTP gateway
+// process.env.MAIL_URL = 'smtp://johan.daugh%40gmail.com:nueFnRWLFIRZxwx30WxljA@smtp.mandrillapp.com:587';
+
 // triggers page redirect on load, guaranteeing unique token
 var connect = Npm.require('connect');
 
@@ -26,3 +29,7 @@ btcdClient = new BITCOIN.Client({ //none of this is accessible from outside the 
   user: 'bitcoinrpc',
   pass: 'pass'
 });
+
+
+
+
