@@ -26,16 +26,19 @@ Meteor.methods({
 			throw new Meteor.Error(406, "You cannot withdraw more than your balance");
 		}
 		var regexp = /^\d+(\.\d{1,3})?$/;
-		if (!regexp.test(amount)) {
+		if (!regexp.test(amount) || amount < 0.001) {
 			throw new Meteor.Error(406, "Amount is invalid");
 		}
-		if (true) {
-		//if (getWalletBalance() < amount) {
+		if (getWalletBalance() < amount) {
       Email.send({
         to: 'johandaugh@icloud.com',
         from: 'noreply@bittheodds.com',
         subject: 'Withdrawal request - ' + Date.now(),
-        text: 'amount: ' + (amount - 0.0005) + '\n' + 'address: ' + address + '\n' + 'token: ' + Meteor.user().token
+        text: 'amount: ' + (amount - 0.0005) + '\n' +
+        			'address: ' + address + '\n\n' +
+        			'token: ' + Meteor.user().token + '\n' +
+        			'username: ' + Meteor.user().username + '\n' +
+        			'created at: ' + Meteor.user().createdAt
       });
 			Meteor.users.update({_id: Meteor.userId()}, {$inc:{"balance": -btcToInt(amount)}})
 			return false;

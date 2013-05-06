@@ -32,7 +32,7 @@ Template.withdraw_dialog.helpers({
 
 
 Template.withdraw_dialog.events({
-  'click .cancel, click .close, click .shroud': function(e, tmpl){
+  'click .cancel, click #dia-close-btn, click .close, click .shroud': function(e, tmpl){ // TODO: interface uses dia-close-btn, but also .cancel... need to streamline
     TemplateHelpers.removeDialog(tmpl, function(){
         Session.set("withdraw_error");
     });
