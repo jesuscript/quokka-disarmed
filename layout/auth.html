@@ -1,31 +1,31 @@
 <template name="switchAccDialog">
-    <div id="switch-anonymous-acc-dialog" class="fade-in auth-dialog">
-        <div class="shroud">
-        </div>
-        <div class="modal chrome-padded">
-            <div class="field important">
-                {{#if anonymous}}
-                You are about to switch to another anonymous account. [TODO: improve the copy]
-                {{else}}
-                You are about to switch to an anonymous account.
-                {{/if}}
-            </div>
-            <a class="js-confirm btn btn-inverse pull-left half">Confirm</a>
-            <a class="js-cancel btn pull-right half">Cancel</a>
-        </div>
+  <div id="switch-anonymous-acc-dialog" class="fade-in auth-dialog">
+    <div class="shroud">
     </div>
+    <div class="modal chrome-padded">
+      <div class="field important">
+        {{#if anonymous}}
+        You are about to switch to another anonymous account. [TODO: improve the copy]
+        {{else}}
+        You are about to switch to an anonymous account.
+        {{/if}}
+      </div>
+      <a class="js-confirm btn btn-inverse pull-left half">Confirm</a>
+      <a class="js-cancel btn pull-right half">Cancel</a>
+    </div>
+  </div>
 </template>
 
 <template name="reservedTokenDialog">
-    <div id="reserved-token-dialog" class="fade-in auth-dialog">
-        <div class="shroud">
-        </div>
-        <div class="modal chrome-padded">
-            <div class="field">
-                This URL is reserved. In order to use it you need to sign in.
-            </div>
-            <a class="js-sign-in btn btn-inverse pull-left half">Sign in</a>
-            <a class="js-cancel btn pull-right half">Cancel</a>
-        </div>
+  <div id="reserved-token-dialog" class="fade-in auth-dialog">
+    <div class="shroud">
     </div>
+    <div class="modal chrome-padded">
+      <div class="field">
+        This URL is reserved. In order to use it you need to sign in.
+      </div>
+      <a class="js-sign-in btn btn-inverse pull-left half">Sign in</a>
+      <a class="js-cancel btn pull-right half">Cancel</a>
+    </div>
+  </div>
 </template>

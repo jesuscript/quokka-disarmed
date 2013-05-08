@@ -1,12 +1,12 @@
 TemplateHelpers.removeDialog = function(tmpl, callback){
-    var node = tmpl.firstNode;
+  var node = tmpl.firstNode;
 
-    $(node).addClass("fade-out");
-    
-    setTimeout(function(){
-        Spark.finalize(node);
-        $(node).remove();
+  $(node).addClass("fade-out");
+  
+  setTimeout(function(){
+    Spark.finalize(node);
+    $(node).remove();
 
-        callback && callback();
-    }, 500);
+    callback && callback();
+  }, 500);
 }

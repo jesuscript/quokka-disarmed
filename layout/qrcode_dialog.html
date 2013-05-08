@@ -1,20 +1,20 @@
 <template name="qrcode_dialog">
-    <div id="qrcode-dialog" class="fade-in">
-        <div class="shroud">
-        </div>
-        <div class="modal chrome-padded">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h3>QR Code</h3>
-            </div>
-            <div class="field">
-                {{{qrCode}}}
-                <h4>{{depositAddress}}</h4>
-            </div>
-            <div class="modal-footer">
-              <a href="#" id="dia-close-btn" class="btn">Close</a>
-            </div>
-        </div>
+  <div id="qrcode-dialog" class="fade-in">
+    <div class="shroud">
     </div>
+    <div class="modal chrome-padded">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>QR Code</h3>
+      </div>
+      <div class="field">
+        {{{qrCode}}}
+        <h4>{{depositAddress}}</h4>
+      </div>
+      <div class="modal-footer">
+        <a href="#" id="dia-close-btn" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
 </template>
 

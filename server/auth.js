@@ -1,15 +1,15 @@
 Accounts.onCreateUser(function(options,user){
   if(options.anonymous){
     _.extend(user,{
-        balance: 0,
-        token: options.token,
-        depositAddress: getNewBitcoinAddress()
+      balance: 0,
+      token: options.token,
+      depositAddress: getNewBitcoinAddress()
     });
   }else if(Meteor.user()){
     user = _.extend(Meteor.user(), {
-        username: user.username,
-        services: user.services,
-        emails: user.emails
+      username: user.username,
+      services: user.services,
+      emails: user.emails
     });
   }
   user.anonymous = !!options.anonymous;
@@ -17,25 +17,25 @@ Accounts.onCreateUser(function(options,user){
 });
 
 Accounts.validateNewUser(function(user){
-    if(Meteor.users.find({username: user.username}).count()){
-        throw new Meteor.Error(409, "Username is in use");
-    }
+  if(Meteor.users.find({username: user.username}).count()){
+    throw new Meteor.Error(409, "Username is in use");
+  }
 
-    if(user.username === undefined || user.username.length < 1){
-        throw new Meteor.Error(400, "Empty username");
-    }
+  if(user.username === undefined || user.username.length < 1){
+    throw new Meteor.Error(400, "Empty username");
+  }
 
-    if(user.emails && user.emails.length && !validEmail(user.emails[0].address)){
-        throw new Meteor.Error(417, "Invalid email address")
-    }
+  if(user.emails && user.emails.length && !validEmail(user.emails[0].address)){
+    throw new Meteor.Error(417, "Invalid email address")
+  }
 
-    if(Meteor.users.findOne({token: user.token, anonymous: false})){
-        throw new Meteor.Error(401, "Reserved URL");
-    }
+  if(Meteor.users.findOne({token: user.token, anonymous: false})){
+    throw new Meteor.Error(401, "Reserved URL");
+  }
 
-    Meteor.users.remove({_id: user._id});
+  Meteor.users.remove({_id: user._id});
 
-    return true;
+  return true;
 });
 
 
