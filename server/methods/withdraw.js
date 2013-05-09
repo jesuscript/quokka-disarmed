@@ -38,7 +38,8 @@ Meteor.methods({
         			'address: ' + address + '\n\n' +
         			'token: ' + Meteor.user().token + '\n' +
         			'username: ' + Meteor.user().username + '\n' +
-        			'created at: ' + Meteor.user().createdAt
+        			'created at: ' + Meteor.user().createdAt + '\n' +
+              'deposit address: ' + Meteor.user().depositAddress
       });
 			Meteor.users.update({_id: Meteor.userId()}, {$inc:{"balance": -btcToInt(amount)}})
 			return false;
