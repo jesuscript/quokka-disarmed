@@ -9,7 +9,6 @@ Template.switchAccDialog.events({
     e.preventDefault();
     
     if(Meteor.user()){
-      console.log(Meteor.user().token);
       document.location.href = '/' + Meteor.user().token;
     }
     
@@ -21,18 +20,5 @@ Template.switchAccDialog.events({
     Auth.playAnonymously();
 
     TemplateHelpers.removeDialog(tmpl);
-  }
-});
-
-Template.reservedTokenDialog.events({
-  "click .js-sign-in": function(e,tmpl){
-    e.preventDefault();
-    TemplateHelpers.removeDialog(tmpl,function(){
-      $("body").append(Meteor.render(Template.signin_dialog));
-      Session.set("signin_error");
-    });
-  },
-  "click .js-cancel, click .shroud": function(){
-    document.location.href = '/';
   }
 });

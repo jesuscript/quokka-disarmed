@@ -1,3 +1,5 @@
+var tokenRegex = /[^/]*$/; // moved up here to prevent this shit from fucking up my indentation
+
 Auth = {
   playAnonymously: function(){
     var self = this;
@@ -14,7 +16,8 @@ Auth = {
           },function(err){
             if(err){
               if(err.error == 401){
-                $("body").append(Meteor.render( Template.reservedTokenDialog ))
+                self.showReservedTokenDialog();
+                
               }else{
                 console.log("unhandled signup error ", err);
               }
@@ -24,22 +27,31 @@ Auth = {
           console.log("unhandled signin error: ", err);
         }
       }
-        
+      
     });
   },
 
   getToken: function(){
-    var re = /[^/]*$/;
     var url = document.URL;
-    return url.match(re)[0].substr(0,64);
+    return url.match(tokenRegex)[0].substr(0,64);
   },
 
-  showPlayAnonymouslyDialog: function(){
-    console.log("TODO: showPlayAnonymouslyDialog");
+  showSignupDialog: function(){
+    $("body").append(Meteor.render( Template.signup_dialog ));
+    Session.set("signup_error");
   },
 
-  showReservedUrlDialog: function(){
-    console.log("TODO: showReservedUrlDialog ");
+  showSigninDialog: function(){
+    $("body").append(Meteor.render(Template.signin_dialog));
+    Session.set("signin_error");
+  },
+
+  showSwitchAccDialog: function(){
+    $("body").append(Meteor.render( Template.switchAccDialog ));
+  },
+
+  showReservedTokenDialog: function(){
+    $("body").append(Meteor.render( Template.reservedTokenDialog ));
   }
 };
 
@@ -56,11 +68,7 @@ Meteor.startup(function(){
     if(user){
       if(user.token == Auth.getToken()) return;
 
-      if(user.anonymous){
-        $("body").append(Meteor.render( Template.switchAccDialog ));
-      }else{
-        $("body").append(Meteor.render( Template.switchAccDialog ))
-      }
+      Auth.showSwitchAccDialog();
     }else{
       Auth.playAnonymously();
     }

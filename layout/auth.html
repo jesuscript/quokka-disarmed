@@ -29,3 +29,52 @@
     </div>
   </div>
 </template>
+
+
+<template name="signup_dialog">
+  <div id="signup-dialog" class="fade-in auth-dialog">
+    <div class="shroud">
+    </div>
+    <div class="modal chrome-padded">
+      {{#if error}}
+      <div class="alert alert-error">
+        {{error}}
+      </div>
+      {{/if}}
+      <div class="field">
+        <input type="text" placeholder="Username" name="username"/>
+      </div>
+      <div class="field with-hint">
+        <input type="password" placeholder="Password" name="password"/>
+        <span class="hint">Must be at least 6 characters long</span>
+      </div>
+      <div class="field">
+        <input type="text" placeholder="Email (optional)" name="email"/>
+      </div>
+      <a class="submit-btn btn btn-inverse pull-left two-thirds">Create</a>
+      <a class="cancel">Cancel</a>
+    </div>
+  </div>
+</template>
+
+<template name="signin_dialog">
+  <div id="signin-dialog" class="fade-in auth-dialog">
+    <div class="shroud">
+    </div>
+    <div class="modal chrome-padded">
+      {{#if error}}
+      <div class="alert alert-error fade-in">
+        {{error}}
+      </div>
+      {{/if}}
+      <div class="field">
+        <input type="text" placeholder="Username or email" name="user"/>
+      </div>
+      <div class="field">
+        <input type="password" placeholder="Password" name="password"/>
+      </div>
+      <a data-key="13" class="submit-btn btn btn-inverse pull-left two-thirds">Sign in</a>
+      <a data-key="27" class="cancel">Cancel</a>
+    </div>
+  </div>
+</template>

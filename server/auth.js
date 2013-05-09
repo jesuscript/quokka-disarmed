@@ -17,6 +17,10 @@ Accounts.onCreateUser(function(options,user){
 });
 
 Accounts.validateNewUser(function(user){
+  if(user.token.length < 1){
+    throw new Meteor.Error(411, "Empty token");
+  }
+  
   if(Meteor.users.find({username: user.username}).count()){
     throw new Meteor.Error(409, "Username is in use");
   }
@@ -46,12 +50,16 @@ function validEmail(email){
 
 
 function getNewBitcoinAddress() {
+  if(!Config.btcdEnabled) return "";
+  
   var Future = Npm.require("fibers/future");
   var fut = new Future();
+  
   btcdClient.getNewAddress(function(err, data) {
     if (err) return console.log(err);
     fut.ret(data);
   });
+  
   return fut.wait();
 }
 
