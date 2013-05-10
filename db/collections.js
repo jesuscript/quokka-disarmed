@@ -2,10 +2,14 @@ collections = {};
 
 collections.Bets = new Meteor.Collection("bets");
 collections.Games = new Meteor.Collection("games");
+collections.Flags = new Meteor.Collection("flags");
 
 if(Meteor.isServer){
   AddressPool = new Meteor.Collection("addressPool"); // server only
 
+  Meteor.publish("flags", function(){
+    return collections.Flags.find({});
+  });
   Meteor.publish("bets", function(current_game_id){
     return collections.Bets.find({}, {sort: {timestamp: -1}, limit: 1});
   });
@@ -21,6 +25,7 @@ if(Meteor.isServer){
 if(Meteor.isClient){
   Meteor.subscribe("bets");
   Meteor.subscribe("games");
+  Meteor.subscribe("flags");
   Meteor.subscribe("userData");
 }
 
