@@ -1,3 +1,0 @@
-Config = {
-  btcdEnabled: false
-};
