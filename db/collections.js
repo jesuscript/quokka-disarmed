@@ -4,6 +4,8 @@ collections.Bets = new Meteor.Collection("bets");
 collections.Games = new Meteor.Collection("games");
 
 if(Meteor.isServer){
+  AddressPool = new Meteor.Collection("addressPool"); // server only
+
   Meteor.publish("bets", function(current_game_id){
     return collections.Bets.find({}, {sort: {timestamp: -1}, limit: 1});
   });
