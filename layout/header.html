@@ -4,6 +4,11 @@
     <strong>Warning!</strong> {{message}}
   </div>
   {{/if}}
+  {{#if wrongReferrer}}
+  <div class="alert alert-error text-center">
+    <strong>Be careful! The link you clicked may belong to an account on this site. If you aren't sure this is YOUR account, please <a href="https://www.bittheodds.com/">click here</a>.</strong>
+  </div>
+  {{/if}}
   <section id="header" class="chrome-padded">
     <h1>No limit, 24/7 multiplayer betting</h1>
     <span class="description">Your deposit address: {{#if currentUser }} {{depositAddress}} <img src="./img/qr_code.png"></span> {{/if}} 
