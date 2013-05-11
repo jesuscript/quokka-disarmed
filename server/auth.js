@@ -50,16 +50,19 @@ function validEmail(email){
 
 
 function getNewBitcoinAddress() {
-  if(!Config.btcdEnabled) return "";
-  
   var Future = Npm.require("fibers/future");
   var fut = new Future();
-  
   btcdClient.getNewAddress(function(err, data) {
-    if (err) return console.log(err);
+    if (err) console.log(err);
     fut.ret(data);
   });
-  
-  return fut.wait();
+  var address = fut.wait()  
+  if (address === undefined) {
+    // if going live under load, this needs to be replaced with a call to findAndRemove()
+    var addr = AddressPool.findOne();
+    AddressPool.remove({'_id': addr._id})
+    address = addr.address;
+  }
+  return address;
 }
 
