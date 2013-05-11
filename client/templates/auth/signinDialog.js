@@ -1,6 +1,8 @@
 Template.signin_dialog.rendered = function(){
   this.find("input").focus();
-  TemplateHelpers.bindKeyboard(this);
+
+  
+  //KK: should use TemplateHelpers.bindKeyboard, but it's currently broken'
 };
 
 Template.signin_dialog.events({
@@ -10,8 +12,8 @@ Template.signin_dialog.events({
     });
   },
   "click .submit-btn": function(e, tmpl){
-    var user = $("#signin-dialog [name=user]").val();
-    var password = $("#signin-dialog [name=password]").val();
+    var user = $(tmpl.find("[name=user]")).val();
+    var password = $(tmpl.find("[name=password]")).val();
     
     Meteor.loginWithPassword(user, password,function(err){
       if(err){

@@ -12,6 +12,9 @@ _.extend(TemplateHelpers, {
     }, 500);
   },
   bindKeyboard: function(tmpl){
+    // won't trigger a click event on a template :(
+
+    /*
     var keyElMap = {};
 
     _.each(tmpl.findAll("[data-key]"),function(el){
@@ -21,8 +24,9 @@ _.extend(TemplateHelpers, {
 
     $(tmpl.firstNode).keypress(function(e){
 
-      // won't trigger a click event on a template :(
+      
       keyElMap[e.charCode] && keyElMap[e.charCode].click();
     });
+    */
   }
 });
