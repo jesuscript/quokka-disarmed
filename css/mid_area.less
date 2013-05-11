@@ -1,21 +1,12 @@
 @import "lib/mixins.lessimport";
 
-#mid-area{
-  width: 1011px;
-  margin: 0 auto;
-}
 #bet-inputs-area{
-  width: 250px;
-  float:left;
   label{
-    display: inline-block;
-    width: 110px;
-    text-align: right;
-    padding-right: 10px;
+    display: block;
+    text-align: center;
     font-size: 14px;
   }
   label, input[type="text"], .indicator{
-    margin: 0;
   }
   label[for="bet-inputs-stake"]{
     font-size:18px;
@@ -23,37 +14,26 @@
     height: 30px;
     line-height: 30px;
   }
-  .field{
-    margin-bottom: 10px;
-    .clearfix();
-  }
   .bet-btn, .new-game-btn{
     display:block;
   }
   .indicator, .sub-block{
-    float: right;
-    width: 110px;
     word-wrap: break-word;
   }
   .indicator{
+    display:block;
     font-size: 18px;
   }
   #bet-inputs-stake-indicator{
-    width: 100px;
     line-height: 24px;
     text-align: center;
     font-weight:normal;
     font-size: 14px;
   }
-  .button-container{
-    height: 30px;
-    margin-top: 20px;
-  }
 }
 
 .slider-container{
-  width: 710px;
-  float: right;
   margin-top: 40px;
+  height: 33px;
 }
 

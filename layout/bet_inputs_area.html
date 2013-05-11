@@ -1,41 +1,55 @@
 <template name="bet_inputs_area">
   <section id="bet-inputs-area" class="chrome-padded">
-    <div class="field">
-      <label for="bet-inputs-stake">
-        ฿ Stake
-      </label>
-      <div class="sub-block">
-        <input type="text" id="bet-inputs-stake" class="numeric-input" value="{{current_stake}}"/>
-        <span class="indicator hidden-d badge-warning badge" id="bet-inputs-stake-indicator">{{current_stake}}</span>
+    <div class="row-fluid">
+      <div class="span6">
+        <label for="bet-inputs-stake">
+          ฿ Stake
+        </label>
+      </div>
+      <div class="span6">
+        <div class="sub-block">
+          {{#if betLocked }}
+          <span class="indicator hidden-d badge-warning badge" id="bet-inputs-stake-indicator">{{current_stake}}</span>
+          {{else}}
+          <input type="text" id="bet-inputs-stake" class="numeric-input input-block-level" value="{{current_stake}}"/>
+          {{/if}}
+        </div>
       </div>
     </div>
-    <div class="field">
-      <label>
-        Range
-      </label>
-      <span class="indicator">[{{range}}]</span>
+    <div class="row-fluid">
+      <div class="span6">
+        <label>
+          Range
+        </label>
+      </div>
+      <div class="span6">
+        <span class="indicator">[{{range}}]</span>
+      </div>
     </div>
-    <div class="field">
-      <label>
-        Range size
-      </label>
-      <span class="indicator">{{range_size}}</span>
+    <div class="row-fluid">
+      <div class="span6">
+        <label>
+          Range size
+        </label>
+      </div>
+      <div class="span6">
+        <span class="indicator">{{range_size}}</span>
+      </div>
     </div>
-    <div class="field">
-      <label>
-        Max reward
-      </label>
-      <span class="indicator">{{max_reward}}</span>
+    <div class="row-fluid">
+      <div class="span6">
+        <label>
+          Max reward
+        </label>
+      </div>
+      <div class="span6">
+        <span class="indicator">{{max_reward}}</span>
+      </div>
     </div>
-    {{#constant}}
-    <div class="button-container">
-      <div class="field">
+    <div class="row-fluid">
+      <div class="span12">
         <a class="btn bet-btn btn-inverse" href="#">Bet</a>
       </div>
-      <div class="field hidden-d">
-        <a class="btn new-game-btn btn-inverse" href="#">Another try</a>
-      </div>
     </div>
-    {{/constant}}
   </section>
 </template>
