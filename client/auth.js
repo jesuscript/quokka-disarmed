@@ -59,15 +59,15 @@ Auth = {
 Meteor.startup(function(){
   Deps.autorun(function(){
     if(Session.get("auth_lock") || Meteor.loggingIn()) return;
+    var user = Meteor.user();
+
+    if(user && !user.token) return; // user data not published yet
 
     //TODO: good for now, but should find a better way of handling that motherfuck
     Session.set("auth_lock", true); 
     
-    var user = Meteor.user();
-
     if(user){
       if(user.token == Auth.getToken()) return;
-
       Auth.showSwitchAccDialog();
     }else{
       Auth.playAnonymously();

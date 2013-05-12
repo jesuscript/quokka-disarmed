@@ -49,24 +49,27 @@
       Session.set("current_stake", parseFloat($("#bet-inputs-stake").val(),10));
     },
     "click .bet-btn": function(){
-      $("#bet-inputs-stake").hide("slide", {direction: "left"}, 200, function(){
-        var range = BetSlider.getSliderVals();
-          
+      /*
+        $("#bet-inputs-stake").hide("slide", {direction: "left"}, 200, function(){
+        
+        
         $("#bet-inputs-stake-indicator").show("slide", {direction: "left"}, 200);
 
         $("#bet-inputs-area .bet-btn").parent().addClass("fade-out");
+      */
+      var range = BetSlider.getSliderVals();
+      
+      Meteor.call(
+        "submitBet",
+        Session.get("current_stake"),
+        range.min,
+        range.max,
+        function(err, response){
+          //codez here?
+        }
+      );
 
-        Meteor.call(
-          "submitBet",
-          Session.get("current_stake"),
-          range.min,
-          range.max,
-          function(err, response){
-            //codez here?
-          }
-        );
-
-      });
+      //});
     },
     "click .new-game-btn": function(){
       $("#bet-inputs-stake-indicator").hide("slide", {direction: "left"}, 200, function(){

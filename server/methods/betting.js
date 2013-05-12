@@ -1,8 +1,9 @@
 Meteor.methods({
   submitBet: function(amount, rangeMin, rangeMax){
     if(validBet(this.userId, amount, rangeMin, rangeMax)){
+      var currentGame = collections.Games.findOne({completed: false});
       
-      var gameId = db_helpers.current_game() && db_helpers.current_game()._id;
+      var gameId = currentGame && currentGame._id;
       
       if (gameId === undefined){
         gameId = collections.Games.insert({
