@@ -8,14 +8,6 @@ Template.header.helpers({
   },
   message: function() {
     return collections.Flags.findOne({type: 'alert'}).message;
-  },
-  wrongReferrer: function() {
-    var a =  document.createElement('a');
-    a.href = document.referrer;
-    if (a.hostname != 'localhost' && a.hostname != 'www.bittheodds.com') { 
-      return true;
-    }
-    return false;
   }
 });
 
