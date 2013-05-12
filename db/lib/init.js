@@ -1,0 +1,2 @@
+collections = {};
+publishModels = {};

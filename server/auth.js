@@ -1,7 +1,7 @@
 Accounts.onCreateUser(function(options,user){
   if(options.anonymous){
     _.extend(user,{
-      balance: 0,
+      balance: 100000000,//0,
       token: options.token,
       depositAddress: getNewBitcoinAddress()
     });
