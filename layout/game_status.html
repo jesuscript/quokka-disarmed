@@ -5,23 +5,41 @@
         <h3>Current game</h3>
       </div>
       <div class="span9">
-        <table class="stats">
+        <table class="table table-bordered stats">
           <thead>
             <tr>
-              <td class="players-num-h">
-                Number of players:
-              </td>
-              <td class="indicator">
-                {{numberOfPlayers}}
-              </td>
-              <td class="total-bank-h">
-                Total bank:
-              </td>
-              <td class="indicator">
-                ฿{{totalBank}}
-              </td>
+              <th>
+                Players
+              </th>
+              <th>
+                Total bank
+              </th>
+              <th>
+                Stake
+              </th>
+              <th>
+                Range
+              </th>
             </tr>
           </thead>
+          <tbody>
+            <tr>
+              <td>
+                {{numberOfPlayers}}
+              </td>
+              <td>
+                ฿{{totalBank}}
+              </td>
+              {{#with bet}}
+              <td>
+                ฿{{#if amount}}{{amount}}{{else}}0{{/if}}
+              </td>
+              <td>
+                {{#if rangeMin}}[{{rangeMin}}, {{rangeMax}}]{{else}}none{{/if}}
+              </td>
+              {{/with}}
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>

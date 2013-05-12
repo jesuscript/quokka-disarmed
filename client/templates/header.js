@@ -3,11 +3,11 @@ Template.header.helpers({
   	return Meteor.user().depositAddress;
 	},
   alert: function() {
-    var alertMsg = collections.Flags.findOne({type: 'alert'});
+    var alertMsg = Collections.Flags.findOne({type: 'alert'});
     return alertMsg && alertMsg.message.length;
   },
   message: function() {
-    return collections.Flags.findOne({type: 'alert'}).message;
+    return Collections.Flags.findOne({type: 'alert'}).message;
   }
 });
 

@@ -1,13 +1,13 @@
-publishModels.gameStats = function(){
+PublishModels.gameStats = function(){
   var self = this;
-  var currentGameCur = collections.Games.find({completed: false});
+  var currentGameCur = Collections.Games.find({completed: false});
   var currentGame = currentGameCur.fetch()[0];
   var betsHandle;
 
   if(! currentGame) return;
 
   var recalculateStats = function(initialising){
-    var bets = collections.Bets.find({gameId: currentGame._id}).fetch();
+    var bets = Collections.Bets.find({gameId: currentGame._id}).fetch();
     var totalBank = _.reduce(bets, function(memo, bet){ return memo + bet.amount; }, 0);
     var numberOfPlayers = _.size(_.groupBy(bets, function(bet){ return bet.playerId; }));
     
@@ -21,7 +21,7 @@ publishModels.gameStats = function(){
     }
     
     //KK: we probably don't need all 3 callbacks, but I'll leave them here for debugging
-    betsHandle = collections.Bets.find({gameId: currentGame._id}).observeChanges({ 
+    betsHandle = Collections.Bets.find({gameId: currentGame._id}).observeChanges({ 
       added: function(){ 
         console.log("bet added");
         recalculateStats();

@@ -1,25 +1,37 @@
 Meteor.methods({
   submitBet: function(amount, rangeMin, rangeMax){
     if(validBet(this.userId, amount, rangeMin, rangeMax)){
-      var currentGame = collections.Games.findOne({completed: false});
-      
+      var currentGame = Collections.Games.findOne({completed: false});
       var gameId = currentGame && currentGame._id;
+      var existingBet;
       
       if (gameId === undefined){
-        gameId = collections.Games.insert({
+        gameId = Collections.Games.insert({
           completed: false
         });
       }
 
       amount = Math.round(amount * 100000000);
 
-      collections.Bets.insert({
-        playerId: this.userId,
-        gameId: gameId,
-        amount: amount, 
-        rangeMin: rangeMin,
-        rangeMax: rangeMax
-      });
+      existingBet = Collections.Bets.findOne({playerId: this.userId, gameId: gameId});
+
+      if(existingBet){
+        Collections.Bets.update({_id: existingBet._id}, {
+          $set: {
+            amount: amount,
+            rangeMin: rangeMin,
+            rangeMax: rangeMax
+          }
+        });
+      }else{
+        Collections.Bets.insert({
+          playerId: this.userId,
+          gameId: gameId,
+          amount: amount, 
+          rangeMin: rangeMin,
+          rangeMax: rangeMax
+        });
+      }
     }
   }
 });

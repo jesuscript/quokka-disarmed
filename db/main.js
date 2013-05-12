@@ -1,22 +1,23 @@
-collections.Bets = new Meteor.Collection("bets");
-collections.Games = new Meteor.Collection("games");
-collections.GameStats = new Meteor.Collection("gameStats");
-collections.Flags = new Meteor.Collection("flags");
+Collections.Bets = new Meteor.Collection("bets");
+Collections.Games = new Meteor.Collection("games");
+Collections.GameStats = new Meteor.Collection("gameStats");
+Collections.Flags = new Meteor.Collection("flags");
 
 if(Meteor.isServer){
   AddressPool = new Meteor.Collection("addressPool"); // server only
 
   Meteor.publish("flags", function(){
-    return collections.Flags.find({});
+    return Collections.Flags.find({});
   });
-  Meteor.publish("gameStats", publishModels.gameStats);
+  Meteor.publish("gameStats", PublishModels.gameStats);
   
   Meteor.publish("games", function(){
-    return collections.Games.find({},{sort: {timestamp: -1}, limit: 100});
+    return Collections.Games.find({},{sort: {timestamp: -1}, limit: 100});
   });
 
-  Meteor.publish("bets", function(){
-    //return collections.Bets.find({});
+  Meteor.publish("userBets", function(){
+    console.log(this.userId);
+    return Collections.Bets.find({playerId: this.userId});
   });
   
   Meteor.publish("userData", function(){  // built-in meteor collection
@@ -35,6 +36,10 @@ if(Meteor.isClient){
   Meteor.subscribe("gameStats");
   Meteor.subscribe("flags");
   Meteor.subscribe("userData");
+  Deps.autorun(function(){
+    Meteor.user(); // to set the dependency
+    Meteor.subscribe("userBets");
+  });
 }
 
 // the user shouldn't have the right to modify anything within their user profiles
