@@ -14,6 +14,10 @@ if(Meteor.isServer){
   Meteor.publish("games", function(){
     return collections.Games.find({},{sort: {timestamp: -1}, limit: 100});
   });
+
+  Meteor.publish("bets", function(){
+    //return collections.Bets.find({});
+  });
   
   Meteor.publish("userData", function(){  // built-in meteor collection
     return Meteor.users.find({_id: this.userId},
