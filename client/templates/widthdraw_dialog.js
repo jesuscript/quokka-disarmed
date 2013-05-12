@@ -32,11 +32,7 @@ Template.withdraw_dialog.helpers({
 
 
 Template.withdraw_dialog.events({
-  'click .cancel, click #dia-close-btn, click .close, click .shroud': function(e, tmpl){ // TODO: interface uses dia-close-btn, but also .cancel... need to streamline
-    TemplateHelpers.removeDialog(tmpl, function(){
-        Session.set("withdraw_error");
-    });
-  },
+
   'click .submit-btn': function(e, tmpl){
     var address = $("#withdraw-dialog [name=address]").val();
     var amount = $("#withdraw-dialog [name=amount]").val();
@@ -67,7 +63,12 @@ Template.withdraw_dialog.events({
         }
       );
     }
-  }
+  },
+  "click #cancel, click .close, click .shroud": function(e,tmpl){
+    TemplateHelpers.removeDialog(tmpl, function(){
+        Session.set("withdraw_error");
+    });
+  }  
 });
 
 
@@ -90,7 +91,7 @@ Template.withdraw_confirmation_instant.helpers({
 
 
 Template.withdraw_confirmation_instant.events({
-  'click .cancel, click #dia-close-btn, click .shroud': function(e, tmpl){
+  "click #cancel, click .close, click .shroud": function(e,tmpl){
     TemplateHelpers.removeDialog(tmpl);
   },
 });
@@ -98,9 +99,15 @@ Template.withdraw_confirmation_instant.events({
 
 
 Template.withdraw_confirmation_delayed.events({
-  'click .cancel, click #dia-close-btn, click .shroud': function(e, tmpl){
+  "click #cancel, click .close, click .shroud": function(e,tmpl){
     TemplateHelpers.removeDialog(tmpl);
   },
 });
+
+
+
+Template.withdraw_dialog.rendered = function(){
+  $(".withdraw-dialog input").first().focus();
+}
 
 

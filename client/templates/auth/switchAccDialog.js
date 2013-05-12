@@ -5,20 +5,13 @@ Template.switchAccDialog.helpers({
 });
 
 Template.switchAccDialog.events({
-  "click .js-cancel, click .shroud": function(e,tmpl){
-    e.preventDefault();
-    
+  "click #confirm": function(e, tmpl){
+    Auth.playAnonymously();
+    TemplateHelpers.removeDialog(tmpl);
+  },
+  "click #cancel, click .close, click .shroud": function(e,tmpl){
     if(Meteor.user()){
       document.location.href = '/' + Meteor.user().token;
     }
-    
-    TemplateHelpers.removeDialog(tmpl);
-  },
-  "click .js-confirm": function(e, tmpl){
-    e.preventDefault();
-    
-    Auth.playAnonymously();
-
-    TemplateHelpers.removeDialog(tmpl);
   }
 });

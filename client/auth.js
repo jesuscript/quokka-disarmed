@@ -7,7 +7,7 @@ Auth = {
 
     Meteor.loginWithPassword(token, token, function(err){
       if(err){
-        if(err.error == 403){
+        if(err.error == 403){ // user not found
           Accounts.createUser({
             username: token,
             password: token,
@@ -15,9 +15,9 @@ Auth = {
             token: token
           },function(err){
             if(err){
-              if(err.error == 401){
+              if(err.error == 401){ // (custom) reserved URL
                 self.showReservedTokenDialog();
-                
+                //self.showSigninDialog();
               }else{
                 console.log("unhandled signup error ", err);
               }
@@ -27,7 +27,6 @@ Auth = {
           console.log("unhandled signin error: ", err);
         }
       }
-      
     });
   },
 
@@ -65,9 +64,11 @@ Meteor.startup(function(){
 
     //TODO: good for now, but should find a better way of handling that motherfuck
     Session.set("auth_lock", true); 
-    
+
     if(user){
-      if(user.token == Auth.getToken()) return;
+      if(user.token == Auth.getToken()) { 
+        return; 
+      }
       Auth.showSwitchAccDialog();
     }else{
       Auth.playAnonymously();
