@@ -1,80 +1,203 @@
 <template name="switchAccDialog">
-  <div id="switch-anonymous-acc-dialog" class="fade-in auth-dialog">
+  <div id="switch-anonymous-acc-dialog" class="fade-in">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
-      <div class="field important">
-        {{#if anonymous}}
-        You are about to switch to another anonymous account. [TODO: improve the copy]
-        {{else}}
-        You are about to switch to an anonymous account.
-        {{/if}}
+      <div class="modal-header">
+        <button type="button" class="close">&times;</button>
+        <h3>New page requested</h3>
       </div>
-      <a class="js-confirm btn btn-inverse pull-left half">Confirm</a>
-      <a class="js-cancel btn pull-right half">Cancel</a>
+      <div class="modal-body">
+        <p>
+        {{#if anonymous}}
+        You've accessed a new page. Changing page will switch you to another account.<br>
+        Insure you have bookmarked the previous URL before you proceed!
+        {{else}}
+        Changing page will sign you out and switch you to an anonymous account.<br>
+        Would you like to sign out and switch to an anonymous account?
+        {{/if}}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <a class="btn" id="cancel">Go back</a>
+        <a class="btn btn-primary" id="confirm">Switch account</a>
+      </div>
     </div>
   </div>
 </template>
 
+
+
 <template name="reservedTokenDialog">
-  <div id="reserved-token-dialog" class="fade-in auth-dialog">
+  <div id="reserved-token-dialog" class="fade-in">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
-      <div class="field">
-        This URL is reserved. In order to use it you need to sign in.
+      <div class="modal-header">
+        <button type="button" class="close">&times;</button>
+        <h3>Welcome back!</h3>
       </div>
-      <a class="js-sign-in btn btn-inverse pull-left half">Sign in</a>
-      <a class="js-cancel btn pull-right half">Cancel</a>
+      <div class="modal-body">
+        <p>
+        You were signed out.<br>
+        Please sign in.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <a class="btn" id="cancel">Cancel</a>
+        <a class="btn btn-primary" id="confirm">Sign in</a>
+      </div>
     </div>
   </div>
 </template>
+
 
 
 <template name="signup_dialog">
-  <div id="signup-dialog" class="fade-in auth-dialog">
+  <div id="signup-dialog" class="fade-in">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
-      {{#if error}}
-      <div class="alert alert-error">
-        {{error}}
+      <div class="modal-header">
+        <button type="button" class="close">&times;</button>
+        <h3>Create account</h3>
       </div>
-      {{/if}}
-      <div class="field">
-        <input type="text" placeholder="Username" name="username"/>
+      <div class="modal-body">
+        {{#if error}}
+        <div class="alert alert-error">
+          {{error}}
+        </div>
+        {{/if}}
+        <div class="field">
+          <input class="input-large" type="text" placeholder="Username" name="username"/>
+        </div>
+        <div class="field">
+          <input class="input-large" type="password" placeholder="Password" name="password"/>
+          <span class="help-inline">Must be at least 6 characters long</span>
+        </div>
+        <div class="field">
+          <input class="input-large" type="text" placeholder="Email (optional)" name="email"/>
+        </div>
       </div>
-      <div class="field with-hint">
-        <input type="password" placeholder="Password" name="password"/>
-        <span class="hint">Must be at least 6 characters long</span>
+      <div class="modal-footer">
+        <a class="btn" id="cancel">Cancel</a>
+        <a class="btn btn-primary" id="confirm">Create</a>
       </div>
-      <div class="field">
-        <input type="text" placeholder="Email (optional)" name="email"/>
-      </div>
-      <a class="submit-btn btn btn-inverse pull-left two-thirds">Create</a>
-      <a class="cancel">Cancel</a>
     </div>
   </div>
 </template>
 
+
+
 <template name="signin_dialog">
-  <div id="signin-dialog" class="fade-in auth-dialog">
+  <div id="signin-dialog" class="fade-in">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
-      {{#if error}}
-      <div class="alert alert-error fade-in">
-        {{error}}
+      <div class="modal-header">
+        <button type="button" class="close">&times;</button>
+        <h3>Sign in</h3>
       </div>
-      {{/if}}
-      <div class="field">
-        <input type="text" placeholder="Username or email" name="user"/>
+      <div class="modal-body">
+        {{#if error}}
+        <div class="alert alert-error fade-in">
+          {{error}}
+        </div>
+        {{/if}}
+        <div class="field">
+          <input class="input-large" type="text" placeholder="Username or email" name="user"/>
+        </div>
+        <div class="field">
+          <input class="input-medium" type="password" placeholder="Password" name="password"/>
+        </div>
       </div>
-      <div class="field">
-        <input type="password" placeholder="Password" name="password"/>
+      <div class="modal-footer">
+        <a class="btn" id="forgot">Forgot Password</a>
+        <a data-key="27" class="btn" id="cancel">Cancel</a>
+        <a data-key="13" class="btn btn-primary" id="confirm">Sign in</a>
       </div>
-      <a data-key="13" class="submit-btn btn btn-inverse pull-left two-thirds">Sign in</a>
-      <a data-key="27" class="cancel">Cancel</a>
     </div>
   </div>
 </template>
+
+
+<template name="reset_password">
+  <div id="reset-password" class="fade-in">
+    <div class="shroud">
+    </div>
+    <div class="modal chrome-padded">
+      <div class="modal-header">
+        <button type="button" class="close">&times;</button>
+        <h3>Reset password</h3>
+      </div>
+      <div class="modal-body">
+        {{#if error}}
+        <div class="alert alert-error fade-in">
+          {{error}}
+        </div>
+        {{/if}}
+        <div class="field">
+          <input class="input-large" type="text" placeholder="new password" name="newPassword"/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a data-key="27" class="btn" id="cancel">Cancel</a>
+        <a data-key="13" class="btn btn-primary" id="confirm">Change Password</a>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+<template name="forgot_password">
+  <div id="forgot-password" class="fade-in">
+    <div class="shroud">
+    </div>
+    <div class="modal chrome-padded">
+      <div class="modal-header">
+        <button type="button" class="close">&times;</button>
+        <h3>Reset password</h3>
+      </div>
+      <div class="modal-body">
+        {{#if error}}
+        <div class="alert alert-error fade-in">
+          {{error}}
+        </div>
+        {{/if}}
+        <div class="field">
+          <input class="input-large" type="text" placeholder="email" name="email"/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a data-key="27" class="btn" id="cancel">Cancel</a>
+        <a data-key="13" class="btn btn-primary" id="confirm">Send Reset Instructions</a>
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="forgot_password_confirmation">
+  <div id="forgot-password" class="fade-in">
+    <div class="shroud">
+    </div>
+    <div class="modal chrome-padded">
+      <div class="modal-header">
+        <button type="button" class="close">&times;</button>
+        <h3>Email sent</h3>
+      </div>
+      <div class="modal-body">
+        Instructions on how to reset your password will be with you shortly
+      </div>
+      <div class="modal-footer">
+        <a class="btn" id="cancel">OK</a>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+
+
+
+
+

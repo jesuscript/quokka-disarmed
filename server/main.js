@@ -11,7 +11,7 @@ __meteor_bootstrap__.app.use(connect.query()).use(function(req, res, next) {
     crypto.randomBytes(512, function(ex, buf) {
       if (ex) throw ex;
       var hash = crypto.createHash('sha256').update(buf).digest("hex");
-      res.writeHead(301, {'Location': process.env.PROTO + '://' + req.headers.host + '/' + hash});
+      res.writeHead(303, {'Location': process.env.PROTO + '://' + req.headers.host + '/' + hash});
       res.end();
     });
   }

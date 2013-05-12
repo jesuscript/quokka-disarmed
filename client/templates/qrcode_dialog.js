@@ -13,7 +13,7 @@ Template.qrcode_dialog.helpers({
 });
 
 Template.qrcode_dialog.events({
-	'click #dia-close-btn, click .close, click .shroud': function(e, tmpl){
+  "click #cancel, click .close, click .shroud": function(e,tmpl){
 		TemplateHelpers.removeDialog(tmpl);
 	}
 });

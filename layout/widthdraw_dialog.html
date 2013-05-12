@@ -1,33 +1,35 @@
 <template name="withdraw_dialog">
-  <div id="withdraw-dialog" class="fade-in withdraw-dialog">
+  <div id="withdraw-dialog" class="fade-in">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
       {{#if depositsConfirmed}}
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close">&times;</button>
         <h3>Withdraw funds</h3>
       </div>
       <div class="modal-body">
-      {{#if error}}
-      <div class="alert alert-error fade-in">
-        {{error}}
+        {{#if error}}
+        <div class="alert alert-error fade-in">
+          {{error}}
+        </div>
+        {{/if}}
+        <p>Withdrawal of funds is usually instantaneous. For larger sums, our verification process can take up to 5 hours.</p>
+        <fieldset>
+          <label>Address to withdraw to:</label>
+          <input class="input-xlarge" type="text" placeholder="your withdrawal address" name="address">
+          <label>Amount (Min ฿0.001, ฿0.0005 transaction fee applies)</label>
+          <span class="add-on">฿</span>
+          <input id="prependedInput" type="text" placeholder="0.000" name="amount">
+        </fieldset>
       </div>
-      {{/if}}
-      <p>Withdrawal of funds is usually instantaneous. For larger sums, our verification process can take up to 5 hours.</p>
-      <fieldset>
-        <label>Address to withdraw to:</label>
-        <input class="input-xlarge" type="text" placeholder="your withdrawal address" name="address">
-        <label>Amount (Min ฿0.001, ฿0.0005 transaction fee applies)</label>
-        <span class="add-on">฿</span>
-        <input id="prependedInput" type="text" placeholder="0.000" name="amount">
-      </fieldset>
-      <a class="submit-btn btn btn-inverse pull-left two-thirds">Request withdrawal</a>
-      <a class="cancel">Cancel</a>
+      <div class="modal-footer">
+        <a class="btn" id="cancel">Cancel</a>
+        <a class="btn btn-primary" id="confirm">Request withdrawal</a>
       </div>
       {{else}}
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close">&times;</button>
         <h3>Please wait</h3>
       </div>
       <div class="modal-body">
@@ -36,7 +38,7 @@
         <p>A total of ฿{{outstandingDeposits}} still needs to be confirmed. Withdrawals will be available to you in approximately {{timeToValidateDeposits}} minutes.</p>
       </div>
       <div class="modal-footer">
-        <a href="#" id="dia-close-btn" class="btn">Close</a>
+        <a class="btn" id="cancel">Close</a>
       </div>
       {{/if}}
     </div>
@@ -44,47 +46,49 @@
 </template>
 
 
-
 <template name="withdraw_confirmation_instant">
-  <div id="withdraw-confirmation-instant" class="fade-in withdraw-confirmation-instant">
+  <div id="withdraw-confirmation-instant" class="fade-in">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close">&times;</button>
         <h3>Withdrawal complete</h3>
       </div>
       <div class="modal-body">
-      <p>Your withdrawal request was executed successfully.</p>
-      <p>฿{{amount}} was sent to <b><a href="http://blockchain.info/search/{{address}}" target="_blank">{{address}}</a></b>, transaction id:<br> 
+        <p>Your withdrawal request was executed successfully.</p>
+        <p>฿{{amount}} was sent to <b><a href="http://blockchain.info/search/{{address}}" target="_blank">{{address}}</a></b>, transaction id:<br> 
         <b><a href="http://blockchain.info/search/{{txId}}" target="_blank">{{txId}}</a></b></p>
-      <p>A ฿0.0005 transaction fee applies</p>
+        <p>A ฿0.0005 transaction fee applies</p>
+      </div>
       <div class="modal-footer">
-        <a href="#" id="dia-close-btn" class="btn">Close</a>
+        <a class="btn" id="cancel">Close</a>
       </div>
     </div>
   </div>
 </template>
 
 
-
 <template name="withdraw_confirmation_delayed">
-  <div id="withdraw-confirmation-delayed" class="fade-in withdraw-confirmation-delayed">
+  <div id="withdraw-confirmation-delayed" class="fade-in">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <button type="button" class="close">&times;</button>
         <h3>Withdrawal in progress</h3>
       </div>
       <div class="modal-body">
-      <p>We've acknowledged your withdrawal request and will send you the funds after verification.</p>
-      <p>This process can take up to 5 hours to complete.</p>
-      <p>A ฿0.0005 transaction fee applies</p>
+        <p>We've acknowledged your withdrawal request and will send you the funds after verification.</p>
+        <p>This process can take up to 5 hours to complete.</p>
+        <p>A ฿0.0005 transaction fee applies</p>
+      </div>
       <div class="modal-footer">
-        <a href="#" id="dia-close-btn" class="btn">Close</a>
+        <a class="btn" id="cancel">Close</a>
       </div>
     </div>
   </div>
 </template>
+
+
 

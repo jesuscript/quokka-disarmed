@@ -1,12 +1,11 @@
 Template.reservedTokenDialog.events({
-  "click .js-sign-in": function(e,tmpl){
-    e.preventDefault();
+  "click #confirm": function(e,tmpl){
     TemplateHelpers.removeDialog(tmpl,function(){
       $("body").append(Meteor.render(Template.signin_dialog));
       Session.set("signin_error");
     });
   },
-  "click .js-cancel, click .shroud": function(){
+  "click #cancel, click .close, click .shroud": function(e,tmpl){
     document.location.href = '/';
   }
 });

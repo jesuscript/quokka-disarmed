@@ -13,14 +13,8 @@ Template.signup_dialog.helpers({
 });
 
 Template.signup_dialog.events({
-  "click .cancel, click .shroud": function(e, tmpl){
-    TemplateHelpers.removeDialog(tmpl,function(){
-      Session.set("signup_error");
-    });
-  },
-  "click .submit-btn": function(e, tmpl){ //TODO keypress Enter submits
+  "click #confirm": function(e, tmpl){ //TODO keypress Enter submits
     var password = $("#signup-dialog [name=password]").val();
-
     if(password.length < 6){
       Session.set("signup_error", {
         error: 406,
@@ -41,5 +35,10 @@ Template.signup_dialog.events({
         }
       });
     }
+  },
+  "click #cancel, click .close, click .shroud": function(e,tmpl){
+    TemplateHelpers.removeDialog(tmpl,function(){
+      Session.set("signup_error");
+    });
   }
 });

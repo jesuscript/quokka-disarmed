@@ -1,5 +1,6 @@
 #  Standards
 
+* single 'quotes' for .js, less but "quotes" for HTML
 * Files == under\_scores\_everywhere, all lowercase except for human-readable files
 * Templates names == under_scores
 * js functions == camelCase
