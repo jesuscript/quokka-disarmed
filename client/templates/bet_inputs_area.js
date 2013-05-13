@@ -42,7 +42,7 @@
         return Math.round(claim * 100000000) / 100000000;
       }
     },
-    betSubtmitted: function(){
+    betSubmitted: function(){
       if(Meteor.user()) return !!Collections.Bets.findOne({playerId: Meteor.user()._id});
     }
   });
@@ -73,6 +73,9 @@
       );
 
       //});
+    },
+    "click .revoke-btn": function(){
+      Meteor.call("revokeBet");
     },
     "click .new-game-btn": function(){
       $("#bet-inputs-stake-indicator").hide("slide", {direction: "left"}, 200, function(){
