@@ -5,11 +5,11 @@ Meteor.methods({
       var gameId = currentGame && currentGame._id;
       var user = Meteor.users.findOne({_id: this.userId});
       var existingBet;
+
       
       if (gameId === undefined){
-        gameId = Collections.Games.insert({
-          completed: false
-        });
+        console.log("betting.submitBet: no game found, bet cancelled");
+        return;
       }
 
       amount = Math.round(amount * 100000000);
