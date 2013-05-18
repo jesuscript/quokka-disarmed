@@ -4,7 +4,8 @@ Template.signin_dialog.rendered = function(){
 };
 
 Template.signin_dialog.events({
-  "click #confirm": function(e, tmpl){ //TODO keypress Enter submits
+  "submit form": function(e, tmpl){ //TODO keypress Enter submits
+    event.preventDefault();
     var user = $(tmpl.find("[name=user]")).val();
     var password = $(tmpl.find("[name=password]")).val();
     Meteor.loginWithPassword(user, password,function(err){
