@@ -44,7 +44,7 @@ Meteor.startup(function(){
           var credit = 0;
 
           if(claim){
-            credit = Game.reward(claim, rewardable, bank);
+            credit = Game.reward(claim, rewardable, totalClaim);
           }else{
             credit = Game.compensation(bet.amount, totalLostStakes, leftover);
           }

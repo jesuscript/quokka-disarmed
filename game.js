@@ -9,16 +9,13 @@ Game = {
     return Math.round(bet * 100 / (range_max - range_min + 1));
   },
   rewardable: function(bank, total_claim){
-    if (bank < total_claim){
-      return bank;
-    }
-    return total_claim;
+    return (bank < total_claim) ? bank : total_claim;
   },
   leftover: function(bank, rewardable){
     return bank - rewardable;
   },
-  reward: function(claim, rewardable, bank){
-    return Math.round(claim * bank/rewardable);
+  reward: function(claim, rewardable, total_claim){
+    return Math.round(claim * rewardable / total_claim);
   },
   compensation: function(stake, sum_lost_stakes, leftover){
     return Math.round(leftover * stake / sum_lost_stakes);
