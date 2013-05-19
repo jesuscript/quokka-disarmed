@@ -13,6 +13,9 @@ Meteor.startup(function(){
     },
     betUpdate: function(){
       var currentGame = Collections.Games.findOne({completed: false});
+
+      !currentGame && return;
+      
       var bets = Collections.Bets.find({gameId: currentGame._id}).fetch();
 
       
