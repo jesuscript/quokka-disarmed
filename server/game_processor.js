@@ -1,4 +1,5 @@
 Meteor.startup(function(){
+  
   Observe.currentGame({
     gameUpdate: function(){
       var currentGames = Collections.Games.find({completed: false}).fetch();
