@@ -4,7 +4,7 @@ Meteor.startup(function(){
       var currentGames = Collections.Games.find({completed: false}).fetch();
       
       if(currentGames.length > 1){
-        console.log("Two uncompleted games found:", currentGame);
+        console.log("Two uncompleted games found:", currentGames);
       } 
       if(currentGames.length < 1){
         console.log("0 games, creating a new one");
