@@ -1,4 +1,3 @@
-console.log("publish");
 AddressPool = new Meteor.Collection("addressPool"); // server only
 
 Meteor.publish("flags", function(){
@@ -6,32 +5,34 @@ Meteor.publish("flags", function(){
 });
 
 Meteor.publish("gameStats", function(){
-  var self = this;
-  
-  self.added("gameStats", 0);
+  this.added("gameStats", 0);
 
   var betUpdateCallback = function(){
     var currentGame = Collections.Games.findOne({completed: false});
+
+    if(!currentGame) return;
+    
     var bets = Collections.Bets.find({gameId: currentGame._id}).fetch();
     var totalBank = _.reduce(bets, function(memo, bet){ return memo + bet.amount; }, 0);
     var numberOfPlayers = _.size(_.groupBy(bets, function(bet){ return bet.playerId; }));
 
-    console.log( { numberOfPlayers: numberOfPlayers, totalBank: totalBank});
-    self.changed("gameStats", 0, { numberOfPlayers: numberOfPlayers, totalBank: totalBank});
-  }
+    this.changed("gameStats", 0, { numberOfPlayers: numberOfPlayers, totalBank: totalBank});
+  }.bind(this);
 
-  GameObserver.addBetUpdateCallback(betUpdateCallback.bind(this));
-
-  betUpdateCallback();
+  var currentGameHandle = Observe.currentGame({betUpdate: betUpdateCallback}, true);
   
-  //this.ready();
+  this.ready();
+
+  this.onStop(function(){
+    currentGameHandle.stop();
+  });
 });
 
 Meteor.publish("games", function(){
   return Collections.Games.find({},{sort: {timestamp: -1}, limit: 100});
 });
 
-Meteor.publish("userBets", function(){
+Meteor.publish("userBets", function(){ //update to publish only for the current game
   return Collections.Bets.find({playerId: this.userId});
 });
 

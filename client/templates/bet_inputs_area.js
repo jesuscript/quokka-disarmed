@@ -43,7 +43,11 @@
       }
     },
     betSubmitted: function(){
-      if(Meteor.user()) return !!Collections.Bets.findOne({playerId: Meteor.user()._id});
+      var currentGame = Collections.Games.findOne({completed: false});
+      if(Meteor.user() && currentGame) return !!Collections.Bets.findOne({
+        playerId: Meteor.user()._id,
+        gameId: currentGame._id
+      });
     }
   });
 
