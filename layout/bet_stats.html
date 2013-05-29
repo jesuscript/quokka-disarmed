@@ -1,0 +1,44 @@
+<template name="betStats">
+  <section id="bet-stats" class="chrome-padded">
+    <div class="row-fluid">
+      <div class="span6">
+        <label>
+          Range
+        </label>
+      </div>
+      <div class="span6">
+        <span class="indicator">[{{range}}]</span>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span6">
+        <label>
+          Range size
+        </label>
+      </div>
+      <div class="span6">
+        <span class="indicator">{{rangeSize}}</span>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span6">
+        <label>
+          Max to win
+        </label>
+      </div>
+      <div class="span6">
+        <span class="indicator">{{maxReward}}</span>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span6">
+        <label>
+          Max to lose
+        </label>
+      </div>
+      <div class="span6">
+        <span class="indicator">0</span>
+      </div>
+    </div>
+  </section>
+</template>

@@ -29,7 +29,7 @@ Meteor.publish("gameStats", function(){
 });
 
 Meteor.publish("games", function(){
-  return Collections.Games.find({},{sort: {timestamp: -1}, limit: 100});
+  return Collections.Games.find({},{sort: {createdAt: -1}, limit: 100});
 });
 
 Meteor.publish("userBets", function(){ //update to publish only for the current game

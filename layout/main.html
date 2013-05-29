@@ -1,3 +1,4 @@
+
 <head>
   <title>Bittheodds</title>
   <meta name="description" content="No limit multiplayer bitcoin betting">
@@ -7,13 +8,34 @@
 </head>
 
 <body>
+  {{> deposit }}
   {{> navbar }}
-  <div class="container">
-    {{> header }}
-    {{> mid_area }}
-    {{> game_on }}
-    {{> lucky_area }}
+  {{> header }}
+  {{>lastLuckyNumbers}}  
+  <div id="main-container" class="container-fluid">
+    <div class="row-fluid">
+      <div class="span2">
+        {{> topWinners }}
+      </div>
+      <div class="span4">
+        {{> gameWheel }}
+      </div>
+      <div class="span2">
+        {{> generalStats}}
+      </div>
+      <div class="span4">
+        {{> playerHeader }}
+        {{> betStats}}
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span12">
+        {{> betInput}}
+      </div>
+    </div>
+    <div class="row-fluid">
+      {{> activity }}
+    </div>
   </div>
 </body>
-
 

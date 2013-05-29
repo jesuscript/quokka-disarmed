@@ -1,0 +1,23 @@
+#last-lucky-numbers{
+  width: 50px;
+  position: fixed;
+  left: 1px;
+  top: 45px;
+  
+  .numbers-list{
+    border: 1px solid #aaaaaa;
+    border-radius: 4px;
+    overflow:hidden;
+    
+    li{
+      text-align: center;
+      background-color: #ffffff;
+
+      border-bottom: 1px solid #cccccc;
+      
+      &:nth-child(odd){
+        background-color: #f9f9f9;
+      }
+    }
+  }
+}

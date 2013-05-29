@@ -9,7 +9,10 @@ Meteor.startup(function(){
       } 
       if(currentGames.length < 1){
         console.log("0 games, creating a new one");
-        Collections.Games.insert({ completed: false });
+        Collections.Games.insert({
+          completed: false,
+          createdAt: (new Date()).getTime()
+        });
       } 
     },
     betUpdate: function(){
@@ -22,7 +25,7 @@ Meteor.startup(function(){
       
       if(bets.length >= 2){
         var bank = _.reduce(bets, function(memo, bet){ return memo + bet.amount; }, 0);
-        var luckyNumber = Math.floor(Math.random() * 100);
+        var luckyNumber = Math.floor(Math.random() * 100); // <<<< Stephan write your codezz here
         
         var totalClaim = _.reduce(bets, function(memo, bet){
           return memo + Game.claim(bet.amount, bet.rangeMin, bet.rangeMax, luckyNumber);
@@ -81,7 +84,8 @@ Meteor.startup(function(){
         console.log(gameStats);
 
         Collections.Games.update({_id: currentGame._id},{$set:{
-          completed: true
+          completed: true,
+          completedAt: (new Date()).getTime()
         }});
       }
     }

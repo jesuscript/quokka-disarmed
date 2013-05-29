@@ -6,42 +6,29 @@
         <li class="divider-vertical"></li>
         {{#if currentUser }}
         <li>
-          <p class="navbar-text username">
-            {{#if anonymous}}
-            Anonymous
-            {{else}}
-            {{username}}
-            {{/if}}
-          </p>
-        </li>
-        <li>
-          <p class="navbar-text">
-            Balance: ฿{{balance}}
-          </p>
-        </li>
-        {{#if anonymous}}
-        <li>
-          <a class="signin-btn" href="#">Sign in</a>
-        </li>
-        <li>
-          <a class="signup-btn" href="#">Create account</a>
-        </li>
-        {{else}}
-        <li>
           <a class="signout-btn" href="#">Sign out</a>
         </li>
-        {{/if}}
-        {{else}}
-        <li>
-          <a class="signin-btn" href="#">Sign in</a>
-        </li>
-        <li>
-          <a class="signup-btn" href="#">Create account</a>
-        </li>
-        {{/if}}
         <li>
           <a class="withdraw-btn" href="#">Withdraw</a>
         </li>
+        {{else}}
+        <li>
+          <a class="signin-btn" href="#">Sign in</a>
+        </li>
+
+        <li>
+          <a class="signup-btn" href="#">Create account</a>
+        </li>
+        {{/if}}
+      </ul>
+      <ul class="nav pull-right">
+        <li>
+          <a class="news-btn" href="#">News</a>
+        </li>
+        <li>
+          <a class="howto-btn" href="#"></a>
+        </li>
+        <li></li>
         <li>
           <a href="javascript:void(0)" data-uv-lightbox="classic_widget" data-uv-mode="full" data-uv-primary-color="#cc6d00" data-uv-link-color="#007dbf" data-uv-default-mode="support" data-uv-forum-id="205470">Feedback &amp; Support</a>
         </li>

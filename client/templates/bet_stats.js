@@ -1,5 +1,5 @@
 (function(){
-  _.extend(Template.bet_inputs_area,{
+  _.extend(Template.betStats,{
     created: function(){
       Session.set("current_stake", 0);
       Session.set("bet", {
@@ -7,17 +7,11 @@
       });
     },
     rendered: function(){
-      $("#bet-inputs-area .numeric-input").numeric();
-      $("#bet-inputs-stake").focus(function(){
-        $("#bet-inputs-stake").select().one("mouseup", function(e){
-          e.preventDefault();
-          $(this).unbind("mouseup");
-        });
-      });
+      $("#bet-stats .numeric-input").numeric();
     }
   });
 
-  Template.bet_inputs_area.helpers({
+  Template.betStats.helpers({
     currentStake: function(){
       return Session.get("current_stake");
     },
@@ -40,6 +34,8 @@
         var claim = Game.claim(Session.get("current_stake"), range.min, range.max);
         
         return Math.round(claim * 100000000) / 100000000;
+      }else{
+        return 0;
       }
     },
     betSubmitted: function(){
@@ -51,7 +47,7 @@
     }
   });
 
-  Template.bet_inputs_area.events({
+  Template.betStats.events({
     "keyup #bet-inputs-stake": function(){
       Session.set("current_stake", parseFloat($("#bet-inputs-stake").val(),10));
     },

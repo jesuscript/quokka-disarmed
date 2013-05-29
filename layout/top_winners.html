@@ -1,0 +1,10 @@
+<template name="topWinners">
+  <section id="top-winners">
+    <h1>All time winners</h1>
+    <ol class="winers-list">
+      {{#each winners}}
+      <li>{{amount}} {{name}}</li>
+      {{/each}}
+    </ol>
+  </section>
+</template>

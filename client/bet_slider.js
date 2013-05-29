@@ -5,6 +5,8 @@ Meteor.startup(function(){
   }).on("valuesChanging", saveValues);
 
   function saveValues(e, data){
+    if(!$betSlider.length) return;
+    
     var vals = data ? data.values : $betSlider.rangeSlider("values");
 
     if(vals.min > vals.max){ // fixing a glitch in rangeSLider

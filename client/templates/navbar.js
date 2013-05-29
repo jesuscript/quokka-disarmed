@@ -1,15 +1,3 @@
-Template.navbar.helpers({
-  username: function(){
-    return Meteor.user().username;
-  },
-  anonymous: function(){
-    return Meteor.user().anonymous;
-  },
-  balance: function(){
-    return intToBtc(Meteor.user().balance);
-  }
-});
-
 Template.navbar.events({
   "click .withdraw-btn": function(e){
     e.preventDefault();

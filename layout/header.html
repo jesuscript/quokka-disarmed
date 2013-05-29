@@ -1,11 +1,10 @@
 <template name="header">
-  {{#if alert}}
-  <div class="alert alert-error text-center">
-    <strong>Warning!</strong> {{message}}
+  <div id="header">
+    {{#if alert}}
+    <div class="alert alert-error text-center">
+      <strong>Warning!</strong> {{message}}
+    </div>
+    {{/if}}
+    <h1>24 hour live no-limit Bitcoin betting, 100% payout</h1>
   </div>
-  {{/if}}
-  <section id="header" class="chrome-padded">
-    <h1>No limit, 24/7 multiplayer betting</h1>
-    <span class="description">Your deposit address: {{#if currentUser }} {{depositAddress}} <img src="./img/qr_code.png"></span> {{/if}} 
-  </section>
 </template>
