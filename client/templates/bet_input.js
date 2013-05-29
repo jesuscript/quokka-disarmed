@@ -51,9 +51,7 @@ window.onresize = function(event) {
   {
     targetWidth = $("#bet-graph").parent().width();
     drawBetsGraph();
-    console.log('resizing...');
-    console.log(targetWidth);
-  }, 100);
+  }, 15);
 }
 
 var targetWidth = $("#bet-graph").parent().width();
@@ -64,7 +62,7 @@ drawBetsGraph();
 
 function drawBetsGraph() {
 
-  var margin = {top: 40, right: 20, bottom: 30, left: 30},
+  var margin = {top: 40, right: 15, bottom: 30, left: 15},
       svgWidth = targetWidth,
       svgHeight = 120,
       barWidth = targetWidth/140,
@@ -114,7 +112,6 @@ function drawBetsGraph() {
   
   rootContainer = svg.attr("width", svgWidth)
       .attr("height", svgHeight)
-      .style("border", "1px solid black")
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
