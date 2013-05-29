@@ -40,23 +40,60 @@ Template.betInput.rendered = function () {
 
 
 
-  // measures and scales
-  var margin = {top: 90, right: 20, bottom: 30, left: 30},
-      width = 800 - margin.left - margin.right,
-      height = 250 - margin.top - margin.bottom,
-      titleShift = 18;
+
+
+var svg = d3.select("#bet-graph").append("svg");
+
+var resizeTimer;
+window.onresize = function(event) {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function()
+  {
+    targetWidth = $("#bet-graph").parent().width();
+    drawBetsGraph();
+    console.log('resizing...');
+    console.log(targetWidth);
+  }, 100);
+}
+
+var targetWidth = $("#bet-graph").parent().width();
+drawBetsGraph();
+
+///////// DRAW GRAPH //// 
+//drawBetsGraph();
+
+function drawBetsGraph() {
+
+  var margin = {top: 40, right: 20, bottom: 30, left: 30},
+      svgWidth = targetWidth,
+      svgHeight = 120,
+      barWidth = targetWidth/140,
+      titleShift = 20,
+      chartWidth = svgWidth - margin.left - margin.right - titleShift,
+      chartHeight = svgHeight - margin.top - margin.bottom;
+     
 
   var x = d3.scale.linear()
       .domain([1, 100])
-      .range([0, width-titleShift]);
+      .range([0, chartWidth]);
 
   var y = d3.scale.linear()
-      .range([height, 0]);
+      .range([chartHeight, 0]);
+
+  y.domain([0, d3.max(valueArray, function(d) { return d.frequency; })]);
 
   function getXTickValues() {
+    var modulo;
+    if (chartWidth > 1600) {
+      modulo = 1;
+    } else if (chartWidth > 400) {
+      modulo = 5;
+    } else {
+      modulo = 10;
+    }
     var theArray = [1];
     for (var i = 1; i <= 100; i++) {
-      if (i % 5 === 0  ) theArray.push(i);
+      if (i % modulo === 0  ) theArray.push(i);
     };
     return theArray;
   }
@@ -72,44 +109,45 @@ Template.betInput.rendered = function () {
       .ticks(3);
 
 
-  console.log(self.node);
-  // draw SVG
-  var svg = d3.select(self.node).append("svg")
-      .attr("width", "100%")
-      .attr("height", height)
-      .attr("viewBox", "0 0 " + (width + margin.left + margin.right + titleShift) + " " + (height +  margin.top + margin.bottom) + "")
-      .attr("preserveAspectRatio", "none")
+  svg.selectAll("g").remove();
+  svg.selectAll(".bar").remove();
+  
+  rootContainer = svg.attr("width", svgWidth)
+      .attr("height", svgHeight)
       .style("border", "1px solid black")
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  rootContainer.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(" + titleShift + "," + chartHeight + ")")
+      .call(xAxis);
 
-    y.domain([0, d3.max(valueArray, function(d) { return d.frequency; })]);
+  rootContainer.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Live Bets");
 
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(" + titleShift + "," + height + ")")
-        .call(xAxis);
-
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis)
-      .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", ".71em")
-        .style("text-anchor", "end")
-        .text("Live Bets");
-
-    svg.selectAll(".bar")
-        .data(valueArray)
-      .enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", function(d) { return x(d.num); })
-        .attr("width", 6)
-        .attr("transform", "translate(" + titleShift + ",0)")
-        .attr("y", function(d) { return y(d.frequency); })
-        .attr("height", function(d) { return height - y(d.frequency); });
-
+  rootContainer.selectAll(".bar")
+      .data(valueArray)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.num); })
+      .attr("width", barWidth)
+      .attr("transform", "translate(" + (titleShift - (barWidth/2)) + ",0)")
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("height", function(d) { return chartHeight - y(d.frequency); })
+    // .transition()
+    //   .duration(1000)
+    //   .attr("y", function(d) { return height - y(d.frequency) - .5; })
+    //   .attr("height", function(d) { return y(d.frequency); });
+      
+            
+}
 
 }
