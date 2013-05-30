@@ -16,7 +16,7 @@
       return Session.get("current_stake");
     },
     range: function(){
-      var vals = BetSlider.getSliderVals();
+      var vals;// = BetSlider.getSliderVals();
       if(vals){
         return vals.min + ", " + vals.max;
       }else{
@@ -24,11 +24,11 @@
       }
     },
     rangeSize: function(){
-      var vals = BetSlider.getSliderVals();
+      var vals;// = BetSlider.getSliderVals();
       return vals ? vals.max - vals.min + 1 : 0;
     },
     maxReward: function(){
-      var range = BetSlider.getSliderVals();
+      var range;// = BetSlider.getSliderVals();
 
       if(range){
         var claim = Game.claim(Session.get("current_stake"), range.min, range.max);
@@ -60,7 +60,7 @@
 
         $("#bet-inputs-area .bet-btn").parent().addClass("fade-out");
       */
-      var range = BetSlider.getSliderVals();
+      var range;// = BetSlider.getSliderVals();
       
       Meteor.call(
         "submitBet",
