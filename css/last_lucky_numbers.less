@@ -1,14 +1,41 @@
 #last-lucky-numbers{
-  width: 50px;
+  width: 55px;
   position: fixed;
   left: 1px;
-  top: 45px;
-  
+  top: 50px;
+
+  .desc{
+    float: left;
+    width: 20px;
+    margin-top:140px;
+    heigth: 140px;
+    span{
+      display: block;
+      font-size: 14px;
+      line-height: normal;
+      white-space: nowrap;
+      font-weight: bold;
+      -webkit-transform: rotate(-90deg);
+      -moz-transform: rotate(-90deg);
+      -ms-transform: rotate(-90deg);
+      -o-transform: rotate(-90deg);
+      transform: rotate(-90deg);
+
+      -webkit-transform-origin: 50% 50%;
+      -moz-transform-origin: 50% 50%;
+      -ms-transform-origin: 50% 50%;
+      -o-transform-origin: 50% 50%;
+      transform-origin: 50% 50%;
+
+      filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    }
+  }  
   .numbers-list{
     border: 1px solid #aaaaaa;
     border-radius: 4px;
     overflow:hidden;
-    
+    float:left;
+    width:30px;
     li{
       text-align: center;
       background-color: #ffffff;
