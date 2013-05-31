@@ -1,0 +1,39 @@
+#bank{
+  position: fixed;
+  left: 50%;
+  width: 500px;
+  margin-left: -250px;
+  z-index: 100;
+  .dialog{
+    height: 300px;
+    border-bottom: 1px solid #222222;
+    border-radius: 0px 0px 4px 4px;
+  }
+  .bank-btn{
+    display: block;
+    text-transform: uppercase;
+    padding: 5px 0px;
+    border-radius: 0px 0px 4px 4px;
+    width: 200px;
+    margin: 0 auto;
+    box-shadow: inset 0 0px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,0.05);
+    border-top: 0;
+  }
+  &.open .bank-btn, .bank-btn:hover{
+    background-image: none;
+    background-color: #222222;
+    box-shadow: none;
+  }
+  -webkit-transition:all 0.5s ease-in-out;
+  -moz-transition:all 0.5s ease-in-out;
+  -o-transition:all 0.5s ease-in-out;
+  transition:all 0.5s ease-in-out;
+  &.open {
+    transform: translateY(0px);
+    -webkit-transform: translateY(0px);
+  }
+  &.closed {
+    transform: translateY(-332px);
+    -webkit-transform: translateY(-332px);
+  }
+}
