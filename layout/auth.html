@@ -3,6 +3,7 @@
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
+      <form>
       <div class="modal-header">
         <button type="button" class="close">&times;</button>
         <h3>Create account</h3>
@@ -15,6 +16,7 @@
         {{/if}}
         <div class="field">
           <input class="input-large" type="text" placeholder="Username" name="username"/>
+          <span class="help-inline">Must be at least 3 characters long</span>
         </div>
         <div class="field">
           <input class="input-large" type="password" placeholder="Password" name="password"/>
@@ -26,8 +28,9 @@
       </div>
       <div class="modal-footer">
         <a class="btn" id="cancel">Cancel</a>
-        <a class="btn btn-inverse" id="confirm">Create</a>
+        <button type="submit" class="btn btn-inverse">Create</a>
       </div>
+      </form>
     </div>
   </div>
 </template>
@@ -73,6 +76,7 @@
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
+      <form>
       <div class="modal-header">
         <button type="button" class="close">&times;</button>
         <h3>Reset password</h3>
@@ -85,15 +89,38 @@
         {{/if}}
         <div class="field">
           <input class="input-large" type="text" placeholder="new password" name="newPassword"/>
+          <span class="help-inline">Must be at least 6 characters long</span>
         </div>
       </div>
       <div class="modal-footer">
-        <a data-key="27" class="btn" id="cancel">Cancel</a>
-        <a data-key="13" class="btn btn-inverse" id="confirm">Change Password</a>
+        <a class="btn" id="cancel">Cancel</a>
+        <button type="submit" class="btn btn-inverse" id="confirm">Change Password</a>
+      </div>
+      </form>
+    </div>
+  </div>
+</template>
+
+<template name="reset_password_confirmation">
+  <div id="reset-password-confirmation" class="fade-in">
+    <div class="shroud">
+    </div>
+    <div class="modal chrome-padded">
+      <div class="modal-header">
+        <button type="button" class="close">&times;</button>
+        <h3>Password reset</h3>
+      </div>
+      <div class="modal-body">
+        Your password was reset successfully. You are now logged in.
+      </div>
+      <div class="modal-footer">
+        <a class="btn" id="cancel">OK</a>
       </div>
     </div>
   </div>
 </template>
+
+
 
 
 <template name="forgot_password">
@@ -101,6 +128,7 @@
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
+      <form>
       <div class="modal-header">
         <button type="button" class="close">&times;</button>
         <h3>Reset password</h3>
@@ -116,15 +144,16 @@
         </div>
       </div>
       <div class="modal-footer">
-        <a data-key="27" class="btn" id="cancel">Cancel</a>
-        <a data-key="13" class="btn btn-inverse" id="confirm">Send Reset Instructions</a>
+        <a class="btn" id="cancel">Cancel</a>
+        <button type="submit" class="btn btn-inverse" id="confirm">Send Reset Instructions</a>
       </div>
+      </form>
     </div>
   </div>
 </template>
 
 <template name="forgot_password_confirmation">
-  <div id="forgot-password" class="fade-in">
+  <div id="forgot-password-confirmation" class="fade-in">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">

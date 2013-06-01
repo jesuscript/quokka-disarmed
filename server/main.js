@@ -6,3 +6,4 @@ btcdClient = new BITCOIN.Client({ //none of this is accessible from outside the 
   user: process.env.BTCD_USER,
   pass: process.env.BTCD_PASS
 });
+

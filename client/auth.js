@@ -11,3 +11,21 @@ Auth = {
   },
 
 };
+
+
+Meteor.startup(function () {
+
+  var match;
+  match = window.location.hash.match(/^\#\/reset-password\/(.*)$/);
+  if (match) {
+    Accounts._preventAutoLogin = true;
+    Accounts._resetPasswordToken = match[1];
+    window.location.hash = '';
+  }
+
+  if (Accounts._resetPasswordToken) {
+    $("body").append(Meteor.render(Template.reset_password));
+    Session.set("reset_error");
+  }
+
+});

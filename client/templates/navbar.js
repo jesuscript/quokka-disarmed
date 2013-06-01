@@ -14,7 +14,16 @@ Template.navbar.events({
   },
   "click .signout-btn": function(e){
     e.preventDefault();
+    console.log('lcicke');
     Meteor.logout();
+  },
+  "click .news-btn": function(e){
+    e.preventDefault();
+    $("body").append(Meteor.render( Template.news_dialog ));
+  },
+  "click .howto-btn": function(e){
+    e.preventDefault();
+    $("body").append(Meteor.render( Template.howto_dialog ));
   }
 });
 
@@ -24,8 +33,6 @@ Template.navbar.helpers({
     return Meteor.user().balance;
   }
 });
-
-
 
 
 Template.navbar.rendered = function(){ 

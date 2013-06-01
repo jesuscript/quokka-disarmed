@@ -7,15 +7,27 @@ Template.signin_dialog.events({
     event.preventDefault();
     var user = $(tmpl.find("[name=user]")).val();
     var password = $(tmpl.find("[name=password]")).val();
-    Meteor.loginWithPassword(user, password,function(err){
-      if(err){
-        Session.set("signin_error", err);
-      }else{
-        TemplateHelpers.removeDialog(tmpl, function(){
-          Session.set("signin_error");
-        });
-      }
-    });
+    if(user.length < 3){
+      Session.set("signin_error", {
+        error: 406,
+        reason: "Username is too short"
+      });
+    } else if (password.length < 6){
+      Session.set("signin_error", {
+        error: 406,
+        reason: "Password is too short"
+      });
+    } else {
+      Meteor.loginWithPassword(user, password,function(err){
+        if(err){
+          Session.set("signin_error", err);
+        }else{
+          TemplateHelpers.removeDialog(tmpl, function(){
+            Session.set("signin_error");
+          });
+        }
+      });
+    }
   },
   "click #forgot": function(e,tmpl){
     TemplateHelpers.removeDialog(tmpl, function(){

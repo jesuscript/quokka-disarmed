@@ -3,10 +3,11 @@ Template.withdraw_dialog.helpers({
   depositsConfirmed: function(){
     Meteor.call('areDepositsConfirmed', function(err, depositsConfirmed) {
       if (err) console.log(err);
-      Session.set('depositsConfirmed', depositsConfirmed);
+      //Session.set('depositsConfirmed', depositsConfirmed);
     }); 
-    if (Session.get('depositsConfirmed'))
-      return Session.get('depositsConfirmed');
+    //if (Session.get('depositsConfirmed'))
+      //return Session.get('depositsConfirmed');
+    return false;
   },
   outstandingDeposits: function(){
     Meteor.call('getOutstandingDeposits', function(err, outstandingDeposits) {
