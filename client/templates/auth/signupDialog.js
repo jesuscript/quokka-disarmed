@@ -24,8 +24,7 @@ Template.signup_dialog.events({
       Accounts.createUser({
         username: $("#signup-dialog [name=username]").val(),
         password: password,
-        email: $("#signup-dialog [name=email]").val(),
-        token: Auth.getToken()
+        email: $("#signup-dialog [name=email]").val()
       },function(err){
         if(err){
           Session.set("signup_error", err);

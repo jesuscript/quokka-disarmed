@@ -1,12 +1,18 @@
 <template name="playerHeader">
   <section id="player-header" class="chrome-padded">
     <div class="row-fluid">
+      {{#if currentUser }}
       <div class="span6">
-        Joshua
+        {{username}}
       </div>
       <div class="span6">
-        1234
+        Balance: ฿{{balance}}
       </div>
+      {{else}}
+      <div class="span">
+        Please  <a class="signin-btn" href="#">sign in</a> or <a class="signup-btn" href="#">create an account</span>
+      </div>
+      {{/if}}
     </div>
   </section>
 </template>

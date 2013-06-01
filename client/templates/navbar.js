@@ -14,11 +14,18 @@ Template.navbar.events({
   },
   "click .signout-btn": function(e){
     e.preventDefault();
-    Meteor.logout(function(){
-      Auth.playAnonymously();
-    });
+    Meteor.logout();
   }
 });
+
+
+Template.navbar.helpers({
+  hasBalance: function(){
+    return Meteor.user().balance;
+  }
+});
+
+
 
 
 Template.navbar.rendered = function(){ 

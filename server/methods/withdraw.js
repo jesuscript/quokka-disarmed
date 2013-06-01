@@ -36,7 +36,6 @@ Meteor.methods({
         subject: 'Withdrawal request - ' + Date.now(),
         text: 'amount: ' + (amount - 0.0005) + '\n' +
         			'address: ' + address + '\n\n' +
-        			'token: ' + Meteor.user().token + '\n' +
         			'username: ' + Meteor.user().username + '\n' +
         			'created at: ' + Meteor.user().createdAt + '\n' +
               'deposit address: ' + Meteor.user().depositAddress
