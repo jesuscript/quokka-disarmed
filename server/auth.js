@@ -1,26 +1,13 @@
 Accounts.onCreateUser(function(options,user){
-  if(options.anonymous){
-    _.extend(user,{
-      balance: 100000000,//0,
-      token: options.token,
-      depositAddress: getNewBitcoinAddress()
-    });
-  }else if(Meteor.user()){
-    user = _.extend(Meteor.user(), {
-      username: user.username,
-      services: user.services,
-      emails: user.emails
-    });
-  }
-  user.anonymous = !!options.anonymous;
+  _.extend(user,{
+    balance: 100000000,//0,
+    depositAddress: getNewBitcoinAddress()
+  });
   return user;
 });
 
+
 Accounts.validateNewUser(function(user){
-  if(user.token.length < 1){
-    throw new Meteor.Error(411, "Empty token");
-  }
-  
   if(Meteor.users.find({username: user.username}).count()){
     throw new Meteor.Error(409, "Username is in use");
   }
@@ -33,20 +20,11 @@ Accounts.validateNewUser(function(user){
     throw new Meteor.Error(417, "Invalid email address")
   }
 
-  if(Meteor.users.findOne({token: user.token, anonymous: false})){
-    throw new Meteor.Error(401, "Reserved URL");
-  }
-
   Meteor.users.remove({_id: user._id});
 
   return true;
 });
 
-
-function validEmail(email){
-  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
-}
 
 
 function getNewBitcoinAddress() {

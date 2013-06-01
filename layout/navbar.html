@@ -4,18 +4,19 @@
       <a class="brand" href="#">฿ITTHEODDS</a>
       <ul class="nav">
         <li class="divider-vertical"></li>
-        {{#if currentUser }}
+        {{#if currentUser}}
         <li>
           <a class="signout-btn" href="#">Sign out</a>
         </li>
+        {{#if hasBalance}}
         <li>
           <a class="withdraw-btn" href="#">Withdraw</a>
         </li>
+        {{/if}}
         {{else}}
         <li>
           <a class="signin-btn" href="#">Sign in</a>
         </li>
-
         <li>
           <a class="signup-btn" href="#">Create account</a>
         </li>
@@ -26,7 +27,7 @@
           <a class="news-btn" href="#">News</a>
         </li>
         <li>
-          <a class="howto-btn" href="#"></a>
+          <a class="howto-btn" href="#">How to Play</a>
         </li>
         <li></li>
         <li>

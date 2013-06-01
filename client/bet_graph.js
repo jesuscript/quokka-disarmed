@@ -43,11 +43,11 @@ BetGraph = {
 
     this.draw(svg);
 
-    $(window).resize(_.debounce(this.draw.bind(this, svg), 100));
+    $(window).resize(_.debounce(this.draw.bind(this, svg), 15));
   },
   
   draw: function(svg) {
-    var margin = {top: 40, right: 15, bottom: 30, left: 15};
+    var margin = {top: 40, right: 15, bottom: 30, left: 25};
     var targetWidth = this.$el.width();
     var svgWidth = targetWidth;
     var svgHeight = 120;

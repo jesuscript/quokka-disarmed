@@ -3,7 +3,7 @@ Meteor.methods({
 	areDepositsConfirmed: function() {
 		// this block bothers me - i use it to instantiate these vars across all withdraw methods
 		// however it's likely not ideal because it requires the code to flow in a certain way for things to be defined
-		received = [];
+    received = [];
 		var depositAddress = Meteor.user().depositAddress
 		for (var i=0; i<=6; i++) {
 			received[i] = getReceivedByAddress(depositAddress, i);
@@ -36,7 +36,6 @@ Meteor.methods({
         subject: 'Withdrawal request - ' + Date.now(),
         text: 'amount: ' + (amount - 0.0005) + '\n' +
         			'address: ' + address + '\n\n' +
-        			'token: ' + Meteor.user().token + '\n' +
         			'username: ' + Meteor.user().username + '\n' +
         			'created at: ' + Meteor.user().createdAt + '\n' +
               'deposit address: ' + Meteor.user().depositAddress
@@ -65,7 +64,7 @@ function getReceivedByAddress(address, numconf) {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
   btcdClient.getReceivedByAddress(address, numconf, function(err, data) {
-    if (err) return console.log(err);
+    if (err) console.log(err);
     fut.ret(btcToInt(data));
   });
   return fut.wait();
@@ -75,7 +74,7 @@ function validateAddress(address) {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
   btcdClient.validateAddress(address, function(err, data) {
-    if (err) return console.log(err);
+    if (err) console.log(err);
     fut.ret(data.isvalid);
   });
   return fut.wait();
@@ -85,7 +84,7 @@ function getWalletBalance() {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
   btcdClient.getBalance('', 6, function(err, data) {
-    if (err) return console.log(err);
+    if (err) console.log(err);
     fut.ret(data);
   });
   return fut.wait();
@@ -95,7 +94,7 @@ function sendToAddress(address, amount) {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
   btcdClient.sendToAddress(address, amount - 0.0005, function(err, trxId) {
-    if (err) return console.log(err);
+    if (err) console.log(err);
     fut.ret(trxId);
   });
   return fut.wait();

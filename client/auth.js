@@ -1,39 +1,4 @@
-var tokenRegex = /[^/]*$/; // moved up here to prevent this shit from fucking up my indentation
-
 Auth = {
-  playAnonymously: function(){
-    var self = this;
-    var token = this.getToken();
-
-    Meteor.loginWithPassword(token, token, function(err){
-      if(err){
-        if(err.error == 403){ // user not found
-          Accounts.createUser({
-            username: token,
-            password: token,
-            anonymous: true,
-            token: token
-          },function(err){
-            if(err){
-              if(err.error == 401){ // (custom) reserved URL
-                self.showReservedTokenDialog();
-                //self.showSigninDialog();
-              }else{
-                console.log("unhandled signup error ", err);
-              }
-            }
-          });
-        }else{
-          console.log("unhandled signin error: ", err);
-        }
-      }
-    });
-  },
-
-  getToken: function(){
-    var url = document.URL;
-    return url.match(tokenRegex)[0].substr(0,64);
-  },
 
   showSignupDialog: function(){
     $("body").append(Meteor.render( Template.signup_dialog ));
@@ -45,34 +10,22 @@ Auth = {
     Session.set("signin_error");
   },
 
-  showSwitchAccDialog: function(){
-    $("body").append(Meteor.render( Template.switchAccDialog ));
-  },
-
-  showReservedTokenDialog: function(){
-    $("body").append(Meteor.render( Template.reservedTokenDialog ));
-  }
 };
 
 
-Meteor.startup(function(){
-  Deps.autorun(function(){
-    if(Session.get("auth_lock") || Meteor.loggingIn()) return;
-    var user = Meteor.user();
+Meteor.startup(function () {
 
-    if(user && !user.token) return; // user data not published yet
+  var match;
+  match = window.location.hash.match(/^\#\/reset-password\/(.*)$/);
+  if (match) {
+    Accounts._preventAutoLogin = true;
+    Accounts._resetPasswordToken = match[1];
+    window.location.hash = '';
+  }
 
-    //TODO: good for now, but should find a better way of handling that motherfuck
-    Session.set("auth_lock", true); 
+  if (Accounts._resetPasswordToken) {
+    $("body").append(Meteor.render(Template.reset_password));
+    Session.set("reset_error");
+  }
 
-    if(user){
-      if(user.token == Auth.getToken()) { 
-        return; 
-      }
-      Auth.showSwitchAccDialog();
-    }else{
-      Auth.playAnonymously();
-    }
-  });
 });
-

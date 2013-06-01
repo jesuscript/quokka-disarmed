@@ -40,8 +40,6 @@ Meteor.publish("userData", function(){  // built-in meteor collection
   return Meteor.users.find({_id: this.userId},
                            {fields: {
                              'balance': 1,
-                             'anonymous': 1,
-                             'token': 1,
                              'depositAddress': 1
                            }});
 });

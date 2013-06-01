@@ -1,5 +1,5 @@
 Template.signup_dialog.rendered = function(){
-  $(".auth-dialog input").first().focus();
+  this.find("input").focus();
 }
 
 Template.signup_dialog.helpers({
@@ -13,9 +13,16 @@ Template.signup_dialog.helpers({
 });
 
 Template.signup_dialog.events({
-  "click #confirm": function(e, tmpl){ //TODO keypress Enter submits
+  "submit form": function(e, tmpl){
+    event.preventDefault();
+    var username = $("#signup-dialog [name=username]").val();
     var password = $("#signup-dialog [name=password]").val();
-    if(password.length < 6){
+    if(username.length < 3){
+      Session.set("signup_error", {
+        error: 406,
+        reason: "Username is too short"
+      });
+    }else if(password.length < 6){
       Session.set("signup_error", {
         error: 406,
         reason: "Password is too short"
@@ -24,14 +31,14 @@ Template.signup_dialog.events({
       Accounts.createUser({
         username: $("#signup-dialog [name=username]").val(),
         password: password,
-        email: $("#signup-dialog [name=email]").val(),
-        token: Auth.getToken()
+        email: $("#signup-dialog [name=email]").val()
       },function(err){
         if(err){
           Session.set("signup_error", err);
         }else{
-          Session.set("signup_error");
-          TemplateHelpers.removeDialog(tmpl);
+          TemplateHelpers.removeDialog(tmpl, function(){
+            Session.set("signup_error");
+          });
         }
       });
     }
