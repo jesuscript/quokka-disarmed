@@ -1,0 +1,34 @@
+<template name="bank">
+  <div id="bank" class="{{#if isOpen}}open{{else}}closed{{/if}}">
+    <div class="shroud"></div>
+    <div class="pull-down">
+      <div class="dialog chrome-padded inverse">
+        <div class="navbar navbar-inverse">
+          <div class="navbar-inner">
+            <ul class="nav">
+              <li class="deposit {{#if depositMode}}active{{/if}}">
+                <a class="deposit-btn" href="#">Deposit</a>
+              </li>
+              <li class="withdraw {{#if withdrawMode}}active{{/if}}">
+                <a class="withdraw-btn" href="#">Withdraw</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <a class="close-dialog" href="#"><i class="icon-remove icon-white"></i></a>
+        {{#if currentUser}}
+
+        {{#if depositMode}}
+        {{>bankDeposit}}
+        {{/if}}
+        
+        {{#if withdrawMode}}
+        
+        {{/if}}
+        
+        {{/if}}
+      </div>
+      <a class="bank-btn btn btn-inverse" href="#">Bank</a>
+    </div>
+  </div>
+</template>

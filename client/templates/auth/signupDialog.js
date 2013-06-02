@@ -55,3 +55,5 @@ Template.signup_dialog.events({
     });
   }
 });
+
+Template.signup_dialog.preserve([".modal"]);

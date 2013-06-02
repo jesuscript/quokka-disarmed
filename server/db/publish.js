@@ -4,6 +4,10 @@ Meteor.publish("flags", function(){
   return Collections.Flags.find({});
 });
 
+Meteor.publish("news", function(){
+  return Collections.News.find({}, {sort: {timestamp: -1}, limit: 10});
+});
+
 Meteor.publish("gameStats", function(){
   this.added("gameStats", 0);
 

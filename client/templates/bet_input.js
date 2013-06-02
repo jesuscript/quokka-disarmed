@@ -39,6 +39,15 @@ Template.betInput.rendered = function(){
   templateRendered = true;
 
   if(windowLoaded) initPlugins(); // otherwise init in window load callback
+
+  setInterval(function() {
+    BetGraph.bet();
+  }, 3000);
+
+  setInterval(function() {
+    BetGraph.revoke();
+  }, 8000);
+
 };
 
 $(window).load(function(){

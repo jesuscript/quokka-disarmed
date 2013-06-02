@@ -3,9 +3,9 @@ Meteor.startup(function(){
   Meteor.subscribe("gameStats");
   Meteor.subscribe("flags");
   Meteor.subscribe("userData");
+  Meteor.subscribe("news");
   Deps.autorun(function(){
     Meteor.user(); // to set the dependency
     Meteor.subscribe("userBets");
   });
-
 });

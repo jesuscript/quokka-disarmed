@@ -1,18 +1,29 @@
 <template name="news_dialog">
-  <div id="" class="fade-in">
+  <div id="news-dialog" class="fade-in">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
       <div class="modal-header">
         <button type="button" class="close">&times;</button>
-        <h3>Our latest news</h3>
+        <h3>Our Latest News</h3>
       </div>
       <div class="modal-body">
-        <p>blahblahblah static text to replace with real stuff</p>
+        {{#each news}}
+          {{> news}}
+        {{/each}}
       </div>
       <div class="modal-footer">
         <a class="btn" id="cancel">Close</a>
       </div>
     </div>
+  </div>
+</template>
+
+
+<template name="news">
+  <div class="news">
+    <div class="timestamp">{{dateFormat timestamp}}</div>
+    <div class="title">{{title}}</div>    
+    <div class="body">{{body}}</div>
   </div>
 </template>

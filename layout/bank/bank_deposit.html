@@ -1,0 +1,13 @@
+<template name="bankDeposit">
+  <div class="instruction">Deposit Bitcoins using the QR code or the address below</div>
+  <div class="qr-code">
+    {{{qrCode}}}
+  </div>
+  <div class="deposit-address">
+    <span class="desc">Deposit address:</span><span>{{depositAddress}}<span>
+  </div>
+  {{else}}
+  <div class="signin-prompt">
+    Please  <a class="signin-btn" href="#">sign in</a> or <a class="signup-btn" href="#">create an account</span>
+  </div>
+</template>

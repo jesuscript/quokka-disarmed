@@ -9,7 +9,7 @@
     width: 500px;
     margin: 0 auto;
     .dialog{
-      height: 270px;
+      height: 285px;
       padding-top: 50px;
       border-bottom: 1px solid #222222;
       border-radius: 0px 0px 4px 4px;
@@ -41,9 +41,9 @@
   }
   .shroud{
     z-index: 110;
-    -webkit-animation:fadeIn ease-in 1;
-    -moz-animation:fadeIn ease-in 1;
-    animation:fadeIn ease-in 1;
+    -webkit-animation:fadeIn03 ease-in 1;
+    -moz-animation:fadeIn03 ease-in 1;
+    animation:fadeIn03 ease-in 1;
     
     -webkit-animation-fill-mode:forwards;
     -moz-animation-fill-mode:forwards;
@@ -67,10 +67,10 @@
     }
   }
   &.closed .pull-down{
-    transform: translateY(-332px);
-    -webkit-transform: translateY(-332px);
-    -moz-transform: translateY(-332px);
-    -o-transform: translateY(-332px);
+    transform: translateY(-352px);
+    -webkit-transform: translateY(-352px);
+    -moz-transform: translateY(-352px);
+    -o-transform: translateY(-352px);
   }
   &.open .bank-btn, .bank-btn:hover{
     background-image: none;
@@ -106,11 +106,21 @@
   }
   .instruction{
     color: #eeeeee;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     text-align: center;
+  }
+  .deposit-address{
+    text-align: center;
+    color: #ffffff;
+    .desc{
+      color: #eeeeee;
+      font-weight: bold;
+      margin-right: 10px;
+    }
   }
   .qr-code{
     text-align: center;
+    margin-bottom: 15px;
     img{
       width: 200px;
     }
@@ -122,6 +132,4 @@
   }
 }
 
-@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:0.3; } }
-@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:0.3; } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:0.3; } }
+
