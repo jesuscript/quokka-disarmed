@@ -5,7 +5,6 @@ Meteor.publish("flags", function(){
 });
 
 Meteor.publish("news", function(){
-  console.log('test');
   return Collections.News.find({}, {sort: {timestamp: -1}, limit: 10});
 });
 
