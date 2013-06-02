@@ -17,6 +17,7 @@ Template.signup_dialog.events({
     event.preventDefault();
     var username = $("#signup-dialog [name=username]").val();
     var password = $("#signup-dialog [name=password]").val();
+    var email = $("#signup-dialog [name=email]").val();
     if(username.length < 3){
       Session.set("signup_error", {
         error: 406,
@@ -26,6 +27,11 @@ Template.signup_dialog.events({
       Session.set("signup_error", {
         error: 406,
         reason: "Password is too short"
+      });
+    }else if(!validEmail(email)){
+      Session.set("signup_error", {
+        error: 417,
+        reason: "Email is invalid"
       });
     }else{
       Accounts.createUser({

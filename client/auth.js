@@ -28,4 +28,18 @@ Meteor.startup(function () {
     Session.set("reset_error");
   }
 
+  match = window.location.hash.match(/^\#\/verify-email\/(.*)$/);
+  if (match) {
+    Accounts._preventAutoLogin = true;
+    Accounts._verifyEmailToken = match[1];
+    window.location.hash = '';
+  }
+
+  if (Accounts._verifyEmailToken) {
+    Accounts.verifyEmail(Accounts._verifyEmailToken, function(error) {
+      $("body").append(Meteor.render(Template.verified_email));
+      Accounts._enableAutoLogin();
+    });
+  }
+
 });

@@ -14,7 +14,6 @@ Template.navbar.events({
   },
   "click .signout-btn": function(e){
     e.preventDefault();
-    console.log('lcicke');
     Meteor.logout();
   },
   "click .news-btn": function(e){

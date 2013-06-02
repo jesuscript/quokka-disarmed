@@ -1,0 +1,14 @@
+<template name="alerts">
+  {{#if alert}}
+  <div class="alert alert-error text-center">
+    <strong>Warning!</strong> {{message}}
+  </div>
+  {{/if}}
+  {{#if currentUser}}
+  {{#if emailNotVerified}}
+    <div class="alert alert-info text-center">
+      <strong>Note:</strong> Please check your email and click the link we sent. A verified email is the only way to recover a lost password!
+    </div>
+  {{/if}}
+  {{/if}}
+</template>

@@ -10,10 +10,11 @@
 <body>
   {{> bank }}
   {{> navbar }}
-  {{> header }}
   {{>lastLuckyNumbers}}  
   <div id="main-container" class="container-fluid">
     <div class="row-fluid">
+      {{> alerts }} 
+      {{> header }}
       <div class="span2">
         {{> topWinners }}
       </div>
@@ -38,4 +39,3 @@
     </div>
   </div>
 </body>
-
