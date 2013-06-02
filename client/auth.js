@@ -41,5 +41,6 @@ Meteor.startup(function () {
       Accounts._enableAutoLogin();
     });
   }
-
 });
+
+
