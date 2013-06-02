@@ -5,10 +5,10 @@ Template.bank.helpers({
 });
 
 Template.bank.events({
-  "click .bank-btn": function(e){
+  "click .bank-btn, click .shroud, click .close-dialog": function(e){
     e.preventDefault();
     Session.set("bank_tmp_open", !Session.get("bank_tmp_open"));
-  } 
+  },
 });
 
-Template.bank.preserve(["#bank"]);
+Template.bank.preserve(["#bank .pull-down"]);

@@ -1,7 +1,19 @@
 <template name="bank">
   <div id="bank" class="{{#if isOpen}}open{{else}}closed{{/if}}">
-    <div class="dialog chrome-padded inverse">
+    <div class="shroud"></div>
+    <div class="pull-down">
+      <div class="dialog chrome-padded inverse">
+        <div class="navbar navbar-inverse">
+            <div class="navbar-inner">
+                <ul class="nav">
+                  <li class="deposit active"><a href="#">Deposit</a></li>
+                  <li class="withdraw"><a href="#">Withdraw</a></li>
+                </ul>
+            </div>
+        </div>
+        <a class="close-dialog" href="#"><i class="icon-remove icon-white"></i></a>
+      </div>
+      <a class="bank-btn btn btn-inverse" href="#">Bank</a>
     </div>
-    <a class="bank-btn btn btn-inverse" href="#">Bank</a>
   </div>
 </template>

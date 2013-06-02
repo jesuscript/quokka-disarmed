@@ -13,8 +13,12 @@
   {{>lastLuckyNumbers}}  
   <div id="main-container" class="container-fluid">
     <div class="row-fluid">
-      {{> alerts }} 
-      {{> header }}
+      <div class="span12">
+        {{> alerts }} 
+        {{> header }}
+      </div>
+    </div>
+    <div class="row-fluid">
       <div class="span2">
         {{> topWinners }}
       </div>

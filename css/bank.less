@@ -1,39 +1,110 @@
 #bank{
   position: fixed;
   width: 100%;
-  z-index: 100;
-  .dialog{
-    height: 300px;
-    border-bottom: 1px solid #222222;
-    border-radius: 0px 0px 4px 4px;
+  z-index: 50;
+  height: 0px;
+  .pull-down{
+    z-index: 110;
+    position: relative;
     width: 500px;
     margin: 0 auto;
+    .dialog{
+      height: 300px;
+      border-bottom: 1px solid #222222;
+      border-radius: 0px 0px 4px 4px;
+    }
+    .bank-btn{
+      display: block;
+      text-transform: uppercase;
+      padding: 5px 0px;
+      border-radius: 0px 0px 4px 4px;
+      width: 30%;
+      margin: 0 auto -31px;
+      box-shadow: inset 0 0px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,0.05);
+      border-top: 0;
+    }
+    @media (max-width: 855px){
+      .bank-btn{
+        width: 10%;
+      }
+    }
+    @media (min-width: 1005px){
+      .bank-btn{
+        width: 40%;
+      }
+    }
+    -webkit-transition:all 0.5s ease-in-out;
+    -moz-transition:all 0.5s ease-in-out;
+    -o-transition:all 0.5s ease-in-out;
+    transition:all 0.5s ease-in-out;
   }
-  .bank-btn{
-    display: block;
-    text-transform: uppercase;
-    padding: 5px 0px;
-    border-radius: 0px 0px 4px 4px;
-    width: 17%;
-    margin: 0 auto -31px;
-    box-shadow: inset 0 0px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,0.05);
-    border-top: 0;
+  .shroud{
+    z-index: 110;
+    -webkit-animation:fadeIn ease-in 1;
+    -moz-animation:fadeIn ease-in 1;
+    animation:fadeIn ease-in 1;
+    
+    -webkit-animation-fill-mode:forwards;
+    -moz-animation-fill-mode:forwards;
+    animation-fill-mode:forwards;
+    
+    -webkit-animation-duration:0.5s;
+    -moz-animation-duration:0.5s;
+    animation-duration:0.5s;
+    display: none;
+  }
+  &.open{
+    height: 100%;
+    .pull-down{
+      transform: translateY(0px);
+      -webkit-transform: translateY(0px);
+      -moz-transform: translateY(0px);
+      -o-transform: translateY(0px);
+    }
+    .shroud{
+      display: block;
+    }
+  }
+  &.closed .pull-down{
+    transform: translateY(-332px);
+    -webkit-transform: translateY(-332px);
+    -moz-transform: translateY(-332px);
+    -o-transform: translateY(-332px);
   }
   &.open .bank-btn, .bank-btn:hover{
     background-image: none;
     background-color: #222222;
     box-shadow: none;
   }
-  -webkit-transition:all 0.5s ease-in-out;
-  -moz-transition:all 0.5s ease-in-out;
-  -o-transition:all 0.5s ease-in-out;
-  transition:all 0.5s ease-in-out;
-  &.open {
-    transform: translateY(0px);
-    -webkit-transform: translateY(0px);
+  .navbar{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    .navbar-inner{
+      border-radius: 0px;
+      padding-left: 0px;
+      text-transform: uppercase;
+      li{
+        width: 229px;
+        text-align:center;
+      }
+    }
   }
-  &.closed {
-    transform: translateY(-332px);
-    -webkit-transform: translateY(-332px);
+  .close-dialog{
+    position: absolute;
+    z-index: 150;
+    top: 0px;
+    right: 0px;
+    padding: 11px 14px;
+    opacity: 0.5;
+    transition: opacity 0.20s ease-in-out;
+    &:hover{
+      opacity: 1;
+    }
   }
 }
+
+@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:0.3; } }
+@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:0.3; } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:0.3; } }
