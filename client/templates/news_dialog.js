@@ -9,7 +9,6 @@ Template.news_dialog.events({
   }  
 });
 
-
 Handlebars.registerHelper('dateFormat', function(context) {
   return moment(context).format("dddd, MMMM DD, YYYY");
 });
