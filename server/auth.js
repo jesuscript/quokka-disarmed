@@ -1,3 +1,5 @@
+Accounts.config({sendVerificationEmail: true, forbidClientAccountCreation: false}); 
+
 Accounts.onCreateUser(function(options,user){
   _.extend(user,{
     balance: 100000000,//0,
@@ -16,7 +18,7 @@ Accounts.validateNewUser(function(user){
     throw new Meteor.Error(400, "Empty username");
   }
 
-  if(user.emails && user.emails.length && !validEmail(user.emails[0].address)){
+  if(!validEmail(user.emails[0].address)){
     throw new Meteor.Error(417, "Invalid email address")
   }
 
