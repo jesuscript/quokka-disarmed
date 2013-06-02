@@ -1,7 +1,18 @@
 Template.bank.helpers({
   isOpen: function(){
     return Session.get("bank_tmp_open");
-  } 
+  },
+  qrCode: function(){
+    Meteor.call('getQrImg', function(err, qrCode) {
+      if (err) console.log(err);
+      Session.set('qrCodeImg', qrCode);
+    }); 
+    if (Session.get('qrCodeImg'))
+      return Session.get('qrCodeImg');
+  },
+  depositAddress: function(){
+    return Meteor.user() && Meteor.user().depositAddress;
+  }
 });
 
 Template.bank.events({

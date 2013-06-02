@@ -12,6 +12,17 @@
             </div>
         </div>
         <a class="close-dialog" href="#"><i class="icon-remove icon-white"></i></a>
+        {{#if currentUser}}
+        <div class="instruction">Deposit Bitcoins using your deposit address or the QR code below</div>
+        <div class="qr-code">
+          {{{qrCode}}}
+        </div>
+        <span class="depositAddress">{{depositAddress}}</span>
+        {{else}}
+        <div class="signin-prompt">
+          Please  <a class="signin-btn" href="#">sign in</a> or <a class="signup-btn" href="#">create an account</span>
+        </div>
+        {{/if}}
       </div>
       <a class="bank-btn btn btn-inverse" href="#">Bank</a>
     </div>
