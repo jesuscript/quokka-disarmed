@@ -1,37 +1,3 @@
-// TODO: not sure how to improve this, but it sure is ugly. See issue #15.
-Template.withdraw_dialog.helpers({
-  depositsConfirmed: function(){
-    Meteor.call('areDepositsConfirmed', function(err, depositsConfirmed) {
-      if (err) console.log(err);
-      //Session.set('depositsConfirmed', depositsConfirmed);
-    }); 
-    //if (Session.get('depositsConfirmed'))
-      //return Session.get('depositsConfirmed');
-    return false;
-  },
-  outstandingDeposits: function(){
-    Meteor.call('getOutstandingDeposits', function(err, outstandingDeposits) {
-      if (err) console.log(err);
-      Session.set('outstandingDeposits', outstandingDeposits);
-    }); 
-    if (Session.get('outstandingDeposits'))
-      return intToBtc(Session.get('outstandingDeposits'));
-  },
-  timeToValidateDeposits: function(){
-    Meteor.call('getTimeToValidateDeposits', function(err, timeToValidateDeposits) {
-      if (err) console.log(err);
-      Session.set('timeToValidateDeposits', timeToValidateDeposits);
-    }); 
-    if (Session.get('timeToValidateDeposits'))
-      return Session.get('timeToValidateDeposits');
-  },
-  error: function(){
-    var err = Session.get("withdraw_error");
-    if(err) return err.reason;
-  }
-});
-
-
 Template.withdraw_dialog.events({
 
   'click .submit-btn': function(e, tmpl){
