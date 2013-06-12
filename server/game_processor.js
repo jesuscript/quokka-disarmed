@@ -1,5 +1,5 @@
 Meteor.startup(function(){
-  
+
   Observe.currentGame({
     gameUpdate: function(){
       var currentGames = Collections.Games.find({completed: false}).fetch();
@@ -24,6 +24,8 @@ Meteor.startup(function(){
 
       
       if(bets.length >= 2){
+        return; //DEBUG 
+        
         var bank = _.reduce(bets, function(memo, bet){ return memo + bet.amount; }, 0);
         var luckyNumber = Math.floor(Math.random() * 100); // <<<< Stephan write your codezz here
         

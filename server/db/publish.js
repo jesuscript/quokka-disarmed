@@ -12,7 +12,7 @@ Meteor.publish("gameStats", function(){
   this.added("gameStats", 0);
 
   var betUpdateCallback = function(){
-    var currentGame = Collections.Games.findOne({completed: false});
+    var currentGame = DB.currentGame();
 
     if(!currentGame) return;
     
@@ -36,8 +36,8 @@ Meteor.publish("games", function(){
   return Collections.Games.find({},{sort: {createdAt: -1}, limit: 100});
 });
 
-Meteor.publish("userBets", function(){ //update to publish only for the current game
-  return Collections.Bets.find({playerId: this.userId});
+Meteor.publish("bets", function(){ //update to publish only for the current game
+  return Collections.Bets.find({gameId: DB.currentGame()._id});
 });
 
 Meteor.publish("userData", function(){  // built-in meteor collection

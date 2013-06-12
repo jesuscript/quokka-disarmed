@@ -8,11 +8,8 @@ Meteor.methods({
 
       
       if (gameId === undefined){
-        console.log("betting.submitBet: no game found, bet cancelled");
-        return;
+        throw Meteor.Error(500, "No active games found");
       }
-
-      amount = Math.round(amount * 100000000);
 
       existingBet = Collections.Bets.findOne({playerId: this.userId, gameId: gameId});
 

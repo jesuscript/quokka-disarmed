@@ -1,32 +1,3 @@
-// var $gameWheel;
-// var windowLoaded = false;
-// var templateRendered = false;
-
-// var initPlugins = function(){
-//   GameWheel.init($gameWheel);
-// };
-
-// Template.gameWheel.rendered = function(){
-//   $gameWheel = $(this.find("#game-wheel"));
-//   templateRendered = true;
-
-//   if(windowLoaded) initPlugins(); // otherwise init in window load callback
-
-//   setInterval(function() {
-//     GameWheel.bet();
-//   }, 3000);
-
-//   setInterval(function() {
-//     GameWheel.revoke();
-//   }, 8000);
-
-// };
-
-// $(window).load(function(){
-//   windowLoaded = true;
-//   if(templateRendered) initPlugins(); //i'm sure there must be a better way to do this...
-// });
-
 Template.gameWheel.rendered = function(){
 
   function bet() {
@@ -127,18 +98,7 @@ Template.gameWheel.rendered = function(){
 
   var path = svg.selectAll("path");
 
-  setInterval(function() {
-    bet();
-  }, 3000);
-
-  setInterval(function() {
-    revoke();
-  }, 8000);
-
-
   draw();
-
-
 
   function draw() {
 

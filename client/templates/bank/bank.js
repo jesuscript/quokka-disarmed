@@ -21,7 +21,7 @@ Template.bank.events({
   },
   "click .signin-btn": function(e){
     e.preventDefault();
-    Auth.showSignupDialog();
+    Auth.showSigninDialog();
   },
   "click .signup-btn": function(e){
     e.preventDefault();

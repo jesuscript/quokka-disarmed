@@ -34,12 +34,14 @@ Template.navbar.helpers({
 });
 
 
-Template.navbar.rendered = function(){ 
+Template.navbar.rendered = function(){
+  /*
   var uv=document.createElement('script');
   uv.type='text/javascript';
   uv.async=true;
   uv.src='//widget.uservoice.com/9ZCCMSCPqP7NR9ZWuQzteQ.js';
   var s=document.getElementsByTagName('script')[0];
   s.parentNode.insertBefore(uv,s);
+  */
 }
 
