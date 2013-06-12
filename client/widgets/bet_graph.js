@@ -10,7 +10,6 @@ $.widget("bto.stackedBetGraph",{
   bets: function(bets){
     if(bets){
       this._bets = bets;
-      console.log(bets);
       this.redraw();
     }else{
       return bets;
