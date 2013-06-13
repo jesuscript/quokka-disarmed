@@ -1,5 +1,6 @@
 var $betSlider;
 var $betGraph;
+
 var windowLoaded = false;
 var templateRendered = false;
 
@@ -27,7 +28,7 @@ var initBetSlider = function(){
 
 var initBetGraph = function(){
   if($betGraph.data("btoStackedBetGraph")){
-    $betGraph.stackedBetGraph("redraw");
+    $betGraph.stackedBetGraph("draw");
 
   }else{
     $betGraph.stackedBetGraph();
