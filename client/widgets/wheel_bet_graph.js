@@ -1,4 +1,6 @@
 $.widget("bto.wheelBetGraph",$.bto.betGraph,{
+  //draw is working but currently adding / revoking bets is broken. 
+  
   options:{
     svgHeight: 250
   },

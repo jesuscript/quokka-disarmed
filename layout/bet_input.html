@@ -2,11 +2,11 @@
   <section id="bet-input" class="chrome-padded">
     <div class="row-fluid">
       <div class="span9">
-        <div class="bet-slider">
-        </div>
         {{#constant}}
-        <div class="bet-graph">
-        </div>
+          <div class="bet-slider">
+          </div>
+          <div class="bet-graph">
+          </div>
         {{/constant}}
       </div>
       <div class="span3 bet-stake-container">
@@ -15,10 +15,25 @@
             Stake: 
           </div>
           <div class="span8">
-            <input type="text" class="stake input-block-level"/>
+            <input type="text" class="stake input-block-level" value="{{betAmount}}"/>
           </div>
         </div>
-        <a class="btn btn-inverse bet-btn">Bet</a>
+        <div class="bet-buttons">
+          {{#if activeBet}}
+            <div class="row-fluid">
+              <div class="span6">
+                <a href="#" class="btn btn-inverse update-btn">
+                  Update
+                </a>
+              </div>
+              <div class="span6">
+                <a class="btn revoke-btn" href="#">Revoke</a>
+              </div>
+            </div>
+          {{else}}
+            <a class="btn btn-inverse bet-btn">Bet</a>
+          {{/if}}
+        </div>
       </div>
     </div>
   </section>

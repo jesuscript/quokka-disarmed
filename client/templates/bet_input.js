@@ -7,7 +7,7 @@ var templateRendered = false;
 var saveBetRange = function(min, max){
   var vals = $betSlider.rangeSlider("values");
   
-  Session.set("betRange", vals);
+  Session.set("betSlider.range", vals);
 }
 
 var initBetSlider = function(){
@@ -58,13 +58,26 @@ $(window).load(function(){
   if(templateRendered) initPlugins(); //i'm sure there must be a better way to do this...
 });
 
+Template.betInput.helpers({
+  activeBet: function(){
+    return Meteor.user() && Collections.Bets.findOne({playerId: Meteor.user()._id});
+  },
+  betAmount: function(){
+    var bet = Meteor.user() && Collections.Bets.findOne({playerId: Meteor.user()._id});
+
+    return bet ? intToBtc(bet.amount) : 0;
+  } 
+});
 
 Template.betInput.events({
-  "click .bet-btn":function(){
+  "click .bet-btn, click .update-btn":function(){
     var amount = $("input.stake").val() || 0;
-    var range = Session.get("betRange");
+    var range = Session.get("betSlider.range");
     
     Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
+  },
+  "click .revoke-btn": function(){
+    Meteor.call("revokeBet");
   } 
 });
 

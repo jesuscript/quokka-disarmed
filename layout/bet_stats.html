@@ -1,5 +1,6 @@
 <template name="betStats">
   <section id="bet-stats" class="chrome-padded">
+    {{#with activeBet}}
     <div class="row-fluid">
       <div class="span6">
         <label>
@@ -7,7 +8,13 @@
         </label>
       </div>
       <div class="span6">
-        <span class="indicator">[{{range}}]</span>
+        <span class="indicator">
+          {{#if rangeMin}}
+            [{{rangeMin}}, {{rangeMax}}]
+          {{else}}
+            None
+          {{/if}}
+        </span>
       </div>
     </div>
     <div class="row-fluid">
@@ -20,6 +27,7 @@
         <span class="indicator">{{rangeSize}}</span>
       </div>
     </div>
+    {{/with}}
     <div class="row-fluid">
       <div class="span6">
         <label>
@@ -37,7 +45,7 @@
         </label>
       </div>
       <div class="span6">
-        <span class="indicator">0</span>
+        <span class="indicator">{{maxLoss}}</span>
       </div>
     </div>
   </section>
