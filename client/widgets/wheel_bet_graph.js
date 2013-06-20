@@ -19,6 +19,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     if(bets){
       this._bets = bets;
       this._createPath();
+      this._updateTotalValue();
     }else{
       return bets;
     }
@@ -70,19 +71,17 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       .text("BTC");
   },
   _drawTotalValue: function(){
-    var array = this._bets;
-    var cumulative = 0;
-    var sums = _.map(array,function(num){ 
-      cumulative += intToBtc(num.amount);
-    });
-
     this._totalValue = this._centerGroup.append("text")
       .attr("class", "total")
       .attr("dy", 7)
       .attr("text-anchor", "middle")
       .text("Loading bets...");
-
-
+  },
+  _updateTotalValue: function(){
+    var cumulative = _.reduce(this._bets,function(memo,num){ 
+      return memo + intToBtc(num.amount);
+    },0,this);
+    
     this._totalValue
       .text(cumulative.toFixed(8))
       .transition()
