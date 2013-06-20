@@ -2,9 +2,18 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
   options: {
     positionCount: 100
   },
+  _create: function(){
+    this._super();
+    
+    $(window).resize(_.debounce(this.draw.bind(this), 10));
+    
+    this._stack = d3.layout.stack();
+
+    this.draw();
+  },
+  
   draw: function(){
     this.element.find("svg").remove();
-    
     this._svg = d3.select(this.element[0]).append("svg");
 
     this._updateStack();
@@ -14,21 +23,27 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
     this._drawRects();
     this._drawXAxis();
   },
+  bets: function(bets){
+    if(bets){
+      this._bets = bets;
+      this._updateStack();
+    }else{
+      return bets;
+    }
+  },
   _updateStack: function(){
     var convertedBetsData = this._convertBetsToStackData();
-    var stack = d3.layout.stack();
 
     this._yStackMax = 0;
     this._layers = [];
     
     if(convertedBetsData.length){
-      this._layers = stack(convertedBetsData);
+      this._layers = this._stack(convertedBetsData);
 
       this._yStackMax = d3.max(this._layers, function(layer) {
         return d3.max(layer, function(d) { return d.y0 + d.y; });
       });
     }
-
   },
   _convertBetsToStackData:function(){
     return _.map(this._bets, function(bet){

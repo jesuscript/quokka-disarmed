@@ -8,13 +8,20 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     this._super();
     
     this._createSvg();
+    this.draw();
   },
   draw: function(){
-    if(!this._bets.length) return;
-
     this._updateColorRange();
     this._createLayout();
     this._createPath();
+  },
+  bets: function(bets){
+    if(bets){
+      this._bets = bets;
+      this._createPath();
+    }else{
+      return bets;
+    }
   },
   _createSvg: function(){
     var svgHeight = this.options.svgHeight;
@@ -83,14 +90,16 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       .attr("x", function(d, i) { return i * 32; });
   },
   _createPath: function(){
-    this._path = this._svg.selectAll("path").data(this._pie(this._bets), function (d) {
-      return d.data.playerId;
-    });
-
+    this._updatePathData();
     this._definePathEnter();
     this._definePathExit();
 
-    this._path.transition().duration(750).attrTween("d", this._getArcTweenFunction());
+    this._pathData.transition().duration(750).attrTween("d", this._getArcTweenFunction());
+  },
+  _updatePathData: function(){
+    this._pathData = this._svg.selectAll("path").data(this._pie(this._bets), function (d) {
+      return d.data.playerId;
+    });
   },
   _definePathEnter:function(){
     var enterAntiClockwise = {
@@ -98,7 +107,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       endAngle: Math.PI * 2
     };
     
-    this._path.enter().append("path")
+    this._pathData.enter().append("path")
       .attr("fill", function (d, i) {
         return this._colorRange(i);
       }.bind(this))
@@ -127,7 +136,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       );
   },
   _definePathExit: function(){
-    this._path.exit()
+    this._pathData.exit()
       .transition()
       .duration(750)
       .attrTween('d', this._getArcTweenOutFunction())
