@@ -22,6 +22,7 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
     this._drawMainLayer();
     this._drawRects();
     this._drawXAxis();
+    this._drawYAxis();
   },
   bets: function(bets){
     if(bets){
@@ -69,7 +70,6 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
     this._y = d3.scale.linear()
       .domain([0, this._yStackMax])
       .range([this._graphHeight, 0]);
-
   },
   _drawMainLayer: function(){
     this._mainLayer = this._svg.selectAll(".layer")
@@ -101,6 +101,19 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
       .attr("class", "x axis")
       .attr("transform", "translate(0," + this._graphHeight + ")")
       .call(xAxis);
+  },
+  _drawYAxis: function(){
+    var yAxis = d3.svg.axis().scale(this._y).orient("left").tickFormat(d3.format(".2s"));
+
+    this._svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("BTC");
   }
 });
 
