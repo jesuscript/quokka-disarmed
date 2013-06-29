@@ -28,9 +28,9 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
     if(bets){
       this._bets = bets;
       this._updateStack();
-    }else{
-      return bets;
     }
+
+    return bets;
   },
   _updateStack: function(){
     var convertedBetsData = this._convertBetsToStackData();
@@ -81,18 +81,19 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
       }.bind(this));
   },
   _drawRects: function(){
-    var rects = this._mainLayer.selectAll("rect")
+    this._mainLayer.selectAll("rect")
       .data(function(d) { return d; })
-      .enter().append("rect")
+      .enter()
+      .append("rect")
       .attr("x", function(d) { return this._x(d.x); }.bind(this))
       .attr("y", this._graphHeight)
       .attr("width", this._x.rangeBand())
-      .attr("height", 0);
-
-    rects.transition()
+      .attr("height", 0)
+      .transition()
       .delay(function(d, i) { return i * 10; })
       .attr("y", function(d) { return this._y(d.y0 + d.y); }.bind(this))
       .attr("height", function(d) { return this._y(d.y0) - this._y(d.y0 + d.y); }.bind(this));
+
   },
   _drawXAxis: function(){
     var xAxis = d3.svg.axis().scale(this._x).tickSize(0).tickPadding(6).orient("bottom");

@@ -22,12 +22,16 @@ Template.bankWithdraw.helpers({
     return outDeposits && intToBtc(outDeposits);
   },
   timeToValidateDeposits: function(){
-    if (Session.get('timeToValidateDeposits'))
-      return Session.get('timeToValidateDeposits');
+    if(Session.get('timeToValidateDeposits')) return Session.get('timeToValidateDeposits');
+
+    return undefined;
   },
   error: function(){
     var err = Session.get("withdraw_error");
+    
     if(err) return err.reason;
+
+    return undefined;
   },
   transfer: function(){
     return Session.get("withdraw_tmpl_transfer");

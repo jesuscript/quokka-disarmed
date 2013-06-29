@@ -169,5 +169,4 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       };
     }
   }
-
 });
