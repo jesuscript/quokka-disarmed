@@ -1,9 +1,4 @@
 Template.navbar.events({
-  "click .withdraw-btn": function(e){
-    e.preventDefault();
-    $("body").append(Meteor.render( Template.withdraw_dialog ));
-    Session.set("withdraw_error");
-  },
   "click .signup-btn": function(e){
     e.preventDefault();
     Auth.showSignupDialog();
@@ -23,13 +18,6 @@ Template.navbar.events({
   "click .howto-btn": function(e){
     e.preventDefault();
     $("body").append(Meteor.render( Template.howto_dialog ));
-  }
-});
-
-
-Template.navbar.helpers({
-  hasBalance: function(){
-    return Meteor.user().balance;
   }
 });
 
