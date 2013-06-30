@@ -1,7 +1,6 @@
 // TODO: see git issue #16
 Meteor.methods({
   areDepositsConfirmed: function() {
-    console.log(Date.now() + 'call to areDepositConfirmed');
     // this block bothers me - i use it to instantiate these vars across all withdraw methods
     // however it's likely not ideal because it requires the code to flow in a certain way for things to be defined
     received = [];
@@ -10,7 +9,7 @@ Meteor.methods({
       received[i] = getReceivedByAddress(depositAddress, i);
       if(isNaN(received[i])) { throw new Meteor.Error(503, "Could not connect to bitcoind"); }
     };
-    ret = ((received[2] - received[0]) >= 0) ? true : false; //ALERT 6
+    ret = ((received[6] - received[0]) >= 0) ? true : false;
     return ret;
   },
   getOutstandingDeposits: function() {
@@ -22,7 +21,7 @@ Meteor.methods({
   },
   requestWithdrawal: function(address, intAmount) {
     validateWithdrawal(address, intAmount);
-    if (1 < intAmount) { // added 100,000 satoshis (10x min fee) to cover very high trx fee (which could happen if loads of dust present in the wallet)
+    if (getWalletBalance() + 100000 < intAmount) { // added 100,000 satoshis (10x min fee) to cover very high trx fee (which could happen if loads of dust present in the wallet)
       alertExcessWithdrawal(address, intAmount);
       Meteor.users.update({_id: Meteor.userId()}, {$inc:{"balance": -intAmount}});
       return false;
