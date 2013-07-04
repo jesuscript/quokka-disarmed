@@ -1,58 +1,41 @@
 <template name="bankWithdraw">
   <div class="withdraw-ui">
-    {{#if transfer}}
-      {{#with transfer}}
-        {{#if completed}}
-          {{>withdrawConfirmationInstant transaction}}
-        {{else}}
-          {{>withdrawConfirmationDelayed }}
-        {{/if}}
-      {{/with}}
+    {{#if bitcoindDown}}
+      {{>withdrawBitcoindDown}}
     {{else}}
-      {{#if depositsConfirmed}}
-        {{#if error}}
-          <div class="alert fade-in">
-            <strong>Oops!</strong> {{error}}
+      {{#if transfer}}
+        {{#with transfer}}
+          {{#if instant}}
+            {{>withdrawConfirmationInstant transaction}}
+          {{else}}
+            {{>withdrawConfirmationDelayed}}
+          {{/if}}
+        {{/with}}
+      {{else}}
+        {{#if hasBalance}}
+          {{#if depositsConfirmed}}
+            {{#if error}}
+              <div class="alert alert-error fade-in">
+                {{error}}
+              </div>
+            {{/if}}
+            {{>withdrawForm}}
+          {{else}}
+            <h3>Please wait</h3>
+            <div class="copy">
+              <p>You recently sent funds to your deposit address.</p>
+              <p>Before you can withdraw these funds as well as any associated winnings, you must first wait for them to be confirmed by the bitcoin network.</p>
+              <p>A total of ฿{{outstandingDeposits}} still needs to be confirmed. Withdrawals will be available to you in approximately {{timeToValidateDeposits}} minutes.</p>
+            </div>
+          {{/if}}
+        {{else}}
+          <h3>Nothing to widthdraw</h3>
+          <div class="copy">
+            <p>Your balance is currently ฿0.</p>
+            <p>You need to make a deposit before you can withdraw funds.</p>
           </div>
         {{/if}}
-        
-        <div class="copy">
-          <p>Withdrawal of funds is usually instantaneous. For larger sums, our verification process can take up to 5 hours.</p>
-        </div>
-        <div class="row-fluid">
-          <div class="span4">
-            <div class="desc">
-              Wallet address
-            </div>
-          </div>
-          <div class="span8">
-            <input class="address-input input-block-level" type="text">
-          </div>
-        </div>
-        <div class="row-fluid">
-          <div class="span4">
-            <div class="desc">
-              Amount
-            </div>
-          </div>
-          <div class="span8">
-            <input class="input-block-level amount-input" id="prependedInput" type="text" placeholder="Minimum ฿0.001">
-          </div>
-        </div>
-        <div class="tip">
-          ฿0.0005 transaction fee applies
-        </div>
-        <a class="withdraw-btn btn btn-main-action" id="confirm">Request withdrawal</a>
-      {{else}}
-        <h3>Please wait</h3>
-        <div class="copy">
-          <p>You recently sent funds to your deposit address.</p>
-          <p>Before you can withdraw these funds as well as any associated winnings, you must first wait for them to be confirmed by the bitcoin network.</p>
-          <p>A total of ฿{{outstandingDeposits}} still needs to be confirmed. Withdrawals will be available to you in approximately {{timeToValidateDeposits}} minutes.</p>
-          
-        </div>
       {{/if}}
-      
     {{/if}}
   </div>
 </template>

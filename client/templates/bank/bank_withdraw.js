@@ -1,18 +1,3 @@
-Template.bankWithdraw.rendered = function(){
-  Meteor.call('areDepositsConfirmed', function(err, depositsConfirmed) {
-    if (err) console.log(err);
-    Session.set('depositsConfirmed', depositsConfirmed);
-  }); 
-  Meteor.call('getOutstandingDeposits', function(err, outstandingDeposits) {
-    if (err) console.log(err);
-    Session.set('outstandingDeposits', outstandingDeposits);
-  }); 
-  Meteor.call('getTimeToValidateDeposits', function(err, timeToValidateDeposits) {
-    if (err) console.log(err);
-    Session.set('timeToValidateDeposits', timeToValidateDeposits);
-  }); 
-};
-
 Template.bankWithdraw.helpers({
   depositsConfirmed: function(){
     return Session.get('depositsConfirmed');
@@ -23,54 +8,66 @@ Template.bankWithdraw.helpers({
   },
   timeToValidateDeposits: function(){
     if(Session.get('timeToValidateDeposits')) return Session.get('timeToValidateDeposits');
-
+    return undefined;
+  },
+  bitcoindDown: function(){
+    var err = Session.get("withdraw_bitcoindDown");
+    if(err) return err.reason;
     return undefined;
   },
   error: function(){
     var err = Session.get("withdraw_error");
-    
     if(err) return err.reason;
-
     return undefined;
   },
   transfer: function(){
     return Session.get("withdraw_tmpl_transfer");
+  },
+  hasBalance: function(){
+    return Meteor.user().balance;
   }
 });
 
 Template.bankWithdraw.events({
-  'click .withdraw-btn': function(e, tmpl){
-    var address = $(tmpl.find(".address-input")).val();
-    var amount = $(tmpl.find(".amount-input")).val();
-    
-    // client validation very limited on purpose as most of it would be doing server calls anyway
-    // ... and code would end up being duplicated
+  "submit form": function(e, tmpl){
+    event.preventDefault();
+    var address = $(tmpl.find("[name=address]")).val();
+    var amount = $(tmpl.find("[name=amount]")).val();
+    var regexp = /^\d+(\.\d{1,3})?$/;
     if(address.length < 27 || address.length > 34){
       Session.set("withdraw_error", {
         error: 406,
         reason: "Address is invalid"
+      });
+    } else if (amount < 0.001) {
+      Session.set("withdraw_error", {
+        error: 406,
+        reason: "Minimum withdrawal amount is ฿0.001"
+      });
+    } else if (!regexp.test(amount)) {
+      Session.set("withdraw_error", {
+        error: 406,
+        reason: "Amount is invalid"
       });
     } else {
       Meteor.call(
         'requestWithdrawal',
         address,
         btcToInt(amount),
-        function(err, transfered){
+        function(err, trxInformation){
           if(err){
             Session.set("withdraw_error", err);
           }else{
             Session.set("withdraw_error");
-            
             TemplateHelpers.removeDialog(tmpl);
-
-            if (transfered) {
+            if (trxInformation) {
               Session.set("withdraw_tmpl_transfer", {
-                completed: true,
-                transaction: transfered
+                instant: true,
+                transaction: trxInformation
               });
             } else {
               Session.set("withdraw_tmpl_transfer", {
-                completed: false
+                instant: false
               });
             }
           }
@@ -79,3 +76,8 @@ Template.bankWithdraw.events({
     }
   }
 });
+
+
+Template.withdrawForm.rendered = function(){
+  this.find("input").focus();
+}
