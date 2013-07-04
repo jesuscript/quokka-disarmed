@@ -6,9 +6,9 @@ $.widget("bto.betGraph",{ // base class for bet graphs. "abstract"
     if(bets){
       this._bets = bets;
       this.draw();
-    }else{
-      return bets;
     }
+    
+    return bets;
   },
   _updateColorRange: function(){
     this._colorRange = d3.scale.category20();

@@ -8,11 +8,13 @@ var initBetWheel = function(){
   }else{
     $betWheel.wheelBetGraph();
 
+    $betWheel.wheelBetGraph("users", Meteor.users);
+
     Deps.autorun(function(){
       $betWheel.wheelBetGraph("bets", Collections.Bets.find().fetch());
     });
   }
-}
+};
 
 Template.gameWheel.rendered = function(){
   $betWheel = $(this.find(".bet-wheel"));

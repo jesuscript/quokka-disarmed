@@ -48,5 +48,17 @@ Meteor.publish("userData", function(){  // built-in meteor collection
                            }});
 });
 
+Meteor.publish("users", function(){
+  return Meteor.users.find({}, {
+    fields: {
+      username: 1
+    }
+  });
+});
+
+Meteor.publish("payouts", function(){
+  return Collections.Payouts.find({},{sort: {timestamp: -1}, limit: 10});
+});
+
 // the user shouldn't have the right to modify anything within their user profiles
 Meteor.users.deny({update: function () { return true; }});

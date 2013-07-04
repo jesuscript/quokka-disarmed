@@ -6,7 +6,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
   },
   _create: function(){
     this._super();
-    
+
     this._createSvg();
     this.draw();
   },
@@ -20,9 +20,15 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       this._bets = bets;
       this._createPath();
       this._updateTotalValue();
-    }else{
-      return bets;
     }
+    return this._bets;
+  },
+  users: function(users){
+    if(users){
+      this._users = users;
+    }
+
+    return this._users;
   },
   _createSvg: function(){
     var svgHeight = this.options.svgHeight;
@@ -130,8 +136,17 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
             'border-radius': '2px',
             'font-family': 'Helvetica Neue, Helvetica, Arial, sans-serif'
           }).text(function(d, i) {//TODO: replace playerId with username
-            return d.data.playerId  + '<br> BTC ' + d.value.toFixed(8); 
-          })
+            var user;
+            var id = d.data.playerId;
+
+            if(this._users && (user = this._users.findOne({_id: id})) && user.username ){
+              user = user.username;
+            }else{
+              user = id;
+            }
+              
+            return user + '<br> BTC ' + d.value.toFixed(8); 
+          }.bind(this))
       );
   },
   _definePathExit: function(){
@@ -139,7 +154,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       .transition()
       .duration(750)
       .attrTween('d', this._getArcTweenOutFunction())
-      .remove()
+      .remove();
   },
   _getArcTweenFunction: function() {
     var arc = this._arc;
@@ -151,7 +166,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       return function(t) {
         return arc(i(t));
       };
-    }
+    };
   },
   _getArcTweenOutFunction: function() {
     var arc = this._arc;
@@ -167,6 +182,6 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       return function (t) {
         return arc(i(t));
       };
-    }
+    };
   }
 });
