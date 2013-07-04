@@ -8,30 +8,6 @@ Meteor.publish("news", function(){
   return Collections.News.find({}, {sort: {timestamp: -1}, limit: 10});
 });
 
-Meteor.publish("gameStats", function(){
-  this.added("gameStats", 0);
-
-  var betUpdateCallback = function(){
-    var currentGame = DB.currentGame();
-
-    if(!currentGame) return;
-    
-    var bets = Collections.Bets.find({gameId: currentGame._id}).fetch();
-    var totalBank = _.reduce(bets, function(memo, bet){ return memo + bet.amount; }, 0);
-    var numberOfPlayers = _.size(_.groupBy(bets, function(bet){ return bet.playerId; }));
-
-    this.changed("gameStats", 0, { numberOfPlayers: numberOfPlayers, totalBank: totalBank});
-  }.bind(this);
-
-  var currentGameHandle = Observe.currentGame({betUpdate: betUpdateCallback}, true);
-  
-  this.ready();
-
-  this.onStop(function(){
-    currentGameHandle.stop();
-  });
-});
-
 Meteor.publish("games", function(){
   return Collections.Games.find({},{sort: {createdAt: -1}, limit: 100});
 });

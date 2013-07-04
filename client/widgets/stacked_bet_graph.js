@@ -27,6 +27,7 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
   bets: function(bets){
     if(bets){
       this._bets = bets;
+
       this._updateStack();
     }
 

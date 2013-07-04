@@ -55,6 +55,8 @@ Meteor.startup(function(){
         }
       }else{
         Meteor.clearTimeout(gameTimeout);
+        gameTimeout = null;
+        
         Collections.Games.update(currentGame, {$set:{startedAt: undefined}});
       }
     }

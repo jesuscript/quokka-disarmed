@@ -1,11 +1,7 @@
 Template.lastLuckyNumbers.helpers({
   luckyNumbers: function(){
-    var numbers = [];
+    var games = Collections.Games.find({completed: true},{sort: {completedAt: -1}}).fetch();
 
-    for(var i=0; i<100; i++){
-      numbers.push(_.random(1,100));
-    }
-    
-    return numbers;
-  } 
+    return _.map(games, function(game){ return game.luckyNum; });
+  }
 });
