@@ -9,13 +9,28 @@ Template.playerHeader.events({
   }
 });
 
+var previousBalance = null;
 
 Template.playerHeader.helpers({
-  username: function(){
-    return Meteor.user().username;
-  },
-  balance: function(){
-    return intToBtc(Meteor.user().balance);
+  playerInfo: function(){
+    var user = Meteor.user();
+    var balanceClass = "";
+    
+    if(!user) return {};
+
+    if(previousBalance !== null){
+      if(previousBalance > user.balance) balanceClass = "decreased";
+      if(previousBalance < user.balance) balanceClass = "increased";
+    }
+
+    previousBalance = user.balance;
+
+    return {
+      username: user.username,
+      balance: intToBtc(user.balance),
+      balanceClass: balanceClass
+    };
   }
 });
+
 

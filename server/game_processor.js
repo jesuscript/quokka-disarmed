@@ -6,24 +6,32 @@ Meteor.startup(function(){
   var processGame = function(){
     var currentGame = DB.currentGame();
     var luckyNum = GetRandInt();
-    var game = new Quokka(DB.bets(currentGame));
+    var bets = DB.bets(currentGame);
+    var game = new Quokka(bets);
     var payouts = game.computeResults(luckyNum);
 
+    _.each(bets, function(bet){ //<< is there any way to optimise this?
+      Meteor.users.update({_id: bet.playerId}, {$inc: {balance: - bet.amount}});
+    });
+
     _.each(payouts, function(payout, id){
+      console.log(payout, id);
+
       Meteor.users.update({_id: id},{$inc: {balance: payout}});
+      
       Collections.Payouts.insert({
         gameId: currentGame._id,
         playerId: id,
         payout: payout,
         timestamp: (new Date()).getTime()
       });
-      
-      Collections.Games.update(currentGame, {$set:{
-        completedAt: (new Date()).getTime(),
-        completed: true,
-        luckyNum: luckyNum
-      }});
     });
+    
+    Collections.Games.update(currentGame, {$set:{
+      completedAt: (new Date()).getTime(),
+      completed: true,
+      luckyNum: luckyNum
+    }});
   };
   
   Observe.currentGame({

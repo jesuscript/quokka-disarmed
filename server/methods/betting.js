@@ -13,9 +13,9 @@ Meteor.methods({
 
       existingBet = Collections.Bets.findOne({playerId: this.userId, gameId: gameId});
 
+      if(user.balance < amount) return;
+        
       if(existingBet){
-        if(user.balance + existingBet.amount < amount) return;
-
         Collections.Bets.update({_id: existingBet._id}, {
           $set: {
             amount: amount,
@@ -23,15 +23,7 @@ Meteor.methods({
             rangeMax: rangeMax
           }
         });
-
-        Meteor.users.update({_id: user._id},{
-          $set: {
-            balance: user.balance + existingBet.amount - amount
-          }
-        });
       }else{
-        if(user.balance < amount) return;
-        
         Collections.Bets.insert({
           playerId: this.userId,
           gameId: gameId,
@@ -39,34 +31,20 @@ Meteor.methods({
           rangeMin: rangeMin,
           rangeMax: rangeMax
         });
-
-        Meteor.users.update({_id: user._id},{
-          $set: {
-            balance: user.balance - amount
-          }
-        });
       }
     }
   },
   revokeBet: function(){
     var currentGame = Collections.Games.findOne({completed: false});
     var bet;
-    var user;
     
     if(currentGame){
       bet = Collections.Bets.findOne({
         gameId: currentGame._id,
         playerId: this.userId
       });
-      user = Meteor.users.findOne({_id: this.userId});
 
       Collections.Bets.remove({_id: bet._id});
-
-      Meteor.users.update({_id: this.userId},{
-        $set: {
-          balance: user.balance + bet.amount
-        }
-      });
     }
     
   }

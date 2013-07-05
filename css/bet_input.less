@@ -8,6 +8,38 @@
   }
   .bet-stake-container, .bet-slider{
     margin-top: 40px;
+    .ui-rangeSlider-container, .ui-rangeSlider-label{
+      background-color: #363636;
+      *background-color: #222222;
+      background-image: -moz-linear-gradient(top, #444444, #222222);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#444444), to(#222222));
+      background-image: -webkit-linear-gradient(top, #444444, #222222);
+      background-image: -o-linear-gradient(top, #444444, #222222);
+      background-image: linear-gradient(to bottom, #444444, #222222);
+      background-repeat: repeat-x;
+      border-color: #222222 #222222 #000000;
+      border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    }
+    .ui-rangeSlider-arrow{
+      background: #222222;
+      border-color: #000000;
+    }
+    .ui-rangeSlider-leftArrow .ui-rangeSlider-arrow-inner{
+      border-right-color: #ffffff;
+    }
+    .ui-rangeSlider-rightArrow .ui-rangeSlider-arrow-inner{
+      border-left-color: #ffffff;
+    }
+    .ui-rangeSlider-label-inner{
+      border-top-color: #222222;
+    }
+    .ui-rangeSlider-bar{
+      background: url("/img/b_w_stripes_s.png");
+      box-shadow: none;
+      -webkit-box-shadow: none;
+      border-radius: 3px;
+      height: 28px;
+    }
   }
   
   .bet-graph {
@@ -25,6 +57,10 @@
     .bar {
       fill: steelblue;
     }
+  }
+
+  .stake{
+    border: 2px solid #222222;
   }
 
 }

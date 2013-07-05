@@ -2,16 +2,18 @@
   <section id="player-header" class="chrome-padded">
     <div class="row-fluid">
       {{#if currentUser }}
-      <div class="span6 username">
-        {{username}}
-      </div>
-      <div class="span6">
-        ฿{{balance}}
-      </div>
+        {{#with playerInfo}}
+          <div class="span6 username">
+            {{username}}
+          </div>
+          <div class="span6">
+            <span class="{{balanceClass}}">฿{{balance}}</span>
+          </div>
+        {{/with}}
       {{else}}
-      <div class="span12 signup-prompt">
-        Please  <a class="signin-btn" href="#">sign in</a> or <a class="signup-btn" href="#">create an account</span>
-      </div>
+        <div class="span12 signup-prompt">
+          Please  <a class="signin-btn" href="#">sign in</a> or <a class="signup-btn" href="#">create an account</span>
+</div>
       {{/if}}
     </div>
   </section>
