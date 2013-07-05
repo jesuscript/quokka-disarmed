@@ -3,8 +3,8 @@
     <div class="row-fluid">
       {{#if currentUser }}
         {{#with playerInfo}}
-          <div class="span6 username">
-            {{username}}
+          <div class="span6">
+            <a class="username" href="#">{{username}}</a>
           </div>
           <div class="span6">
             <span class="{{balanceClass}}">฿{{balance}}</span>

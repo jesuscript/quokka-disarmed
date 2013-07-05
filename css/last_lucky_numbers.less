@@ -56,10 +56,25 @@
     width:30px;
     li{
       text-align: center;
-      background-color: #ffffff;
+      background-color: #fafafa;
+      background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
+      background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
+      background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
+      background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
+      background-repeat: repeat-x;
+
 
       &:nth-child(odd){
-        background-color: #222222;
+        background-color: #363636;
+        *background-color: #222222;
+        background-image: -moz-linear-gradient(top, #444444, #222222);
+        background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#444444), to(#222222));
+        background-image: -webkit-linear-gradient(top, #444444, #222222);
+        background-image: -o-linear-gradient(top, #444444, #222222);
+        background-image: linear-gradient(to bottom, #444444, #222222);
+        background-repeat: repeat-x;
+
         color: #ffffff;
       }
     }
