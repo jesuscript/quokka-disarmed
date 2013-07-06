@@ -1,23 +1,28 @@
 $.widget("bto.stackedBetGraph",$.bto.betGraph,{
   
-  obets: [],
+  _bets: [],
   valueArray: [],
   rootContainer: '',
+
+  bets: function(bets){
+    if(bets){
+      this._bets = bets;
+      this.recalculateBets();
+      this.redraw();
+    }
+    return bets;
+  },
 
 
   _create: function(){
     this._super();
-    
     $(window).resize(_.debounce(this.draw.bind(this), 5));
-    
-    this._stack = d3.layout.stack();
-
     this.draw();
   },
 
 
   draw: function() {
-
+    console.log('draw invoked');
     this.element.find("svg").remove();
     this._svg = d3.select(this.element[0]).append("svg");
 
@@ -37,7 +42,7 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
     var y = d3.scale.linear()
       .range([chartHeight, 0]);
 
-    y.domain([0, d3.max(this.valueArray, function(d) { return d.frequency; })]);
+    y.domain([0, d3.max(this.valueArray, function(d) { return d.total; })]);
 
     function getXTickValues() {
       var modulo;
@@ -95,8 +100,8 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
       .attr("x", function(d) { return x(d.num); })
       .attr("width", barWidth)
       .attr("transform", "translate(" + (titleShift - (barWidth/2)) + ",0)")
-      .attr("y", function(d) { return y(d.frequency); })
-      .attr("height", function(d) { return chartHeight - y(d.frequency); })
+      .attr("y", function(d) { return y(d.total); })
+      .attr("height", function(d) { return chartHeight - y(d.total); })
   },
 
 
@@ -114,7 +119,7 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
     var y = d3.scale.linear()
         .range([chartHeight, 0]);
 
-    y.domain([0, d3.max(this.valueArray, function(d) { return d.frequency; })]);
+    y.domain([0, d3.max(this.valueArray, function(d) { return d.total; })]);
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -127,61 +132,48 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
         .data(this.valueArray)
         .transition()
         .duration(500)
-        .attr("y", function(d) { return y(d.frequency); })
-        .attr("height", function(d) { return chartHeight - y(d.frequency); })
+        .attr("y", function(d) { return y(d.total); })
+        .attr("height", function(d) { return chartHeight - y(d.total); })
   },
 
 
   bet: function() {
     var rAmount1 = this.getRandomInt(1, 100);
     var rAmount2 = this.getRandomInt(rAmount1, 100);
-    console.dir(this.obets);
-    this.obets.push({"username": this.generateRandomName(), "num1": rAmount1, "num2": rAmount2});
+    this._bets.push({"username": this.generateRandomName(), "num1": rAmount1, "num2": rAmount2});
     this.recalculateBets();
     this.redraw();
   },
 
 
   revoke: function() {
-    this.obets.splice(Math.floor(Math.random() * this.bets.length), 1);
+    this._bets.splice(Math.floor(Math.random() * this.bets.length), 1);
     this.recalculateBets();
     this.redraw();
   },
 
 
-  generateRandomName: function() {
-    var name_list = [ 'al_capone', 
-                      'angelo_bruno',
-                      'anthony_corallo',
-                      'attilio_messina',
-                      'baby_face_nelson',
-                      'bernard_weinstein',
-                      'bugs_moran',
-                      'bugsy_siegel'];
-    var random_index = Math.floor(Math.random() * name_list.length);
-    var random_number = Math.floor(Math.random() * 9999);
-    return name_list[random_index] + random_number;
-  },
-
-
   // creates value array to populate graph
   recalculateBets: function() {
+
     var convertedBets = [];
 
-    for (var i = this.obets.length - 1; i >= 0; i--) {
-      for (var j = this.obets[i].num2; j >= this.obets[i].num1; j--) {
-        convertedBets.push( {"username": this.obets[i].username, "num": j} );
+    for (var i = this._bets.length - 1; i >= 0; i--) {
+      for (var j = this._bets[i].rangeMax; j >= this._bets[i].rangeMin; j--) {
+        var rangeSize = this._bets[i].rangeMax - this._bets[i].rangeMin;
+        if (rangeSize == 0) rangeSize = 1;
+        convertedBets.push( {"amount": this._bets[i].amount/rangeSize/100000000, "num": j} );
       }
     };
 
     this.valueArray = [];
   
     for (var i = 1; i<=100; i++) {
-      var freq = 0;
+      var total = 0;
       for (var j = convertedBets.length - 1; j >= 0; j--) {
-        if (convertedBets[j].num == i) freq++;
+        if (convertedBets[j].num == i) total = total + convertedBets[j].amount;
       };
-      this.valueArray.push( {"num": i, "frequency": freq} );
+      this.valueArray.push( {"num": i, "total": total} );
     }
   },
 
