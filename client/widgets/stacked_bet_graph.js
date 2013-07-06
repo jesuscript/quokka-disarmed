@@ -153,9 +153,7 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
   },
 
 
-  // creates value array to populate graph
   recalculateBets: function() {
-
     var convertedBets = [];
 
     for (var i = this._bets.length - 1; i >= 0; i--) {

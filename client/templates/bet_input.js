@@ -27,7 +27,6 @@ var initBetSlider = function(){
 };
 
 var initBetGraph = function(){
-  return;
   if(!$betGraph.data("btoStackedBetGraph")){
     $betGraph.stackedBetGraph();
 
