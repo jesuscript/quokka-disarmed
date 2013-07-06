@@ -8,7 +8,7 @@ var saveBetRange = function(min, max){
   var vals = $betSlider.rangeSlider("values");
   
   Session.set("betSlider.range", vals);
-}
+};
 
 var initBetSlider = function(){
   if($betSlider.data("uiRangeSlider")){
@@ -27,17 +27,15 @@ var initBetSlider = function(){
 };
 
 var initBetGraph = function(){
-  if($betGraph.data("btoStackedBetGraph")){
-    $betGraph.stackedBetGraph("draw");
-
-  }else{
+  return;
+  if(!$betGraph.data("btoStackedBetGraph")){
     $betGraph.stackedBetGraph();
 
     Deps.autorun(function(){
       $betGraph.stackedBetGraph("bets", Collections.Bets.find().fetch());
     });
   }
-}
+};
 
 // setInterval(function() {
 //   $betGraph.stackedBetGraph("bet");
@@ -53,9 +51,15 @@ var initPlugins = function(){
   initBetGraph();
 };
 
+Template.betInput.created = function(){
+  Session.set("betInput_stakeKeydown", 0);
+};
+
 Template.betInput.rendered = function(){
   $betSlider = $(this.find(".bet-slider"));
   $betGraph = $(this.find(".bet-graph"));
+  $(this.find(".stake")).numeric();
+  
   templateRendered = true;
 
   if(windowLoaded) initPlugins(); // otherwise init in window load callback
@@ -73,9 +77,20 @@ Template.betInput.helpers({
   },
   betAmount: function(){
     var bet = Meteor.user() && Collections.Bets.findOne({playerId: Meteor.user()._id});
+    if(bet){
+      bet = intToBtc(bet.amount);
+    }else{
+      bet = Session.get("betInput_stake");
+    }
 
-    return bet ? intToBtc(bet.amount) : 0;
-  } 
+    return bet || 0;
+  },
+  sufficientFunds: function(){
+    var bal = Meteor.user().balance;
+    var stake = Session.get("betInput_stake") || 0;
+
+    return Meteor.user() &&  bal > 0 && bal >= btcToInt(stake);
+  }
 });
 
 Template.betInput.events({
@@ -87,6 +102,22 @@ Template.betInput.events({
   },
   "click .revoke-btn": function(){
     Meteor.call("revokeBet");
-  } 
+  },
+  "click .signup-btn": function(e){
+    e.preventDefault();
+    Auth.showSignupDialog();
+  },
+  "click .signin-btn": function(e){
+    e.preventDefault();
+    Auth.showSigninDialog();
+  },
+  "click .deposit-btn": function(e){
+    e.preventDefault();
+    Template.bank.toggleOpen();
+  },
+  "keyup .stake": function(){
+    Session.set("betInput_stake", $("input.stake").val());
+  }
 });
 
+Template.betInput.preserve([".stake"]);

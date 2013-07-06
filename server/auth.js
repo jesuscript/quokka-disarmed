@@ -2,7 +2,7 @@ Accounts.config({sendVerificationEmail: true, forbidClientAccountCreation: false
 
 Accounts.onCreateUser(function(options,user){
   _.extend(user,{
-    balance: 100000000,//0,
+    balance: 0,
     depositAddress: getNewBitcoinAddress()
   });
   return user;
@@ -19,7 +19,7 @@ Accounts.validateNewUser(function(user){
   }
 
   if(!validEmail(user.emails[0].address)){
-    throw new Meteor.Error(417, "Invalid email address")
+    throw new Meteor.Error(417, "Invalid email address");
   }
 
   Meteor.users.remove({_id: user._id});
