@@ -1,52 +1,69 @@
 <template name="betStats">
   <section id="bet-stats" class="chrome-padded">
-    {{#with activeBet}}
-    <div class="row-fluid">
-      <div class="span6">
-        <label>
-          Range
-        </label>
-      </div>
-      <div class="span6">
-        <span class="indicator">
-          {{#if rangeMin}}
-            [{{rangeMin}}, {{rangeMax}}]
-          {{else}}
-            None
-          {{/if}}
-        </span>
-      </div>
-    </div>
-    <div class="row-fluid">
-      <div class="span6">
-        <label>
-          Range size
-        </label>
-      </div>
-      <div class="span6">
-        <span class="indicator">{{rangeSize}}</span>
-      </div>
-    </div>
-    {{/with}}
-    <div class="row-fluid">
-      <div class="span6">
-        <label>
-          Max to win
-        </label>
-      </div>
-      <div class="span6">
-        <span class="indicator">{{maxReward}}</span>
-      </div>
-    </div>
-    <div class="row-fluid">
-      <div class="span6">
-        <label>
-          Max to lose
-        </label>
-      </div>
-      <div class="span6">
-        <span class="indicator">{{maxLoss}}</span>
-      </div>
-    </div>
+    {{#if playing}}
+      {{#with activeBet}}
+        <div class="row-fluid">
+          <div class="span6">
+            <label>
+              Range
+            </label>
+          </div>
+          <div class="span6">
+            <span class="indicator">
+              {{#if rangeMin}}
+                [{{rangeMin}}, {{rangeMax}}]
+              {{else}}
+                None
+              {{/if}}
+            </span>
+          </div>
+        </div>
+        <div class="row-fluid">
+          <div class="span6">
+            <label>
+              Range size
+            </label>
+          </div>
+          <div class="span6">
+            <span class="indicator">{{rangeSize}}</span>
+          </div>
+        </div>
+        {{#if maxToWin}}
+          <div class="row-fluid">
+            <div class="span6">
+              <label>
+                Max payout
+              </label>
+            </div>
+            <div class="span6">
+              <span class="indicator">฿{{maxToWin}}</span>
+            </div>
+          </div>
+          <div class="row-fluid">
+            <div class="span6">
+              <label>
+                Max to lose
+              </label>
+            </div>
+            <div class="span6">
+              <span class="indicator">฿{{maxToLose}}</span>
+            </div>
+          </div>
+          <div class="row-fluid">
+            <div class="span6">
+              <label>
+                Chance to win
+              </label>
+            </div>
+            <div class="span6">
+              <span class="indicator">{{chanceToWin}}%</span>
+            </div>
+          </div>
+        {{/if}}
+      {{/with}}
+
+    {{else}}
+      <span class="place-bet-prompt">Please place your bet</span>
+    {{/if}}
   </section>
 </template>

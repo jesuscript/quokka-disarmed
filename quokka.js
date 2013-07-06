@@ -50,11 +50,26 @@ Quokka = Class.extend({
 
     return payouts;
   },
-  maxToWin: function(bet){
+  getBetStats: function(playerId){
+    var stake = _.find(this._bets, function(bet){ return bet.playerId === playerId; }).amount;
+    var payout;
+    var stats = {
+      maxToWin: 0,
+      maxToLose: 0,
+      chanceToWin: 0
+    };
 
-  },
-  maxToLose: function(arg){
-    
+    for(var i=1; i<=100; i++){
+      payout = this.computeResults(i)[playerId] || 0;
+
+      if(payout > stats.maxToWin) stats.maxToWin = payout;
+      console.log(stake,payout);
+
+      if(stake - payout > stats.maxToLose) stats.maxToLose = stake - payout;
+      if(payout > stake) stats.chanceToWin++;
+    }
+
+    return stats;
   },
   _getBetsPerNum: function(){
     var betsPerNum = [];

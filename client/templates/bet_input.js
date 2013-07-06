@@ -108,6 +108,25 @@ Template.betInput.events({
   },
   "keyup .stake": function(){
     Session.set("betInput_stake", $("input.stake").val());
+  },
+  "click .stake-buttons .btn": function(e){
+    var $btn = $(e.currentTarget);
+    var oldStake = parseFloat($("input.stake").val(),10);
+    var newStake = 0;
+    var user = Meteor.user();
+    
+    if($btn.is(".btn-01")) newStake = 0.1 + oldStake;
+    if($btn.is(".btn-001")) newStake = 0.01 + oldStake;
+    if($btn.is(".btn-0001")) newStake = 0.001 + oldStake;
+    if($btn.is(".btn-max") && user) newStake = intToBtc(user.balance);
+    if($btn.is(".btn-x2")) newStake = oldStake * 2;
+
+    newStake = Math.round(newStake * 100000000) / 100000000;
+
+    $("input.stake").val(newStake);
+    Session.set("betInput_stake", newStake);
+
+    e.preventDefault();
   }
 });
 
