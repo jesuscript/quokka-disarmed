@@ -7,8 +7,6 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
     
     $(window).resize(_.debounce(this.draw.bind(this), 10));
     
-    this._stack = d3.layout.stack();
-
     this.draw();
   },
   
@@ -16,31 +14,31 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
     this.element.find("svg").remove();
     this._svg = d3.select(this.element[0]).append("svg");
 
-    this._updateStack();
+    this._createStack();
     this._updateAxesData();
     this._updateColorRange();
-    this._drawMainLayer();
+    this._drawLayers();
     this._drawRects();
     this._drawXAxis();
     this._drawYAxis();
   },
-  bets: function(bets){
-    if(bets){
-      this._bets = bets;
+  // bets: function(bets){
+  //   if(bets){
+  //     this._bets = bets;
 
-      this._updateStack();
-    }
-
-    return bets;
-  },
-  _updateStack: function(){
+  //     this._drawRects();
+  //     this._drawLayers();
+  //   }
+  //   return bets;
+  // },
+  _createStack: function(){
     var convertedBetsData = this._convertBetsToStackData();
 
     this._yStackMax = 0;
     this._layers = [];
     
     if(convertedBetsData.length){
-      this._layers = this._stack(convertedBetsData);
+      this._layers = d3.layout.stack()(convertedBetsData);
 
       this._yStackMax = d3.max(this._layers, function(layer) {
         return d3.max(layer, function(d) { return d.y0 + d.y; });
@@ -72,8 +70,8 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
       .domain([0, this._yStackMax])
       .range([this._graphHeight, 0]);
   },
-  _drawMainLayer: function(){
-    this._mainLayer = this._svg.selectAll(".layer")
+  _drawLayers: function(){
+    this._svg.selectAll(".layer")
       .data(this._layers)
       .enter().append("g")
       .attr("class", "layer")
@@ -82,14 +80,13 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
       }.bind(this));
   },
   _drawRects: function(){
-    this._mainLayer.selectAll("rect")
+    this._svg.selectAll("rect")
       .data(function(d) { return d; })
       .enter()
       .append("rect")
       .attr("x", function(d) { return this._x(d.x); }.bind(this))
       .attr("y", this._graphHeight)
       .attr("width", this._x.rangeBand())
-      .attr("height", 0)
       .transition()
       .delay(function(d, i) { return i * 10; })
       .attr("y", function(d) { return this._y(d.y0 + d.y); }.bind(this))

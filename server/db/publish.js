@@ -36,5 +36,9 @@ Meteor.publish("payouts", function(){
   return Collections.Payouts.find({},{sort: {timestamp: -1}, limit: 10});
 });
 
+Meteor.publish("allTimeStats", function(){
+  return Collections.AllTimeStats.find({});
+});
+
 // the user shouldn't have the right to modify anything within their user profiles
 Meteor.users.deny({update: function () { return true; }});

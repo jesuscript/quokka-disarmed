@@ -10,7 +10,7 @@
         {{/constant}}
       </div>
       <div class="span3 bet-stake-container">
-        <div class="row-fluid">
+        <div class="row-fluid stake-input-container">
           <div class="span4 stake-label">
             Stake: 
           </div>
@@ -18,20 +18,38 @@
             <input type="text" class="stake input-block-level" value="{{betAmount}}"/>
           </div>
         </div>
+        <div class="row-fluid stake-buttons top">
+          <a class="btn btn-01 span4">0.1</a>
+          <a class="btn btn-001 span4">0.01</a>
+          <a class="btn btn-0001 span4">0.001</a>
+        </div>
+        <div class="row-fluid stake-buttons bottom">
+          <a class="btn btn-x2 span4">x2</a>
+          <a class="btn max span4">Max</a>
+          <a class="btn btn-clear span4">Clear</a>
+        </div>
         <div class="bet-buttons">
-          {{#if activeBet}}
-            <div class="row-fluid">
-              <div class="span6">
-                <a href="#" class="btn btn-inverse update-btn">
-                  Update
-                </a>
-              </div>
-              <div class="span6">
-                <a class="btn revoke-btn" href="#">Revoke</a>
-              </div>
-            </div>
+          {{#if currentUser}}
+            {{#if sufficientFunds}}
+              {{#if activeBet}}
+                <div class="row-fluid">
+                  <div class="span6">
+                    <a href="#" class="btn btn-inverse update-btn">
+                      Update
+                    </a>
+                  </div>
+                  <div class="span6">
+                    <a class="btn revoke-btn" href="#">Revoke</a>
+                  </div>
+                </div>
+              {{else}}
+                <a class="btn btn-inverse bet-btn">Bet</a>
+              {{/if}}
+            {{else}}
+              <a class="btn btn-inverse deposit-btn">Insufficient funds</a>
+            {{/if}}
           {{else}}
-            <a class="btn btn-inverse bet-btn">Bet</a>
+            Please  <a class="signin-btn" href="#">sign in</a> or <a class="signup-btn" href="#">create an account</span>
           {{/if}}
         </div>
       </div>

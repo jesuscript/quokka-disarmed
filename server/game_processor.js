@@ -10,11 +10,20 @@ Meteor.startup(function(){
     var game = new Quokka(bets);
     var payouts = game.computeResults(luckyNum);
     var decrements = {};
+    var allTimeStats = Collections.AllTimeStats.findOne();
+    var payoutSum  = 0;
+    var payoutMax = 0;
+
+    if(!allTimeStats){
+      Collections.AllTimeStats.insert(allTimeStats = {
+        payoutMax: 0,
+        payoutSum: 0
+      });
+    }
 
     _.each(bets, function(bet){
       decrements[bet.playerId] = - bet.amount;
     });
-
 
     _.each(payouts, function(payout, id){
       Collections.Payouts.insert({
@@ -24,6 +33,19 @@ Meteor.startup(function(){
         timestamp: (new Date()).getTime()
       });
     });
+
+    payoutSum = _.reduce(payouts, function(memo, p){ return memo + p; }, 0, this);
+    payoutMax = _.max(payouts, function(p){ return p; });
+
+    Collections.AllTimeStats.update(allTimeStats, {
+      $set: {
+        payoutMax: (payoutMax > allTimeStats.payoutMax) ? payoutMax : allTimeStats.payoutMax
+      },
+      $inc: {
+        payoutSum: payoutSum
+      }
+    });
+    
 
     payouts = game.mergePayouts(payouts, decrements);
     

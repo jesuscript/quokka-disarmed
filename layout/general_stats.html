@@ -1,13 +1,15 @@
 <template name="generalStats">
   <section id="general-stats" class="chrome-padded">
     <div class="total-players">
-      Players: 209
+      Players Live: {{playersLive}}
     </div>
-    <div>
-      Largest-win: 1234
-    </div>
-    <div>
-      Coins distributed: 1234
-    </div>
+    {{#with allTimeStats}}
+      <div>
+        Largest-win: {{largestWin}}
+      </div>
+      <div>
+        Coins distributed: {{coinsDistributed}}
+      </div>
+    {{/with}}
   </section>
 </template>

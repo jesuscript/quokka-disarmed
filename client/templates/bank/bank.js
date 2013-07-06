@@ -14,13 +14,17 @@ Template.bank.helpers({
   }
 });
 
-Template.bank.events({
-  "click .bank-btn, click .shroud, click .close-dialog": function(e){
-    e.preventDefault();
+Template.bank.toggleOpen = function(){
     resetWithdrawInterface();
     if (!Session.get("bank_tmpl_open")) 
     Session.set("bank_tmpl_mode", "deposit"); // deposit is default view
     Session.set("bank_tmpl_open", !Session.get("bank_tmpl_open"));
+};
+
+Template.bank.events({
+  "click .bank-btn, click .shroud, click .close-dialog": function(e,tmpl){
+    e.preventDefault();
+    Template.bank.toggleOpen();
   },
   "click .signin-btn": function(e){
     e.preventDefault();

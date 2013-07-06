@@ -5,6 +5,7 @@ Meteor.startup(function(){
   Meteor.subscribe("users");
   Meteor.subscribe("payouts");
   Meteor.subscribe("news");
+  Meteor.subscribe("allTimeStats");
 
   var betsHandle;
   
