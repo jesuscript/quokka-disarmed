@@ -1,19 +1,23 @@
 #game-wheel{
-  background-color: #ffffff;
-  font: 10px sans-serif;
-  text-shadow: none;
-
-  .total{
-    font-size: 18px;
-    font-weight: bold;
+  &.results .bet-wheel{
+    display: none;
   }
-  .units{
-    fill: gray;
-    font-size: 12px;
+  &.wheel .bet-wheel{
+    display: block;
   }
-  .label{
-    fill: #CCC;
-    font-size: 12px;
+  .lucky-num-copy, .lucky-num, .payout{
+    display: block;
+    text-align:center;
+  }
+  .lucky-num-copy{
     font-weight: bold;
+    line-height: normal;
+  }
+  .lucky-num{
+    font-size: 100px;
+    line-height: 100px;
+  }
+  .payout{
+    margin-top: 20px;
   }
 }

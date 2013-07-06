@@ -51,8 +51,7 @@ Quokka = Class.extend({
     return payouts;
   },
   maxToWin: function(bet){
-    var maxStakeSumPerNum = Math.max.apply(null, this._stakeSumsPerNum.slice(1));
-    return ((bet.amount / (bet.rangeMax - bet.rangeMin + 1)) / maxStakeSumPerNum) * this.getBank();
+
   },
   maxToLose: function(arg){
     

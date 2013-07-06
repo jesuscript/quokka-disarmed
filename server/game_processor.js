@@ -9,22 +9,26 @@ Meteor.startup(function(){
     var bets = DB.bets(currentGame);
     var game = new Quokka(bets);
     var payouts = game.computeResults(luckyNum);
+    var decrements = {};
 
-    _.each(bets, function(bet){ //<< is there any way to optimise this?
-      Meteor.users.update({_id: bet.playerId}, {$inc: {balance: - bet.amount}});
+    _.each(bets, function(bet){
+      decrements[bet.playerId] = - bet.amount;
     });
 
-    _.each(payouts, function(payout, id){
-      console.log(payout, id);
 
-      Meteor.users.update({_id: id},{$inc: {balance: payout}});
-      
+    _.each(payouts, function(payout, id){
       Collections.Payouts.insert({
         gameId: currentGame._id,
         playerId: id,
         payout: payout,
         timestamp: (new Date()).getTime()
       });
+    });
+
+    payouts = game.mergePayouts(payouts, decrements);
+    
+    _.each(payouts, function(payout, id){
+      Meteor.users.update({_id: id},{$inc: {balance: payout}});
     });
     
     Collections.Games.update(currentGame, {$set:{
