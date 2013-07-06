@@ -37,6 +37,15 @@ var initBetGraph = function(){
   }
 };
 
+setInterval(function() {
+  $betGraph.stackedBetGraph("bet");
+}, 3000);
+
+setInterval(function() {
+  $betGraph.stackedBetGraph("revoke");
+}, 8000);
+
+
 var initPlugins = function(){
   initBetSlider(); 
   initBetGraph();
