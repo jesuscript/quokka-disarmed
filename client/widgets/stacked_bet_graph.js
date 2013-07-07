@@ -1,60 +1,44 @@
 $.widget("bto.stackedBetGraph",$.bto.betGraph,{
   
+  _nvd3Data: [],
+
   _create: function(){
-    console.log('calling create');
+
     this._super();
-
-
-    var histcatexpshort = [ 
-      { 
-        "key" : "Johan Daugh" , 
-        "values" : [ [ 1 , 20] , [ 2 , 20] , [ 3 , 20] ] 
-      } , 
-      { 
-        "key" : "bob ddd" , 
-        "values" : [ [ 1 , 10] , [ 2 , 10] , [ 3 , 10] ] 
-      } , 
-      { 
-        "key" : "Smith joen" , 
-        "values" : [ [ 1 , 5] , [ 2 , 5] , [ 3 , 5] ] 
-      }
-    ];   
+    self = this;
 
     nv.addGraph(function() {
-      var chart = nv.models.stackedAreaChart()
+      self.chart = nv.models.stackedAreaChart()
                     .x(function(d) { return d[0] })
                     .y(function(d) { return d[1] })
                     .clipEdge(true);
 
-
-      chart.xAxis
+      self.chart.xAxis
           .showMaxMin(false);
 
-
-      chart.yAxis
+      self.chart.yAxis
           .tickFormat(d3.format(',.2f'));
 
-        d3.select('.bet-graph svg')
-          .datum(histcatexpshort)
-            .transition().duration(500).call(chart);
+      console.log('self._nvd3Data before invokating in create = ' + self._nvd3Data);
+      
+      d3.select('.bet-graph svg')
+      .datum(self._nvd3Data)
+      .transition().duration(500).call(self.chart);
 
-      nv.utils.windowResize(chart.update);
-
+      nv.utils.windowResize(self.chart.update);
+      chart = self.chart;
       return chart;
     });
-
-
-
   },
 
 
   bets: function(bets){
-    if(bets){
+    console.log('incoming bets' + bets);
+    if (this.chart) {
       this._bets = bets;
-      this._convertBetsToStackData()
+      this._convertBetsToStackData();
       this.redraw();
     }
-    return bets;
   },
 
 
@@ -83,9 +67,10 @@ $.widget("bto.stackedBetGraph",$.bto.betGraph,{
 
   redraw: function() {
 
-       d3.select('.bet-graph svg')
-          .datum(this._nvd3Data)
-            .transition().duration(500).call(chart);
+    console.log('trying to redraw, state of this.chart is:' + this.chart);
+     d3.select('.bet-graph svg')
+    .datum(this._nvd3Data)
+    .transition().duration(500);
   },
 
 
