@@ -27,13 +27,14 @@ var initBetSlider = function(){
 };
 
 var initBetGraph = function(){
-  if(!$betGraph.data("btoStackedBetGraph")){
+  if(!$betGraph.data("btoStackedBetGraph")){ // prevents Deps.autorun to be re-run over and over
+    console.log('calling stackedBetGraph');
     $betGraph.stackedBetGraph();
-
     Deps.autorun(function(){
+      console.log('deps.autorun on bets() invoked');
       $betGraph.stackedBetGraph("bets", Collections.Bets.find().fetch());
     });
-  }
+  };
 };
 
 var initPlugins = function(){
@@ -57,7 +58,6 @@ Template.betInput.rendered = function(){
 
 $(window).load(function(){
   windowLoaded = true;
-
   if(templateRendered) initPlugins(); //i'm sure there must be a better way to do this...
 });
 
