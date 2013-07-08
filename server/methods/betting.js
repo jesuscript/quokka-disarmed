@@ -25,6 +25,7 @@ Meteor.methods({
         });
       }else{
         Collections.Bets.insert({
+          playerName: Meteor.user().username,
           playerId: this.userId,
           gameId: gameId,
           amount: amount, 
