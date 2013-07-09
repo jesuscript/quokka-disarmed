@@ -1,9 +1,15 @@
 <template name="generalStats">
   <section id="general-stats" class="chrome-padded">
-    <div class="total-players">
-      <div class="desc">Players Live:</div>
-      <div class="indicator">{{playersLive}}</div>
+    {{#with connections}}
+    <div>
+      <div class="desc">Logged In:</div>
+      <div class="indicator">{{usersLoggedIn}}</div>
     </div>
+    <div>
+      <div class="desc">Observing:</div>
+      <div class="indicator">{{usersObserving}}</div>
+    </div>
+    {{/with}}
     {{#with allTimeStats}}
       <div>
         <div class="desc">Largest-win:</div>
