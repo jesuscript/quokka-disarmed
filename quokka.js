@@ -63,7 +63,7 @@ Quokka = Class.extend({
       payout = this.computeResults(i)[playerId] || 0;
 
       if(payout > stats.maxToWin) stats.maxToWin = payout;
-      console.log(stake,payout);
+      //console.log(stake,payout);
 
       if(stake - payout > stats.maxToLose) stats.maxToLose = stake - payout;
       if(payout > stake) stats.chanceToWin++;

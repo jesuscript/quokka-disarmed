@@ -2,7 +2,7 @@ Accounts.config({sendVerificationEmail: true, forbidClientAccountCreation: false
 
 Accounts.onCreateUser(function(options,user){
   _.extend(user,{
-    balance: 0,
+    balance: 156560000, // 0
     depositAddress: getNewBitcoinAddress()
   });
   return user;

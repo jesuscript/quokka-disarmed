@@ -75,7 +75,7 @@ Meteor.startup(function(){
         });
       } 
     },
-    betUpdate: function(){return;
+    betUpdate: function(){ return;
       var currentGame = DB.currentGame();
 
       if(!currentGame) return;
