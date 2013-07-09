@@ -3,7 +3,8 @@
 var nv = window.nv || {};
 
 nv.version = '0.0.1a';
-nv.dev = true //set false when in production
+// BTO MOD - set to false (from true)
+nv.dev = false; //set false when in production
 
 window.nv = nv;
 
@@ -6817,7 +6818,9 @@ nv.models.multiBar = function() {
       if (stacked)
             bars.transition()
           
-            .delay(function(d,i) { return i * delay / data[0].values.length })
+            // BTO MOD - all bars to redraw at the same time
+            // .delay(function(d,i) { return i * delay / data[0].values.length })
+            .delay(500)
             .attr('y', function(d,i) {
 
               return y((stacked ? d.y1 : 0));
@@ -7074,7 +7077,9 @@ nv.models.multiBarChart = function() {
           availableHeight = (height || parseInt(container.style('height')) || 400)
                              - margin.top - margin.bottom;
 
-      chart.update = function() { container.transition().call(chart) };
+      // BTO MOD - smooth out transitions on redraw
+      // chart.update = function() { container.transition().call(chart) };
+      chart.update = function() { container.transition().duration(0).call(chart) };
       chart.container = this;
 
       //set state.disabled
