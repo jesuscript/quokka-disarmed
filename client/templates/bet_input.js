@@ -1,12 +1,11 @@
 var $betSlider;
-var $betGraph;
+//var $betGraph;
 
 var windowLoaded = false;
 var templateRendered = false;
 
 var saveBetRange = function(min, max){
   var vals = $betSlider.rangeSlider("values");
-  
   Session.set("betSlider.range", vals);
 };
 
@@ -26,20 +25,20 @@ var initBetSlider = function(){
   }
 };
 
-var initBetGraph = function(){
-  if(!$betGraph.data("btoStackedBetGraph")){ // prevents Deps.autorun to be re-run over and over
-    console.log('calling stackedBetGraph');
-    $betGraph.stackedBetGraph();
-    Deps.autorun(function(){
-      console.log('deps.autorun on bets() invoked');
-      $betGraph.stackedBetGraph("bets", Collections.Bets.find().fetch());
-    });
-  };
-};
+// var initBetGraph = function(){
+//   if(!$betGraph.data("btoStackedBetGraph")){ // prevents Deps.autorun to be re-run over and over
+//     console.log('calling stackedBetGraph');
+//     $betGraph.stackedBetGraph();
+//     Deps.autorun(function(){
+//       console.log('deps.autorun on bets() invoked');
+//       $betGraph.stackedBetGraph("bets", Collections.Bets.find().fetch());
+//     });
+//   };
+// };
 
 var initPlugins = function(){
   initBetSlider(); 
-  initBetGraph();
+  // initBetGraph();
 };
 
 Template.betInput.created = function(){
@@ -48,7 +47,7 @@ Template.betInput.created = function(){
 
 Template.betInput.rendered = function(){
   $betSlider = $(this.find(".bet-slider"));
-  $betGraph = $(this.find(".bet-graph"));
+  //$betGraph = $(this.find(".bet-graph"));
   $(this.find(".stake")).numeric();
   
   templateRendered = true;
