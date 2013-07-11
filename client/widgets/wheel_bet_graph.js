@@ -11,7 +11,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     this.draw();
   },
   draw: function(){
-    this._updateColorRange();
+    this._setColorRange();
     this._createLayout();
     this._createPath();
   },

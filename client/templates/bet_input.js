@@ -1,5 +1,5 @@
 var $betSlider;
-//var $betGraph;
+var $betGraph;
 
 var windowLoaded = false;
 var templateRendered = false;
@@ -20,25 +20,22 @@ var initBetSlider = function(){
     }).on("valuesChanging", function(){
       saveBetRange();
     });
-
     saveBetRange();
   }
 };
 
-// var initBetGraph = function(){
-//   if(!$betGraph.data("btoStackedBetGraph")){ // prevents Deps.autorun to be re-run over and over
-//     console.log('calling stackedBetGraph');
-//     $betGraph.stackedBetGraph();
-//     Deps.autorun(function(){
-//       console.log('deps.autorun on bets() invoked');
-//       $betGraph.stackedBetGraph("bets", Collections.Bets.find().fetch());
-//     });
-//   };
-// };
+var initBetGraph = function(){
+  if(!$betGraph.data("btoStackedBetGraph")){
+    $betGraph.stackedBetGraph();
+    Deps.autorun(function(){
+      $betGraph.stackedBetGraph("redraw", Collections.Bets.find().fetch());
+    });
+  };
+};
 
 var initPlugins = function(){
   initBetSlider(); 
-  // initBetGraph();
+  initBetGraph();
 };
 
 Template.betInput.created = function(){
@@ -47,11 +44,9 @@ Template.betInput.created = function(){
 
 Template.betInput.rendered = function(){
   $betSlider = $(this.find(".bet-slider"));
-  //$betGraph = $(this.find(".bet-graph"));
+  $betGraph = $(this.find(".bet-graph"));
   $(this.find(".stake")).numeric();
-  
   templateRendered = true;
-
   if(windowLoaded) initPlugins(); // otherwise init in window load callback
 };
 
@@ -71,13 +66,11 @@ Template.betInput.helpers({
     }else{
       bet = Session.get("betInput_stake");
     }
-
     return bet || 0;
   },
   sufficientFunds: function(){
     var bal = Meteor.user().balance;
     var stake = Session.get("betInput_stake") || 0;
-
     return Meteor.user() &&  bal > 0 && bal >= btcToInt(stake);
   }
 });
@@ -86,7 +79,6 @@ Template.betInput.events({
   "click .bet-btn, click .update-btn":function(){
     var amount = $("input.stake").val() || 0;
     var range = Session.get("betSlider.range");
-    
     Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
   },
   "click .revoke-btn": function(){
