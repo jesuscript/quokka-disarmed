@@ -15,7 +15,6 @@ var initBetSlider = function(){
   }else{
     $betSlider.rangeSlider({
       bounds:{min:1, max: 100},
-      wheelMode: "zoom",
       step: 1
     }).on("valuesChanging", function(){
       saveBetRange();
