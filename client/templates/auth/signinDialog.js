@@ -35,6 +35,12 @@ Template.signin_dialog.events({
       $("body").append(Meteor.render(Template.forgot_password));
     });
   },
+  "click .signup-btn": function(e,tmpl){
+    TemplateHelpers.removeDialog(tmpl, function(){
+      Session.set("signin_error");
+      $("body").append(Meteor.render(Template.signup_dialog));
+    });
+  },  
   "click #cancel, click .close, click .shroud": function(e,tmpl){
     TemplateHelpers.removeDialog(tmpl, function(){
       Session.set("signin_error");

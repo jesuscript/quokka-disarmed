@@ -84,12 +84,7 @@ Template.betInput.events({
   "click .revoke-btn": function(){
     Meteor.call("revokeBet");
   },
-  "click .signup-btn": function(e){
-    e.preventDefault();
-    Auth.showSignupDialog();
-  },
   "click .signin-btn": function(e){
-    e.preventDefault();
     Auth.showSigninDialog();
   },
   "click .deposit-btn": function(e){
