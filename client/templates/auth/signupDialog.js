@@ -6,7 +6,6 @@ Template.signup_dialog.helpers({
   error: function(){
     var err = Session.get("signup_error");
     if(err){
-      if(err.error == 400) return "Empty username";
       return err.reason;
     }
   }
@@ -23,7 +22,12 @@ Template.signup_dialog.events({
         error: 406,
         reason: "Username is too short"
       });
-    }else if(password.length < 6){
+    }else if(username.length > 12){
+      Session.set("signup_error", {
+        error: 406,
+        reason: "Username is too long"
+      });
+   } else if(password.length < 6){
       Session.set("signup_error", {
         error: 406,
         reason: "Password is too short"

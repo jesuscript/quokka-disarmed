@@ -18,6 +18,10 @@ Accounts.validateNewUser(function(user){
     throw new Meteor.Error(400, "Empty username");
   }
 
+  if(user.username.length > 12){
+    throw new Meteor.Error(406, "Username too long");
+  }
+
   if(!validEmail(user.emails[0].address)){
     throw new Meteor.Error(417, "Invalid email address");
   }
