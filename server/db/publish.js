@@ -64,7 +64,7 @@ Meteor.publish('connectionsMonitor', function() {
       Collections.Connections.update({}, {$inc: {usersObserving: 1}});
     }
 
-    this._session.socket.on('data', Meteor.bindEnvironment(function(data) {
+    this._session.socket.on('data', Meteor.bindEnvironment(function(data) { // Throws on dev, sometimes, likely to be when the dev monitoring script do funny things with sockets
       var method = JSON.parse(data).method;
 
       if (method === 'login' || method === 'createUser') {
