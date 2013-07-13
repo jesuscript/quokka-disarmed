@@ -4,17 +4,19 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     console.log('stackedBetGraph create()');
     this._super();
 
-    // properties definitions
-    // this._chartWidth and this._chartHeight refer to the drawn area on the chart. The rest are margins so we don't overdraw
-    this._yAxisLabelShift = 15; // shift everything to the right to give room for the y axis label to be readable
-    this._margin = {top: 10, right: 15, bottom: 18, left: 40}; // using standard d3 margin definitions by attaching all elements to a bounding box
-    this._chartHeight = 150 - this._margin.top - this._margin.bottom;
+    this._d3data = [];
+
+    // properties (instance) definitions, jquery widget requires for them to be located here
+    // this._chartWidth and this._chartHeight refer to the drawn area on the chart. The rest are margins so axis legend doesn't get clipped
+    this._yAxisLabelShift = 15; // shift everything to the right to give room for the y axis label for it not to be covered by the bar on x = 1
+    this._margin = {top: 10, right: 15, bottom: 18, left: 40}; // using 'best practice' d3 margin definitions by attaching all elements to a bounding box
+    this._chartHeight = 150 - this._margin.top - this._margin.bottom; // chart never resizes vertically
 
     $(window).resize(_.debounce(this._draw.bind(this), 10));
 
     this._svg = d3.select(this.element[0]).append('svg');
 
-    // this._draw();
+    this._draw();
   },
 
 
@@ -23,38 +25,34 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
     this._setColorRange();
 
-    this._chartWidth = this.element.width() - this._margin.left - this._margin.right - this._yAxisLabelShift;
+    this._chartWidth = this.element.width() - this._margin.left - this._margin.right - this._yAxisLabelShift; // due to lag in rendering this needs to be placed here to be accurate, and not on _create
 
-    this._layers = d3.layout.stack()(this._d3data); // calculate x, y0 and y for each series
-    
-    this._yStackMax = d3.max(this._layers, function(layer) {
-      return d3.max(layer, function(d) { return d.y0 + d.y; }); // highest y0 + y == top most point on chart
-    });
+    this._udpdateStack();
 
-    var x = d3.scale.ordinal()
+    this._x = d3.scale.ordinal()
           .domain(d3.range(1,101))
           .rangeBands([0, this._chartWidth], .3); // roundRangeBands creates significant rounding errors leading to a squeezed graphic
 
     var xAxis = d3.svg.axis()
-      .scale(x)
+      .scale(this._x)
       .orient('bottom')
       .tickValues(this._getXTickValues()) // rescale x axis so tick labels don't overlap
       .tickSubdivide(true) // unstable, doesn't seem to always work, known bug
-      .tickSize(6,3,0); // remove end ticks to avoid
+      .tickSize(6,3,0); // remove end ticks to avoid uglyness
 
-    var y = d3.scale.linear()
+    this._y = d3.scale.linear()
       .domain([0, this._yStackMax])
       .range([this._chartHeight, 0]);
 
-    var yAxis = d3.svg.axis()
-      .scale(y)
+    this._yAxis = d3.svg.axis()
+      .scale(this._y)
       .orient("left")
-      .tickSize(6,3,0) // remove end ticks to avoid
+      .tickSize(4,2,0) // remove end ticks to avoid uglyness
       .tickFormat(d3.format(".2s"));
 
-    //this._svg.selectAll("g").remove(); // don't remove entire SVG - just the groups (will kill off children nodes)
+    this._svg.selectAll("g").remove(); // don't remove entire SVG - just the groups (will kill off children nodes)
 
-    this._chartArea = this._svg
+    this._chartArea = this._svg // define bounding box
       .append('g')
         .attr('transform', 'translate(' + this._margin.left + ',' + this._margin.top + ')'); // new root coords at top left corner of margins
 
@@ -65,45 +63,78 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
     this._chartArea.append("g")
       .attr("class", "y axis")
-      .call(yAxis)
+      .call(this._yAxis)
         .append("text")
           .attr("transform", "rotate(-90)")
           .attr("y", 6)
           .attr("dy", ".71em")
           .style("text-anchor", "end")
           .text("BTC");
+  },
 
-    // create a g with a specific color for each bettor
-    this._series = this._chartArea.selectAll(".series")
-      .data(this._layers)
-      .enter()
-      .append("g")
-        .attr("class", "series")
-              .attr("transform", "translate(" + this._yAxisLabelShift + ",0)")
-        .style("fill", function(d, i) {
-          return this._colorRange(i);
-        }.bind(this));
-
-    this._series.selectAll("rect")
-      .data(function(d) { return d; })
-      .enter()
-      .append("rect")
-      .attr("x", function(d) { return x(d.x); })
-      .attr("y", this._chartHeight)
-      .attr("width", Math.floor(x.rangeBand())) // AA on width
-      .attr("height", 0)
-      .transition()
-        .delay(function(d, i) { return i * 10; })
-        .attr("y", function(d) { return Math.ceil(y(d.y0 + d.y)); }) // Anti Aliasing on y
-        .attr("height", function(d) { return Math.floor(y(d.y0) - y(d.y0 + d.y)); }); // Anti Aliasing on height
+  _udpdateStack: function() {
+    this._yStackMax = 0;
+ 
+    if (this._d3data.length) {  
+      this._layers = d3.layout.stack()(this._d3data); // calculate x, y0 and y for each series
+      
+      this._yStackMax = d3.max(this._layers, function(layer) {
+        return d3.max(layer, function(d) { return d.y0 + d.y; }); // highest y0 + y == top most point on chart
+      });
+    }
   },
 
 
   redraw: function(betCollection) {
     console.log('redraw invoked');
+
     if (betCollection && betCollection.length) {
       this._d3data = this._convertBetsToStackData(betCollection);
-      this._draw();
+          
+      this._udpdateStack();
+
+      this._y.domain([0, this._yStackMax])
+        .range([this._chartHeight, 0]);
+
+      this._chartArea.select(".y.axis").transition().duration(1000).call(this._yAxis);  
+
+      // create a g with a specific color for each bettor
+      this._series = this._chartArea.selectAll(".series")
+        .data(this._layers)
+
+      this._series.enter()
+          .append("g")
+            .attr("class", "series")
+                  .attr("transform", "translate(" + this._yAxisLabelShift + ",0)")
+            .style("fill", function(d, i) {
+              return this._colorRange(i);
+            }.bind(this));
+
+      // no update selection as we want to leave the groups as they are
+
+      this._series.exit().remove();
+
+      this._rects = this._series.selectAll("rect")
+        .data(function(d) { return d; })
+
+      this._rects.enter()
+        .append("rect")
+        .attr("x", function(d) { return this._x(d.x); }.bind(this))
+        .attr("y", function(d) { return Math.ceil(this._y(d.y0)); }.bind(this)) // Anti Aliasing on y
+        .attr("width", Math.floor(this._x.rangeBand())) // AA on width
+        .attr("height", 0)
+        .transition()
+          .duration(1000)
+          .attr("height", function(d) { return Math.floor(this._y(d.y0) - this._y(d.y0 + d.y)); }.bind(this)); // Anti Aliasing on height
+
+      this._rects
+          .transition()
+            .duration(1000)
+            .attr("y", function(d) { return Math.ceil(this._y(d.y0 + d.y)); }.bind(this)) // Anti Aliasing on y
+            .attr("height", function(d) { return Math.floor(this._y(d.y0) - this._y(d.y0 + d.y)); }.bind(this)); // Anti Aliasing on height
+
+      this._rects.exit().remove();
+
     }
   },
 
