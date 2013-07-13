@@ -4,11 +4,6 @@ var $betGraph;
 var windowLoaded = false;
 var templateRendered = false;
 
-var saveBetRange = function(min, max){
-  var vals = $betSlider.rangeSlider("values");
-  Session.set("betSlider.range", vals);
-};
-
 var initBetSlider = function(){
   if($betSlider.data("uiRangeSlider")){
     $betSlider.rangeSlider("resize");
@@ -16,10 +11,12 @@ var initBetSlider = function(){
     $betSlider.rangeSlider({
       bounds:{min:1, max: 100},
       step: 1
-    }).on("valuesChanging", function(){
-      saveBetRange();
+    }).on("userValuesChanged", function(){
+      // likely unnecessary but just in case...
+      if ($betSlider.rangeSlider("values").min <= $betSlider.rangeSlider("values").max) {      
+        Session.set("betSlider.range", $betSlider.rangeSlider("values"));
+      }
     });
-    saveBetRange();
   }
 };
 

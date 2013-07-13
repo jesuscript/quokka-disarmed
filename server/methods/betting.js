@@ -3,9 +3,7 @@ Meteor.methods({
     if(validBet(this.userId, amount, rangeMin, rangeMax)){
       var currentGame = Collections.Games.findOne({completed: false});
       var gameId = currentGame && currentGame._id;
-      var user = Meteor.users.findOne({_id: this.userId});
       var existingBet;
-
       
       if (gameId === undefined){
         throw Meteor.Error(500, "No active games found");
@@ -13,8 +11,6 @@ Meteor.methods({
 
       existingBet = Collections.Bets.findOne({playerId: this.userId, gameId: gameId});
 
-      if(user.balance < amount) return;
-        
       if(existingBet){
         Collections.Bets.update({_id: existingBet._id}, {
           $set: {
@@ -52,8 +48,31 @@ Meteor.methods({
 });
 
 function validBet(userId, amount, rangeMin, rangeMax){
-  if (!userId) return false;
-  
-  //TODO: check player's balance'
-  return  amount > 0 && typeof rangeMin == "number" && typeof rangeMax == "number";
+  var validBet = true;
+  var reason = '';
+
+  if (!userId) {
+    reason = 'Invalid User'; 
+    validBet = false;
+  }
+
+  if ((rangeMin < 0) || (rangeMin > rangeMax) || (rangeMax > 100)) {
+    reason = 'Invalid Range'; 
+    validBet = false;
+  }
+
+  if (Meteor.user().balance < amount) {
+    reason = 'Amount > User Balance';
+    validBet = false;
+  }
+
+  if ((amount < 0) || (!typeof rangeMin == "number") || (!typeof rangeMax == "number")) {
+    reason = 'Amount < 0 or rangeMin Max of invalid type';
+    validBet = false;
+  }
+
+  if (!validBet) console.warn('SECWARN: Attempt to pass invalid bet detected. Reason: ' + reason);
+
+  return validBet;
+
 }
