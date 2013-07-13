@@ -1,5 +1,4 @@
-if(Meteor.isServer){
-
+Meteor.startup(function(){
   var btcdEnv = process.env.BTCD_ENV || 'testnet';
   process.env.TRX_FEE = 10000;
 
@@ -31,5 +30,4 @@ if(Meteor.isServer){
     }
     break;
   }
-  
-}
+});
