@@ -11,12 +11,7 @@ var initBetSlider = function(){
     $betSlider.rangeSlider({
       bounds:{min:1, max: 100},
       step: 1
-    }).on("userValuesChanged", function(){
-      // likely unnecessary but just in case...
-      if ($betSlider.rangeSlider("values").min <= $betSlider.rangeSlider("values").max) {      
-        Session.set("betSlider.range", $betSlider.rangeSlider("values"));
-      }
-    });
+    })
   }
 };
 
@@ -74,8 +69,10 @@ Template.betInput.helpers({
 Template.betInput.events({
   "click .bet-btn, click .update-btn":function(){
     var amount = $("input.stake").val() || 0;
-    var range = Session.get("betSlider.range");
-    Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
+    var range = $betSlider.rangeSlider("values");
+    if (range.min <= range.max) {  // likely unnecessary but just in case...      
+      Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
+    }
   },
   "click .revoke-btn": function(){
     Meteor.call("revokeBet");
