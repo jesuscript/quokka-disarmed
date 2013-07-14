@@ -72,7 +72,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
       .scale(this._x)
       .orient('bottom')
       .tickValues(this._getXTickValues()) // rescale x axis so tick labels don't overlap
-      .tickSize(5,3,0); // remove end ticks to avoid uglyness
+      .tickSize(5,3,1); // major, minor, line thickness
 
     this._y = d3.scale.linear()
       .domain([0, this._yStackMax])
@@ -82,7 +82,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
       .scale(this._y)
       .orient("left")
       .ticks(5) // approximate tick count
-      .tickSize(4,2,0) // remove end ticks to avoid uglyness
+      .tickSize(4,2,1) // major, minor, line thickness
       .tickFormat(d3.format(".2s"));
   },
 
@@ -121,7 +121,6 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
 
   redraw: function(betCollection) {
-    console.log('redraw invoked');
     if (betCollection) {
       console.log('redraw accepted');
       this._d3data = this._convertBetsToStackData(betCollection);
@@ -141,7 +140,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     this._y.domain([0, this._yStackMax])
     .range([this._chartHeight, 0]);
 
-    this._chartArea.select(".y.axis").transition().duration(1000).call(this._yAxis);  
+    this._chartArea.select(".y.axis").transition().duration(2000).call(this._yAxis); // we're making the yaxis 'lag' a bit on purpose for dramatic effect
   },
 
 
@@ -151,6 +150,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
       .data(this._layers)
 
     // update
+    // (nothing to do)
 
     // enter behaviour
     this._series.enter()
@@ -160,14 +160,18 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
         .style("fill", function(d, i) { return this._colorRange(i); }.bind(this));
 
     // enter + update
+    // (nothing to do)
 
     // exit behaviour
-    //this._series.exit().each(function() {console.log('series');}).transition().delay(2000).remove(); // delay so we can cascade out the removed bet
+    this._series.exit()
+      .transition()
+        .duration(800)
+        .style("opacity", '0')
+        .remove();
   },
 
 
   _rectDefineD3Sequence:function(){ 
-
     // feed data
     this._rects = this._series.selectAll("rect") // selections HAVE to be rerun, can't just refer to variable to update
       .data(function(d) { return d; })
@@ -176,38 +180,29 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     this._rects
       .attr("x", function(d) { return this._x(d.x); }.bind(this))
       .transition()
-        .duration(1000)
-        .attr("y", function(d) { return Math.ceil(this._y(d.y0 + d.y)); }.bind(this)) // Anti Aliasing on y
-        .attr("height", function(d) { return Math.floor(this._y(d.y0) - this._y(d.y0 + d.y)); }.bind(this)); // Anti Aliasing on height
+        .duration(800)
+        .attr("y", function(d) { return this._y(d.y0 + d.y); }.bind(this)) 
+        .attr("height", function(d) { var h = this._y(d.y0) - this._y(d.y0 + d.y) -1; return (h>=0) ? h : 0; }.bind(this)); // -1 for pretty bar bottoms
 
     // enter behaviour
     this._rects.enter()
       .append("rect")
       .attr("class", "bar") // required so that subsequent selections have something to grab on to
       .attr("x", function(d) { return this._x(d.x); }.bind(this))
-      .attr("y", function(d) { return Math.ceil(this._y(d.y0)); }.bind(this)) // Anti Aliasing on y
-      .attr("width", Math.floor(this._x.rangeBand())) // AA on width
+      .attr("y", function(d) { return this._y(d.y0); }.bind(this)) 
+      .attr("width", this._x.rangeBand()) 
       .attr("height", 0)
       .transition()
-        .delay(1000)
-        .duration(1000)
-        .attr("y", function(d) { return Math.ceil(this._y(d.y0 + d.y)); }.bind(this)) // Anti Aliasing on y
-        .attr("height", function(d) { return Math.floor(this._y(d.y0) - this._y(d.y0 + d.y)); }.bind(this)); // Anti Aliasing on height
+        .delay(800)
+        .duration(800)
+        .attr("y", function(d) { return this._y(d.y0 + d.y); }.bind(this)) 
+        .attr("height", function(d) { var h = this._y(d.y0) - this._y(d.y0 + d.y) -1; return (h>=0) ? h : 0; }.bind(this)); // -1 for pretty bar bottoms... mmmmm.....
 
     // enter + update
-
+    // (nothing to do)
 
     // exit behaviour
-    this._rects.exit()
-      .each(function() {console.log('test');})
-      .transition()
-        .duration(1000)
-        .attr("y", function(d) { return Math.ceil(this._y(d.y0)); }.bind(this)) // Anti Aliasing on y
-        .attr("height", function(d) { return Math.floor(this._y(d.y0) - this._y(d.y0 + d.y)); }.bind(this)) // Anti Aliasing on height
-       ;
-
-    
-
+    // (rects are not aware of a series exit unfortunately, this must be handled at series level)
   },
 
 
