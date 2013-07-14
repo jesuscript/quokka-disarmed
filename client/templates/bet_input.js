@@ -29,10 +29,6 @@ var initPlugins = function(){
   initBetGraph();
 };
 
-Template.betInput.created = function(){
-  Session.set("betInput_stakeKeydown", 0);
-};
-
 Template.betInput.rendered = function(){
   $betSlider = $(this.find(".bet-slider"));
   $betGraph = $(this.find(".bet-graph"));
@@ -67,12 +63,19 @@ Template.betInput.helpers({
   }
 });
 
+
+
 Template.betInput.events({
-  "click .bet-btn, click .update-btn":function(){
+  "click .bet-btn, click .update-btn, submit form":function(){
+    event.preventDefault();
+    console.log('hello');
     var amount = $("input.stake").val() || 0;
     var range = $betSlider.rangeSlider("values");
+    if (amount <= 0) {
+       $(".stake").parents('.control-group').addClass('error'); // thanks to meteor spark, field control group resets to the correct class after an element update!
+       $(".stake").focus().select();  
+    } 
     if (range.min <= range.max) {  // likely unnecessary but just in case...      
-      console.log(btcToInt(amount));
       Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
     }
   },

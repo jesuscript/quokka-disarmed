@@ -1,6 +1,6 @@
 Meteor.methods({
   submitBet: function(amount, rangeMin, rangeMax){
-    if(validBet(this.userId, amount, rangeMin, rangeMax)){
+    if(validBet(amount, rangeMin, rangeMax)){
       var currentGame = Collections.Games.findOne({completed: false});
       var gameId = currentGame && currentGame._id;
       var existingBet;
@@ -9,7 +9,7 @@ Meteor.methods({
         throw Meteor.Error(500, "No active games found");
       }
 
-      existingBet = Collections.Bets.findOne({playerId: this.userId, gameId: gameId});
+      existingBet = Collections.Bets.findOne({playerId: Meteor.userId(), gameId: gameId});
 
       if(existingBet){
         Collections.Bets.update({_id: existingBet._id}, {
@@ -22,7 +22,7 @@ Meteor.methods({
       }else{
         Collections.Bets.insert({
           playerName: Meteor.user().username,
-          playerId: this.userId,
+          playerId: Meteor.userId(),
           gameId: gameId,
           amount: amount, 
           rangeMin: rangeMin,
@@ -38,7 +38,7 @@ Meteor.methods({
     if(currentGame){
       bet = Collections.Bets.findOne({
         gameId: currentGame._id,
-        playerId: this.userId
+        playerId: Meteor.userId()
       });
 
       Collections.Bets.remove({_id: bet._id});
@@ -47,16 +47,16 @@ Meteor.methods({
   }
 });
 
-function validBet(userId, amount, rangeMin, rangeMax){
+function validBet(amount, rangeMin, rangeMax){
   var validBet = true;
   var reason = '';
 
-  if (!userId) {
+  if (!Meteor.userId()) {
     reason = 'Invalid User'; 
     validBet = false;
   }
 
-  if ((rangeMin < 0) || (rangeMin > rangeMax) || (rangeMax > 100)) {
+  if ((rangeMin <= 0) || (rangeMin > rangeMax) || (rangeMax > 100)) {
     reason = 'Invalid Range'; 
     validBet = false;
   }
@@ -66,8 +66,13 @@ function validBet(userId, amount, rangeMin, rangeMax){
     validBet = false;
   }
 
-  if ((amount < 0) || (!typeof rangeMin == "number") || (!typeof rangeMax == "number")) {
-    reason = 'Amount < 0 or rangeMin Max of invalid type';
+  if (amount <= 0) {
+    reason = 'Amount <= 0';
+    validBet = false;
+  }
+
+  if ((!typeof rangeMin == "number") || (!typeof rangeMax == "number")) {
+    reason = 'RangeMin or rangeMax of invalid type';
     validBet = false;
   }
 

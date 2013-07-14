@@ -1,7 +1,6 @@
 (function(){
   _.extend(Template.betStats,{
     created: function(){
-      Session.set("current_stake", 0);
       Session.set("bet", {
         status: "new"
       });
