@@ -18,7 +18,11 @@ Template.navbar.events({
   "click .howto-btn": function(e){
     e.preventDefault();
     $("body").append(Meteor.render( Template.howto_dialog ));
-  }
+  },
+  "click .volume-switch": function(e){
+    e.preventDefault();
+    
+  }  
 });
 
 
@@ -31,3 +35,15 @@ Template.navbar.rendered = function(){
   s.parentNode.insertBefore(uv,s);
 }
 
+// TODO
+// Template.navbar.created = function (){
+//   Audio.play('startup');
+// }
+
+// TODO
+// Template.navbar.helpers({
+//   volumeClass: function(){
+//     if (Meteor.user()) return Meteor.user().profile.soundOn
+//     return Meteor.user() && Collections.Bets.findOne({playerId: Meteor.user()._id});
+//   }
+// });
