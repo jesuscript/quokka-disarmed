@@ -5,9 +5,6 @@
       Session.set("bet", {
         status: "new"
       });
-    },
-    rendered: function(){
-      $("#bet-stats .numeric-input").numeric();
     }
   });
 

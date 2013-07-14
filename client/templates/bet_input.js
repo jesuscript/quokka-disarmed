@@ -36,7 +36,8 @@ Template.betInput.created = function(){
 Template.betInput.rendered = function(){
   $betSlider = $(this.find(".bet-slider"));
   $betGraph = $(this.find(".bet-graph"));
-  $(this.find(".stake")).numeric();
+  $(this.find('.stake')).autoNumeric('init', {mDec: '8', aPad: false} );
+  $(this.find('.stake')).click(function() { $(this).select(); });  
   templateRendered = true;
   if(windowLoaded) initPlugins(); // otherwise init in window load callback
 };
@@ -71,6 +72,7 @@ Template.betInput.events({
     var amount = $("input.stake").val() || 0;
     var range = $betSlider.rangeSlider("values");
     if (range.min <= range.max) {  // likely unnecessary but just in case...      
+      console.log(btcToInt(amount));
       Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
     }
   },
