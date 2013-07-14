@@ -9,7 +9,7 @@ Template.navbar.events({
   },
   "click .signout-btn": function(e){
     e.preventDefault();
-    Meteor.logout();
+    Auth.logout();
   },
   "click .news-btn": function(e){
     e.preventDefault();
