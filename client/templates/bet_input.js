@@ -68,7 +68,6 @@ Template.betInput.helpers({
 Template.betInput.events({
   "click .bet-btn, click .update-btn, submit form":function(){
     event.preventDefault();
-    console.log('hello');
     var amount = $("input.stake").val() || 0;
     var range = $betSlider.rangeSlider("values");
     if (amount <= 0) {

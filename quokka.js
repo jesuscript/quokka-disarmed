@@ -6,7 +6,6 @@ Quokka = Class.extend({
   },
   bets: function(bets){
     if(bets){
-      console.log('in bets quokka.js');
       // a bit duped based on the server check found in betting.js, but can't hurt
       _.each(bets, function(bet){
         if(bet.amount <= 0 || typeof bet.amount != "number"){
@@ -61,10 +60,7 @@ Quokka = Class.extend({
 
     for(var i=1; i<=100; i++){
       payout = this.computeResults(i)[playerId] || 0;
-
       if(payout > stats.maxToWin) stats.maxToWin = payout;
-      //console.log(stake,payout);
-
       if(stake - payout > stats.maxToLose) stats.maxToLose = stake - payout;
       if(payout > stake) stats.chanceToWin++;
     }

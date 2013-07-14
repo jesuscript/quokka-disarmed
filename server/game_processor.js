@@ -65,10 +65,10 @@ Meteor.startup(function(){
       var currentGames = Collections.Games.find({completed: false}).fetch();
       
       if(currentGames.length > 1){
-        console.log("Two uncompleted games found:", currentGames);
+        console.warn("Two uncompleted games found:", currentGames);
       } 
       if(currentGames.length < 1){
-        console.log("0 games, creating a new one");
+        console.warn("0 games, creating a new one");
         Collections.Games.insert({
           completed: false,
           createdAt: (new Date()).getTime()

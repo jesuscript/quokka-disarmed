@@ -1,7 +1,6 @@
 $.widget('bto.stackedBetGraph',$.bto.betGraph,{
   
   _create: function(){
-    console.log('stackedBetGraph create()');
     this._super();
 
     this._d3data = [];
@@ -21,8 +20,6 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
 
   _draw: function() {
-    console.log('draw() invoked()');
-
     this._setColorRange();
 
     this._chartWidth = this.element.width() - this._margin.left - this._margin.right - this._yAxisLabelShift; // due to lag in rendering this needs to be placed here to be accurate, and not on _create
@@ -122,7 +119,6 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
   redraw: function(betCollection) {
     if (betCollection) {
-      console.log('redraw accepted');
       this._d3data = this._convertBetsToStackData(betCollection);
           
       this._udpdateStack();

@@ -19,13 +19,11 @@ var initBetWheel = function(){
 Template.gameWheel.rendered = function(){
   $betWheel = $(this.find(".bet-wheel"));
   templateRendered = true;
-
   if(windowLoaded) initBetWheel();
 };
 
 $(window).load(function(){
   windowLoaded = true;
-
   if(templateRendered) initBetWheel();
 });
 

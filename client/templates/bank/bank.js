@@ -67,11 +67,11 @@ function calculateWithdrawStatus(){
       Session.set('depositsConfirmed', depositsConfirmed);
     }); 
     Meteor.call('getOutstandingDeposits', function(err, outstandingDeposits) {
-      if (err) console.log(err);
+      if (err) console.error(err);
       Session.set('outstandingDeposits', outstandingDeposits);
     }); 
     Meteor.call('getTimeToValidateDeposits', function(err, timeToValidateDeposits) {
-      if (err) console.log(err);
+      if (err) console.error(err);
       Session.set('timeToValidateDeposits', timeToValidateDeposits);
     });
   }
