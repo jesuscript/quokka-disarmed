@@ -1,5 +1,5 @@
 var $betSlider;
-var $betGraph;
+var $betStacked;
 
 var windowLoaded = false;
 var templateRendered = false;
@@ -15,23 +15,23 @@ var initBetSlider = function(){
   }
 };
 
-var initBetGraph = function(){
-  if(!$betGraph.data("btoStackedBetGraph")){
-    $betGraph.stackedBetGraph();
+var initBetStacked = function(){
+  if(!$betStacked.data("btoStackedBetGraph")){
+    $betStacked.stackedBetGraph();
     Deps.autorun(function(){
-      $betGraph.stackedBetGraph("redraw", Collections.Bets.find().fetch());
+      $betStacked.stackedBetGraph("redraw", Collections.Bets.find().fetch());
     });
   };
 };
 
 var initPlugins = function(){
   initBetSlider(); 
-  initBetGraph();
+  initBetStacked();
 };
 
 Template.betInput.rendered = function(){
   $betSlider = $(this.find(".bet-slider"));
-  $betGraph = $(this.find(".bet-graph"));
+  $betStacked = $(this.find(".bet-graph"));
   $(this.find('.stake')).autoNumeric('init', {mDec: '8', aPad: false} );
   $(this.find('.stake')).click(function() { $(this).select(); });  
   templateRendered = true;

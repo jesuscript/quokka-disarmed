@@ -3,9 +3,7 @@ var windowLoaded = false; // we really need to find
 var templateRendered = false; // a better way of doing this
 
 var initBetWheel = function(){
-  if($betWheel.data("btoWheelBetGraph")){
-    $betWheel.wheelBetGraph("draw");
-  }else{
+  if(!$betWheel.data("btoWheelBetGraph")){
     $betWheel.wheelBetGraph();
     Deps.autorun(function(){
       $betWheel.wheelBetGraph("redraw", Collections.Bets.find().fetch());
