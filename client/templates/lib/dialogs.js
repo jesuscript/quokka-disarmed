@@ -9,6 +9,6 @@ _.extend(TemplateHelpers, {
       $(node).remove();
 
       callback && callback();
-    }, 500);
+    }, 300); // fade out is 0.3s
   },
 });
