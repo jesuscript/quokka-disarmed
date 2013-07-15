@@ -3,13 +3,12 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
   _create: function(){
     this._super();
 
-    this._d3data = [];
-
     // properties (instance) definitions, jquery widget requires for them to be located here
     // this._chartWidth and this._chartHeight refer to the drawn area on the chart. The rest are margins so axis legend doesn't get clipped
     this._yAxisLabelShift = 15; // shift everything to the right to give room for the y axis label for it not to be covered by the bar on x = 1
     this._margin = {top: 10, right: 15, bottom: 18, left: 40}; // using 'best practice' d3 margin definitions by attaching all elements to a bounding box
-    this._chartHeight = 150 - this._margin.top - this._margin.bottom; // chart never resizes vertically
+    this._chartHeight = 120 - this._margin.top - this._margin.bottom; // chart never resizes vertically
+    this._transitionDuration = 800; // time for bars to go up / down, other values recalcuted based on this
 
     $(window).resize(_.debounce(this._draw.bind(this), 100)); // debouncing at 100 seems to be enough to avoid re-rendering while mouse is still moving
 
@@ -33,6 +32,8 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     this._chartArea = this._svg // define bounding box
       .append('g')
         .attr('transform', 'translate(' + this._margin.left + ',' + this._margin.top + ')'); // new root coords at top left corner of margins
+
+    this._drawNoBetsText();
 
     this._drawAxes();
 
@@ -84,7 +85,40 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
   },
 
 
-  // draw axises. Called once on draw().
+  // draw text on graph in case there are no bets. Called both on _draw() and _redraw()
+  _drawNoBetsText: function() {
+    if ((this._chartArea.select("#no-bets-text").empty()) && (!this._d3data.length)) {
+      this._addNoBetsText();
+    } else if (this._d3data.length) {
+      this._removeNoBetsText();
+    }
+  },
+
+  _addNoBetsText: function() {
+    this._noBetsText = this._chartArea.append("text")
+      .attr("id", "no-bets-text")
+      .attr("text-anchor", "middle")
+      .attr("y", this._chartHeight/2)
+      .attr("x", this.element.width()/2)
+      .style("fill", "#999")     
+      .style("opacity", '0')
+      .text("No bet placed")
+    .transition()
+      .delay(this._transitionDuration) // time for the bars to go all the way down
+      .duration(this._transitionDuration)
+      .style("opacity", '1')
+  },
+
+  _removeNoBetsText: function() {
+    this._chartArea.select("#no-bets-text")
+    .transition()
+      .duration(this._transitionDuration) // disapear by the time the bars are starting climbing (there's a this._transitionDuration ms delay before the bar draw on enter)
+      .style("opacity", '0')
+    .remove();
+  },
+
+
+  // draw axises. Called once on _draw()
   _drawAxes: function() {
     this._chartArea.append('g')
       .attr("class", "x axis")
@@ -120,7 +154,9 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
   redraw: function(betCollection) {
     if (betCollection) {
       this._d3data = this._convertBetsToStackData(betCollection);
-          
+      
+      this._drawNoBetsText();
+
       this._udpdateStack();
 
       this._transitionYAxis();
@@ -161,7 +197,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     // exit behaviour
     this._series.exit()
       .transition()
-        .duration(800)
+        .duration(this._transitionDuration)
         .style("opacity", '0')
         .remove();
   },
@@ -176,7 +212,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     this._rects
       .attr("x", function(d) { return this._x(d.x); }.bind(this))
       .transition()
-        .duration(800)
+        .duration(this._transitionDuration)
         .attr("y", function(d) { return this._y(d.y0 + d.y); }.bind(this)) 
         .attr("height", function(d) { var h = this._y(d.y0) - this._y(d.y0 + d.y) -1; return (h>=0) ? h : 0; }.bind(this)); // -1 for pretty bar bottoms
 
@@ -189,8 +225,8 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
       .attr("width", this._x.rangeBand()) 
       .attr("height", 0)
       .transition()
-        .delay(800)
-        .duration(800)
+        .delay(this._transitionDuration)
+        .duration(this._transitionDuration)
         .attr("y", function(d) { return this._y(d.y0 + d.y); }.bind(this)) 
         .attr("height", function(d) { var h = this._y(d.y0) - this._y(d.y0 + d.y) -1; return (h>=0) ? h : 0; }.bind(this)); // -1 for pretty bar bottoms... mmmmm.....
 
