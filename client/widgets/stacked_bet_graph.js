@@ -100,6 +100,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
       .attr("text-anchor", "middle")
       .attr("y", this._chartHeight/2)
       .attr("x", this.element.width()/2)
+      .style("font-size","14") // align with rest of site
       .style("fill", "#999")     
       .style("opacity", '0')
       .text("No bet placed")
