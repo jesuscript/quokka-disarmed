@@ -32,7 +32,7 @@ var initPlugins = function(){
 Template.betInput.rendered = function(){
   $betSlider = $(this.find(".bet-slider"));
   $betStacked = $(this.find(".bet-graph"));
-  $(this.find('.stake')).autoNumeric('init', {mDec: '8', aPad: false} );
+  $(this.find('.stake')).autoNumeric('init', {mDec: '8', aPad: false, aSep: ''} );
   $(this.find('.stake')).click(function() { $(this).select(); });  
   templateRendered = true;
   if(windowLoaded) initPlugins(); // otherwise init in window load callback
