@@ -80,4 +80,5 @@ Template.bankWithdraw.events({
 
 Template.withdrawForm.rendered = function(){
   this.find("input").focus();
+  $(this.find('#withdrawAmount')).autoNumeric('init', {mDec: '8', aPad: false, aSep: ''} );
 }
