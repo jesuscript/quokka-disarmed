@@ -7,7 +7,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     // this._chartWidth and this._chartHeight refer to the drawn area on the chart. The rest are margins so axis legend doesn't get clipped
     this._yAxisLabelShift = 15; // shift everything to the right to give room for the y axis label for it not to be covered by the bar on x = 1
     this._margin = {top: 10, right: 15, bottom: 18, left: 40}; // using 'best practice' d3 margin definitions by attaching all elements to a bounding box
-    this._chartHeight = 120 - this._margin.top - this._margin.bottom; // chart never resizes vertically
+    this._chartHeight = 87 - this._margin.top - this._margin.bottom; // chart never resizes vertically
     this._transitionDuration = 800; // time for bars to go up / down, other values recalcuted based on this
 
     $(window).resize(_.debounce(this._draw.bind(this), 100)); // debouncing at 100 seems to be enough to avoid re-rendering while mouse is still moving
@@ -79,7 +79,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     this._yAxis = d3.svg.axis()
       .scale(this._y)
       .orient("left")
-      .ticks(5) // approximate tick count
+      .ticks(4) // approximate tick count
       .tickSize(4,2,1) // major, minor, line thickness
       .tickFormat(d3.format(".2s"));
   },
