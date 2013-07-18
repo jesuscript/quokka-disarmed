@@ -59,7 +59,7 @@ Template.bankWithdraw.events({
             Session.set("withdraw_error", err);
           }else{
             Session.set("withdraw_error");
-            TemplateHelpers.removeDialog(tmpl);
+            TemplateHelpers.removeDialog({ tmpl:tmpl });
             if (trxInformation) {
               Session.set("withdraw_tmpl_transfer", {
                 instant: true,

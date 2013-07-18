@@ -16,7 +16,7 @@ Template.reset_password.events({
         if(err){
           Session.set("reset_error", err);
         }else{
-          TemplateHelpers.removeDialog(tmpl, function(){
+          TemplateHelpers.removeDialog({ tmpl:tmpl, fadeOut:false }, function(){
             Accounts._enableAutoLogin();
             Session.set("reset_error");
             $("body").append(Meteor.render(Template.reset_password_confirmation));
@@ -26,7 +26,7 @@ Template.reset_password.events({
     }
   },
   "click #cancel, click .close, click .shroud": function(e,tmpl){
-    TemplateHelpers.removeDialog(tmpl, function(){
+    TemplateHelpers.removeDialog({ tmpl:tmpl }, function(){
       Session.set("reset_error");
     });
   }
@@ -47,6 +47,6 @@ Template.reset_password.helpers({
 
 Template.reset_password_confirmation.events({
   "click #cancel, click .close, click .shroud": function(e,tmpl){
-    TemplateHelpers.removeDialog(tmpl);
+    TemplateHelpers.removeDialog({ tmpl:tmpl });
   }
 });

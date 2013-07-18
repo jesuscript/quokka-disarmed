@@ -46,7 +46,7 @@ Template.signup_dialog.events({
         if(err){
           Session.set("signup_error", err);
         }else{
-          TemplateHelpers.removeDialog(tmpl, function(){
+          TemplateHelpers.removeDialog({ tmpl:tmpl }, function(){
             Session.set("signup_error");
           });
         }
@@ -54,7 +54,7 @@ Template.signup_dialog.events({
     }
   },
   "click #cancel, click .close, click .shroud": function(e,tmpl){
-    TemplateHelpers.removeDialog(tmpl,function(){
+    TemplateHelpers.removeDialog({ tmpl:tmpl }, function(){
       Session.set("signup_error");
     });
   }

@@ -16,7 +16,7 @@ Template.forgot_password.events({
         if(err){
           Session.set("forgot_error", err);
         }else{
-          TemplateHelpers.removeDialog(tmpl, function(){
+          TemplateHelpers.removeDialog({ tmpl:tmpl, fadeOut:false }, function(){
             Session.set("forgot_error");
             $("body").append(Meteor.render(Template.forgot_password_confirmation));
           });
@@ -25,7 +25,7 @@ Template.forgot_password.events({
     }
   },
   "click #cancel, click .close, click .shroud": function(e,tmpl){
-    TemplateHelpers.removeDialog(tmpl, function(){
+    TemplateHelpers.removeDialog({ tmpl:tmpl }, function(){
       Session.set("forgot_error");
     });
   }
@@ -43,6 +43,6 @@ Template.forgot_password.helpers({
 
 Template.forgot_password_confirmation.events({
   "click #cancel, click .close, click .shroud": function(e,tmpl){
-    TemplateHelpers.removeDialog(tmpl);
+    TemplateHelpers.removeDialog({ tmpl:tmpl });
   }
 });

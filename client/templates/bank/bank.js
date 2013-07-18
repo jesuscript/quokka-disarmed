@@ -16,8 +16,7 @@ Template.bank.helpers({
 
 Template.bank.toggleOpen = function(){
     resetWithdrawInterface();
-    if (!Session.get("bank_tmpl_open")) 
-    Session.set("bank_tmpl_mode", "deposit"); // deposit is default view
+    if (!Session.get("bank_tmpl_open")) Session.set("bank_tmpl_mode", "deposit"); // deposit is default view
     Session.set("bank_tmpl_open", !Session.get("bank_tmpl_open"));
 };
 
@@ -54,9 +53,8 @@ function resetWithdrawInterface() {
   Session.set("withdraw_tmpl_transfer"); // don't show 'transfer in progress' dialog again
 }
 
-
 function calculateWithdrawStatus(){
-  if (Meteor.user().balance) {
+  if (Meteor.user() && Meteor.user().balance) {
     Meteor.call('areDepositsConfirmed', function(err, depositsConfirmed) {
       if (err) {
         Session.set("withdraw_bitcoindDown", {
