@@ -16,41 +16,43 @@
           </div>
           <form>
             <div class="span8 control-group">
-              <input type="text" class="stake input-block-level" value="{{betAmount}}"/>
+              <input type="text" class="stake input-block-level" value="{{betAmount}}" />
             </div>
           </form>
         </div>
-        <div class="row-fluid stake-buttons top">
-          <a class="btn btn-01 span4">0.1</a>
-          <a class="btn btn-001 span4">0.01</a>
-          <a class="btn btn-0001 span4">0.001</a>
-        </div>
-        <div class="row-fluid stake-buttons bottom">
-          <a class="btn btn-x2 span4">x2</a>
-          <a class="btn btn-max span4">Max</a>
-          <a class="btn btn-clear span4">Clear</a>
-        </div>
-        <div class="bet-buttons">
-          {{#if currentUser}}
-            {{#if sufficientFunds}}
-              {{#if activeBet}}
-                <div class="row-fluid">
-                  <div class="span6">
-                    <a class="btn btn-inverse update-btn" href="#">Update</a>
+        <div class='unselectable' unselectable='on' onselectstart='return false;' onmousedown='return false;'>
+          <div class="row-fluid stake-buttons top">
+            <a class="btn btn-01 span4">0.1</a>
+            <a class="btn btn-001 span4">0.01</a>
+            <a class="btn btn-0001 span4">0.001</a>
+          </div>
+          <div class="row-fluid stake-buttons bottom">
+            <a class="btn btn-x2 span4">x2</a>
+            <a class="btn btn-max span4">Max</a>
+            <a class="btn btn-clear span4">Clear</a>
+          </div>
+          <div class="bet-buttons">
+            {{#if currentUser}}
+              {{#if sufficientFunds}}
+                {{#if activeBet}}
+                  <div class="row-fluid">
+                    <div class="span6">
+                      <a class="btn btn-inverse update-btn" href="#">Update</a>
+                    </div>
+                    <div class="span6">
+                      <a class="btn revoke-btn" href="#">Revoke</a>
+                    </div>
                   </div>
-                  <div class="span6">
-                    <a class="btn revoke-btn" href="#">Revoke</a>
-                  </div>
-                </div>
+                {{else}}
+                  <a class="btn btn-inverse bet-btn">Bet</a>
+                {{/if}}
               {{else}}
-                <a class="btn btn-inverse bet-btn">Bet</a>
+                <a class="btn btn-inverse deposit-btn">Insufficient funds</a>
               {{/if}}
             {{else}}
-              <a class="btn btn-inverse deposit-btn">Insufficient funds</a>
+              <a class="btn btn btn-inverse signin-btn">Sign in to bet!</a>
             {{/if}}
-          {{else}}
-            <a class="btn btn btn-inverse signin-btn">Sign in to bet!</a>
-          {{/if}}
+          </div>
         </div>
       </div>
     </div>
