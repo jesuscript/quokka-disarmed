@@ -11,6 +11,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     // properties (instance) definitions, jquery widget requires for them to be located here
     this._bankRadius = this.options.svgHeight/2;
     this._innerRadius = this._bankRadius-15;
+    this._previousBankBalance = 0; // starts from nill bank
 
     this._createSvg();
 
@@ -42,38 +43,36 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       .innerRadius(this._innerRadius)
       .outerRadius(this._bankRadius);
 
+    this._backgroundPath = this._svg.append("path")
+        .datum({startAngle:0, endAngle: 2 * Math.PI})
+        .attr("id", "waitingBackground")
+        .style("fill", "#C4C4C4")
+        .attr("d", this._arc)
+  //        .transition().delay(500).attr("transform", "scale(100)");
+
+        //.text(cumulative.toFixed(8))
 
 
     this._centerGroup = this._svg.append("g")
       .attr("class", "center-group");
 
-    this._whiteCircle = this._centerGroup.append("circle")
-      .attr("fill", "white")
-      .attr("r", this._innerRadius);
-
     this._totalLabel = this._centerGroup.append("text")
-      .attr("class", "label")
-      .attr("dy", -15)
+      .attr("class", "wheel-bank-label")
+      .attr("dy", -20)
       .attr("text-anchor", "middle")
       .text("BANK");
 
     this._totalValue = this._centerGroup.append("text")
-      .attr("class", "total")
-      .attr("dy", 7)
+      .attr("class", "wheel-bank-total")
+      .attr("dy", 12)
       .attr("text-anchor", "middle")
-      .text("Loading bets...");
-
-    this._totalUnits = this._centerGroup.append("text")
-      .attr("class", "units")
-      .attr("dy", 21)
-      .attr("text-anchor", "middle")
-      .text("BTC");
+      .text("฿ 0.00000000");
 
   },
   
 
   redraw: function(betCollection){
-    if(betCollection){
+    if(betCollection) {
       this._d3data = this._convertBetsToWheelData(betCollection)
       this._updateTotalValue();
       this._wheelDefineD3Sequence();
@@ -85,7 +84,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     return _.map(betCollection, function(bet){
       return {
           playerName: bet.playerName,
-          amount: intToBtc(bet.amount)
+          amount: bet.amount
         };
     });
   },
@@ -94,13 +93,22 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
   _updateTotalValue: function(){
     var cumulative = _.reduce(this._d3data,function(memo,num){ 
       return memo + num.amount;
-    },0,this);
+    }, 0, this);
+    console.log('entering');
     
     this._totalValue
-      .text(cumulative)
+      .text(this._previousBankBalance)
       .transition()
-        .duration(750)
-        .attr("x", function(d, i) { return i * 32; });
+        .duration(800)
+        .ease('linear') // needed for custom tween on text
+        .tween("text", function() {
+          var i = d3.interpolate(this.textContent, cumulative);
+          return function(t) {
+            this.textContent = intToBtc(i(t)).toFixed(8);
+          };
+        });
+
+    this._previousBankBalance = cumulative;
   },
 
 
@@ -110,7 +118,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       endAngle: Math.PI * 2
     };
 
-    this._path = this._svg.selectAll("path");
+    this._path = this._svg.selectAll("path:not(#waitingBackground)");
 
     this._pathData = this._path
       .data(this._pie(this._d3data), function (d) { return d.data.playerName; });
@@ -151,6 +159,8 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
         .attrTween("d", this._getArcTweenFunction());
 
   },
+
+
 
 
   _getArcTweenFunction: function() {
