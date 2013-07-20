@@ -10,3 +10,11 @@ Template.alerts.helpers({
     return !Meteor.user().emails[0].verified;
   }
 });
+
+
+Template.alerts.events({
+  "click .resendVerificationEmail-btn": function(e,tmpl){
+    e.preventDefault();
+    Auth.resendVerificationEmail();
+  }  
+});

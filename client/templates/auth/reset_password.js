@@ -4,7 +4,7 @@ Template.reset_password.rendered = function(){
 
 Template.reset_password.events({
   "submit form": function(e, tmpl){
-    event.preventDefault();
+    e.preventDefault();
     var password = $(tmpl.find("[name=newPassword]")).val();
     if(password.length < 6){
       Session.set("reset_error", {

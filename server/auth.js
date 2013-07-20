@@ -50,3 +50,12 @@ function getNewBitcoinAddress() {
   return address;
 }
 
+
+Meteor.methods({
+  resendVerificationEmail: function(){
+    if(Meteor.userId()) {
+      Accounts.sendVerificationEmail(Meteor.userId())
+    }
+  }
+});
+

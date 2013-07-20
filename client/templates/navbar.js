@@ -21,7 +21,7 @@ Template.navbar.events({
   },
   "click .volume-switch": function(e){
     e.preventDefault();
-    
+    //TODO
   }  
 });
 

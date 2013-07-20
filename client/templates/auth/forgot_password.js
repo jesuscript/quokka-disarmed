@@ -4,7 +4,7 @@ Template.forgot_password.rendered = function(){
 
 Template.forgot_password.events({
   "submit form": function(e, tmpl){
-    event.preventDefault();
+    e.preventDefault();
     var email = $(tmpl.find("[name=email]")).val();
     if(!validEmail(email)){
       Session.set("forgot_error", {

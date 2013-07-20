@@ -66,8 +66,8 @@ Template.betInput.helpers({
 
 
 Template.betInput.events({
-  "click .bet-btn, click .update-btn, submit form":function(){
-    event.preventDefault();
+  "click .bet-btn, click .update-btn, submit form":function(e){
+    e.preventDefault();
     var amount = $("input.stake").val() || 0;
     var range = $betSlider.rangeSlider("values");
     if (amount <= 0) {
@@ -78,10 +78,12 @@ Template.betInput.events({
       Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
     }
   },
-  "click .revoke-btn": function(){
+  "click .revoke-btn": function(e){
+    e.preventDefault();
     Meteor.call("revokeBet");
   },
   "click .signin-btn": function(e){
+    e.preventDefault();
     Auth.showSigninDialog();
   },
   "click .deposit-btn": function(e){

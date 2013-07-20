@@ -4,7 +4,7 @@ Template.signin_dialog.rendered = function(){
 
 Template.signin_dialog.events({
   "submit form": function(e, tmpl){
-    event.preventDefault();
+    e.preventDefault();
     var user = $(tmpl.find("[name=user]")).val();
     var password = $(tmpl.find("[name=password]")).val();
     if(user.length < 3){
@@ -36,6 +36,7 @@ Template.signin_dialog.events({
     });
   },
   "click .signup-btn": function(e,tmpl){
+    e.preventDefault();
     TemplateHelpers.removeDialog({ tmpl:tmpl }, function(){
       Session.set("signin_error");
       $("body").append(Meteor.render(Template.signup_dialog));

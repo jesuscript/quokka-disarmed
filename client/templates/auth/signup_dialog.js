@@ -13,7 +13,7 @@ Template.signup_dialog.helpers({
 
 Template.signup_dialog.events({
   "submit form": function(e, tmpl){
-    event.preventDefault();
+    e.preventDefault();
     var username = $("#signup-dialog [name=username]").val();
     var password = $("#signup-dialog [name=password]").val();
     var email = $("#signup-dialog [name=email]").val();

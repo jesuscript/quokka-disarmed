@@ -30,7 +30,7 @@ Template.bankWithdraw.helpers({
 
 Template.bankWithdraw.events({
   "submit form": function(e, tmpl){
-    event.preventDefault();
+    e.preventDefault();
     var address = $(tmpl.find("[name=address]")).val();
     var amount = $(tmpl.find("[name=amount]")).val();
     var regexp = /^\d+(\.\d{1,3})?$/;
