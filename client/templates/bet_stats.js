@@ -33,13 +33,15 @@ Template.betStats.helpers({
     return !!(Meteor.user() && Collections.Bets.findOne({playerId: Meteor.userId()}));
   },
   activeBet: function(){
-    var activeBet = Meteor.user() && Collections.Bets.findOne({playerId: Meteor.userId()});
-    var currentGame = Collections.Games.findOne({completed: false});
-    var allBets = Collections.Bets.find({gameId: currentGame._id}).fetch();
-    var betAggregates = (new Quokka(allBets)).getBetStats(Meteor.userId()); 
+    var currentGame = Collections.Games.findOne({completed: false}, {_id: 1});
+    var activeBet = Meteor.user() && currentGame && Collections.Bets.findOne({playerId: Meteor.userId(), gameId: currentGame._id});
 
     returnVal = {};
     if(activeBet){
+      
+      var allBets = Collections.Bets.find({gameId: currentGame._id}).fetch();
+      var betAggregates = (new Quokka(allBets)).getBetStats(Meteor.userId()); 
+
       if(allBets.length > 1) {
         _.extend(returnVal, {
           maxToWin: intToBtc(betAggregates.maxToWin),
