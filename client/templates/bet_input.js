@@ -72,9 +72,9 @@ Template.betInput.events({
     var range = $betSlider.rangeSlider("values");
     if (amount <= 0) {
        $(".stake").parents('.control-group').addClass('error'); // thanks to meteor spark, field control group resets to the correct class after an element update!
-       $(".stake").focus().select();  
+       $(".stake").focus().select();
     } 
-    if (range.min <= range.max) {  // likely unnecessary but just in case...      
+    if ((amount > 0) && (range.min <= range.max)) {   
       Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
     }
   },
