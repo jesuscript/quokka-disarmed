@@ -9,6 +9,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     this._margin = {top: 10, right: 15, bottom: 18, left: 40}; // using 'best practice' d3 margin definitions by attaching all elements to a bounding box
     this._chartHeight = 92 - this._margin.top - this._margin.bottom; // chart never resizes vertically
     this._transitionDuration = 800; // time for bars to go up / down, other values recalcuted based on this
+    this._previousBetCollection = []; // temporary fix for duplicate autorun trigger bug
 
     $(window).resize(_.debounce(this._draw.bind(this), 100)); // debouncing at 100 seems to be enough to avoid re-rendering while mouse is still moving
 
@@ -38,7 +39,6 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     this._drawAxes();
 
     this._staticRedraw();
-
   },
 
 
@@ -153,19 +153,25 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
 
   redraw: function(betCollection) {
-    if (betCollection) {
-      this._d3data = this._convertBetsToStackData(betCollection);
-      
-      this._drawNoBetsText();
+    if(betCollection) {
+      var duplicateCallDetected = this._previousBetCollection.compare(betCollection);
+      if (!duplicateCallDetected) {
+        this._d3data = this._convertBetsToStackData(betCollection);
 
-      this._udpdateStack();
+        this._drawNoBetsText();
 
-      this._transitionYAxis();
+        this._udpdateStack();
 
-      this._seriesDefineD3Sequence();
+        this._transitionYAxis();
 
-      this._rectDefineD3Sequence();
-    }
+        this._seriesDefineD3Sequence();
+
+        this._rectDefineD3Sequence();
+      } else { 
+         //console.log('duplicate autorun output ignored in stacked bet graph') 
+      ;} // TODO FIX OBSERVER? BUG
+    } 
+    this._previousBetCollection = betCollection;
   },
 
 

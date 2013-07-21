@@ -30,6 +30,7 @@ var initPlugins = function(){
 };
 
 Template.betInput.rendered = function(){
+  //console.log('rendered');
   $betSlider = $(this.find(".bet-slider"));
   $betStacked = $(this.find(".bet-graph"));
   $(this.find('.stake')).autoNumeric('init', {mDec: '8', aPad: false, aSep: ''} );
@@ -39,6 +40,7 @@ Template.betInput.rendered = function(){
 };
 
 $(window).load(function(){
+  //console.log('loaded');
   windowLoaded = true;
   if(templateRendered) initPlugins(); //i'm sure there must be a better way to do this...
 });

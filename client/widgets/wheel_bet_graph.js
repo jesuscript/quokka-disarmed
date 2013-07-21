@@ -12,7 +12,9 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     this._bankRadius = this.options.svgHeight/2;
     this._innerRadius = this._bankRadius-15;
     this._previousBankBalance = 0; // starts from nill bank
-
+    this._previousBetCollection = []; // temporary fix for duplicate autorun trigger bug
+    this._gameHasStarted = false;
+    
     this._createSvg();
 
     this._draw();
@@ -47,10 +49,9 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
         .datum({startAngle:0, endAngle: 2 * Math.PI})
         .attr("id", "waitingBackground")
         .style("fill", "#C4C4C4")
-        .attr("d", this._arc)
-  //        .transition().delay(500).attr("transform", "scale(100)");
+        .attr("d", this._arc);
+        //transition().delay(500).attr("transform", "scale(100)");
 
-        //.text(cumulative.toFixed(8))
 
 
     this._centerGroup = this._svg.append("g")
@@ -58,25 +59,51 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
     this._totalLabel = this._centerGroup.append("text")
       .attr("class", "wheel-bank-label")
-      .attr("dy", -20)
+      .attr("dy", -32)
       .attr("text-anchor", "middle")
       .text("BANK");
 
     this._totalValue = this._centerGroup.append("text")
       .attr("class", "wheel-bank-total")
-      .attr("dy", 12)
+      .attr("dy", 0)
       .attr("text-anchor", "middle")
       .text("฿ 0.00000000");
+
+    this._timer = this._centerGroup.append("text")
+      .attr("class", "wheel-bank-timer")
+      .attr("dy", 50)
+      .attr("text-anchor", "middle")
+      .text("Place your bets please");
 
   },
   
 
   redraw: function(betCollection){
     if(betCollection) {
-      this._d3data = this._convertBetsToWheelData(betCollection)
-      this._updateTotalValue();
-      this._wheelDefineD3Sequence();
+      var duplicateCallDetected = this._previousBetCollection.compare(betCollection);
+      if (!duplicateCallDetected) {
+
+        this._d3data = this._convertBetsToWheelData(betCollection);
+
+        this._updateTotalValue();
+        this._wheelDefineD3Sequence();
+      } else { 
+         //console.log('duplicate autorun output ignored in stacked bet graph') 
+      ;} // TODO FIX OBSERVER? BUG
     }
+    this._previousBetCollection = betCollection;
+  },
+
+
+  redrawTimer: function(countDown){
+    this._timer
+      .text('Roll in ' + countDown + ' seconds');
+  },
+
+
+  killTimer: function() {
+    this._timer
+      .text('Place your bets please');
   },
 
 
@@ -94,7 +121,6 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     var cumulative = _.reduce(this._d3data,function(memo,num){ 
       return memo + num.amount;
     }, 0, this);
-    console.log('entering');
     
     this._totalValue
       .text(this._previousBankBalance)
@@ -104,7 +130,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
         .tween("text", function() {
           var i = d3.interpolate(this.textContent, cumulative);
           return function(t) {
-            this.textContent = intToBtc(i(t)).toFixed(8);
+            this.textContent = '฿ ' + intToBtc(i(t)).toFixed(8);
           };
         });
 
