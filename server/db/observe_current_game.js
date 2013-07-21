@@ -1,5 +1,5 @@
 Observe.currentGame = function(callbacks, runCallbacks){
-  console.log('inside observe function');
+  //console.log('inside observe function');
   var self = this;
   var gameCursor = Collections.Games.find({completed: false});
   var betsHandle, gameHandle;

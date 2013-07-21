@@ -60,7 +60,7 @@ Meteor.startup(function(){
     }});
   };
   
-  console.log('invoking observe');
+  //console.log('invoking observe');
   Observe.currentGame({
     gameUpdate: function(){ 
       var currentGames = Collections.Games.find({completed: false}).fetch();
@@ -77,7 +77,7 @@ Meteor.startup(function(){
       } 
     },
     betUpdate: function(){ 
-      console.log('triggered bet update');
+      //console.log('triggered bet update');
       var currentGame = DB.currentGame();
 
       if(!currentGame) return;
@@ -85,13 +85,13 @@ Meteor.startup(function(){
       var bets = DB.bets(currentGame);
 
       if(bets.length >= 2){
-        console.log('startin game');
+        //console.log('startin game');
         if(!gameTimeout){
           gameTimeout = Meteor.setTimeout(processGame, 60000);
           Collections.Games.update(currentGame, {$set:{startedAt: (new Date()).getTime()}});
         }
       }else{
-        console.log('ending  game');
+        //console.log('ending  game');
         Meteor.clearTimeout(gameTimeout);
         gameTimeout = null;
         
