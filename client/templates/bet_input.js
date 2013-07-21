@@ -19,6 +19,7 @@ var initBetStacked = function(){
   if(!$betStacked.data("btoStackedBetGraph")){
     $betStacked.stackedBetGraph();
     Deps.autorun(function(){
+      console.log('autorun invoked on stacked bet graph');
       $betStacked.stackedBetGraph("redraw", Collections.Bets.find().fetch());
     });
   };

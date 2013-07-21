@@ -153,6 +153,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
 
   redraw: function(betCollection) {
+    console.dir(betCollection);
     if(betCollection) {
       var duplicateCallDetected = this._previousBetCollection.compare(betCollection);
       if (!duplicateCallDetected) {
