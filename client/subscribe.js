@@ -6,6 +6,8 @@ Meteor.startup(function(){
   Meteor.subscribe("payouts");
   Meteor.subscribe("news");
   Meteor.subscribe("allTimeStats");
+  Meteor.subscribe("connections");
+  Meteor.subscribe("connectionsMonitor");
 
   var betsHandle;
   

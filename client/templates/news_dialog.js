@@ -5,7 +5,7 @@ Template.news_dialog.news = function () {
 
 Template.news_dialog.events({
   "click #cancel, click .close, click .shroud": function(e,tmpl){
-    TemplateHelpers.removeDialog(tmpl);
+    TemplateHelpers.removeDialog({ tmpl:tmpl });
   }  
 });
 

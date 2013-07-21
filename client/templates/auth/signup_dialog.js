@@ -6,7 +6,6 @@ Template.signup_dialog.helpers({
   error: function(){
     var err = Session.get("signup_error");
     if(err){
-      if(err.error == 400) return "Empty username";
       return err.reason;
     }
   }
@@ -14,7 +13,7 @@ Template.signup_dialog.helpers({
 
 Template.signup_dialog.events({
   "submit form": function(e, tmpl){
-    event.preventDefault();
+    e.preventDefault();
     var username = $("#signup-dialog [name=username]").val();
     var password = $("#signup-dialog [name=password]").val();
     var email = $("#signup-dialog [name=email]").val();
@@ -23,7 +22,12 @@ Template.signup_dialog.events({
         error: 406,
         reason: "Username is too short"
       });
-    }else if(password.length < 6){
+    }else if(username.length > 12){
+      Session.set("signup_error", {
+        error: 406,
+        reason: "Username is too long"
+      });
+   } else if(password.length < 6){
       Session.set("signup_error", {
         error: 406,
         reason: "Password is too short"
@@ -42,7 +46,7 @@ Template.signup_dialog.events({
         if(err){
           Session.set("signup_error", err);
         }else{
-          TemplateHelpers.removeDialog(tmpl, function(){
+          TemplateHelpers.removeDialog({ tmpl:tmpl }, function(){
             Session.set("signup_error");
           });
         }
@@ -50,7 +54,7 @@ Template.signup_dialog.events({
     }
   },
   "click #cancel, click .close, click .shroud": function(e,tmpl){
-    TemplateHelpers.removeDialog(tmpl,function(){
+    TemplateHelpers.removeDialog({ tmpl:tmpl }, function(){
       Session.set("signup_error");
     });
   }

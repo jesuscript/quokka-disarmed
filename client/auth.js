@@ -10,6 +10,19 @@ Auth = {
     Session.set("signin_error");
   },
 
+  resendVerificationEmail: function(){
+    Meteor.call('resendVerificationEmail', function() {
+      $("body").append(Meteor.render(Template.resend_verification_email_dialog));
+    }); 
+  },
+
+  logout: function(){
+    $("body").append(Meteor.render(Template.logout_dialog));
+    for (prop in Session.keys) { // logout does next to nothing, need to invalidate session scope ourselves
+      Session.set(prop);
+    }
+    Meteor.logout();
+  }
 };
 
 

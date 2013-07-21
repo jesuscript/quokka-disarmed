@@ -1,14 +1,8 @@
 var $betSlider;
-var $betGraph;
+var $betStacked;
 
 var windowLoaded = false;
 var templateRendered = false;
-
-var saveBetRange = function(min, max){
-  var vals = $betSlider.rangeSlider("values");
-  
-  Session.set("betSlider.range", vals);
-};
 
 var initBetSlider = function(){
   if($betSlider.data("uiRangeSlider")){
@@ -16,48 +10,39 @@ var initBetSlider = function(){
   }else{
     $betSlider.rangeSlider({
       bounds:{min:1, max: 100},
-      wheelMode: "zoom",
       step: 1
-    }).on("valuesChanging", function(){
-      saveBetRange();
-    });
-
-    saveBetRange();
+    })
   }
 };
 
-var initBetGraph = function(){
-  if(!$betGraph.data("btoStackedBetGraph")){
-    $betGraph.stackedBetGraph();
-
+var initBetStacked = function(){
+  if(!$betStacked.data("btoStackedBetGraph")){
+    $betStacked.stackedBetGraph();
     Deps.autorun(function(){
-      $betGraph.stackedBetGraph("bets", Collections.Bets.find().fetch());
+      console.log('autorun invoked on stacked bet graph');
+      $betStacked.stackedBetGraph("redraw", Collections.Bets.find().fetch());
     });
-  }
+  };
 };
 
 var initPlugins = function(){
   initBetSlider(); 
-  initBetGraph();
-};
-
-Template.betInput.created = function(){
-  Session.set("betInput_stakeKeydown", 0);
+  initBetStacked();
 };
 
 Template.betInput.rendered = function(){
+  //console.log('rendered');
   $betSlider = $(this.find(".bet-slider"));
-  $betGraph = $(this.find(".bet-graph"));
-  $(this.find(".stake")).numeric();
-  
+  $betStacked = $(this.find(".bet-graph"));
+  $(this.find('.stake')).autoNumeric('init', {mDec: '8', aPad: false, aSep: ''} );
+  $(this.find('.stake')).click(function() { $(this).select(); });  
   templateRendered = true;
-
   if(windowLoaded) initPlugins(); // otherwise init in window load callback
 };
 
 $(window).load(function(){
+  //console.log('loaded');
   windowLoaded = true;
-
   if(templateRendered) initPlugins(); //i'm sure there must be a better way to do this...
 });
 
@@ -72,30 +57,33 @@ Template.betInput.helpers({
     }else{
       bet = Session.get("betInput_stake");
     }
-
     return bet || 0;
   },
   sufficientFunds: function(){
     var bal = Meteor.user().balance;
     var stake = Session.get("betInput_stake") || 0;
-
     return Meteor.user() &&  bal > 0 && bal >= btcToInt(stake);
   }
 });
 
+
+
 Template.betInput.events({
-  "click .bet-btn, click .update-btn":function(){
-    var amount = $("input.stake").val() || 0;
-    var range = Session.get("betSlider.range");
-    
-    Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
-  },
-  "click .revoke-btn": function(){
-    Meteor.call("revokeBet");
-  },
-  "click .signup-btn": function(e){
+  "click .bet-btn, click .update-btn, submit form":function(e){
     e.preventDefault();
-    Auth.showSignupDialog();
+    var amount = $("input.stake").val() || 0;
+    var range = $betSlider.rangeSlider("values");
+    if (amount <= 0) {
+       $(".stake").parents('.control-group').addClass('error'); // thanks to meteor spark, field control group resets to the correct class after an element update!
+       $(".stake").focus().select();
+    } 
+    if ((amount > 0) && (range.min <= range.max)) {   
+      Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
+    }
+  },
+  "click .revoke-btn": function(e){
+    e.preventDefault();
+    Meteor.call("revokeBet");
   },
   "click .signin-btn": function(e){
     e.preventDefault();

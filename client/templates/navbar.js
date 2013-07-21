@@ -9,7 +9,7 @@ Template.navbar.events({
   },
   "click .signout-btn": function(e){
     e.preventDefault();
-    Meteor.logout();
+    Auth.logout();
   },
   "click .news-btn": function(e){
     e.preventDefault();
@@ -18,7 +18,11 @@ Template.navbar.events({
   "click .howto-btn": function(e){
     e.preventDefault();
     $("body").append(Meteor.render( Template.howto_dialog ));
-  }
+  },
+  "click .volume-switch": function(e){
+    e.preventDefault();
+    //TODO
+  }  
 });
 
 
@@ -31,3 +35,43 @@ Template.navbar.rendered = function(){
   s.parentNode.insertBefore(uv,s);
 }
 
+
+var previousBalance = null;
+
+Template.navbar.helpers({
+  playerInfo: function(){
+    var user = Meteor.user();
+    var balanceClass = "";
+    
+    if(!user) return {};
+
+    if(previousBalance !== null){
+      if(previousBalance > user.balance) balanceClass = "decreased";
+      if(previousBalance < user.balance) balanceClass = "increased";
+    }
+
+    previousBalance = user.balance;
+    
+    return {
+      username: user.username,
+      balance: intToBtc(user.balance),
+      balanceClass: balanceClass
+    };
+  }
+});
+
+
+
+
+// TODO
+// Template.navbar.created = function (){
+//   Audio.play('startup');
+// }
+
+// TODO
+// Template.navbar.helpers({
+//   volumeClass: function(){
+//     if (Meteor.user()) return Meteor.user().profile.soundOn
+//     return Meteor.user() && Collections.Bets.findOne({playerId: Meteor.user()._id});
+//   }
+// });

@@ -30,7 +30,7 @@ Template.bankWithdraw.helpers({
 
 Template.bankWithdraw.events({
   "submit form": function(e, tmpl){
-    event.preventDefault();
+    e.preventDefault();
     var address = $(tmpl.find("[name=address]")).val();
     var amount = $(tmpl.find("[name=amount]")).val();
     var regexp = /^\d+(\.\d{1,3})?$/;
@@ -59,7 +59,7 @@ Template.bankWithdraw.events({
             Session.set("withdraw_error", err);
           }else{
             Session.set("withdraw_error");
-            TemplateHelpers.removeDialog(tmpl);
+            TemplateHelpers.removeDialog({ tmpl:tmpl });
             if (trxInformation) {
               Session.set("withdraw_tmpl_transfer", {
                 instant: true,
@@ -80,4 +80,5 @@ Template.bankWithdraw.events({
 
 Template.withdrawForm.rendered = function(){
   this.find("input").focus();
+  $(this.find('#withdrawAmount')).autoNumeric('init', {mDec: '8', aPad: false, aSep: ''} );
 }

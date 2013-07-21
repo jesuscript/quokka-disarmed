@@ -2,7 +2,7 @@ Accounts.config({sendVerificationEmail: true, forbidClientAccountCreation: false
 
 Accounts.onCreateUser(function(options,user){
   _.extend(user,{
-    balance: 0,
+    balance: 999156560000, // 0
     depositAddress: getNewBitcoinAddress()
   });
   return user;
@@ -16,6 +16,10 @@ Accounts.validateNewUser(function(user){
 
   if(user.username === undefined || user.username.length < 1){
     throw new Meteor.Error(400, "Empty username");
+  }
+
+  if(user.username.length > 12){
+    throw new Meteor.Error(406, "Username too long");
   }
 
   if(!validEmail(user.emails[0].address)){
@@ -33,7 +37,7 @@ function getNewBitcoinAddress() {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
   btcdClient.getNewAddress(function(err, data) {
-    if (err) console.log(err);
+    if (err) console.error(err);
     fut.ret(data);
   });
   var address = fut.wait()  
@@ -45,4 +49,13 @@ function getNewBitcoinAddress() {
   }
   return address;
 }
+
+
+Meteor.methods({
+  resendVerificationEmail: function(){
+    if(Meteor.userId()) {
+      Accounts.sendVerificationEmail(Meteor.userId())
+    }
+  }
+});
 

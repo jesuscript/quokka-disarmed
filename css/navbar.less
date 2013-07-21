@@ -1,14 +1,32 @@
 #navbar{
+  margin-bottom: 10px;
+  .volume-switch {
+    margin-top: 10px;
+  }
   .navbar-text{
     padding: 0px 15px;
+    color: #000000;
   }
   .navbar-inner{
     .brand, a{
       color: #000000;
     }
-    
     border-radius: 0px;
     border-bottom-color: #222222;
+  }
+  .decreased, .increased{
+    padding: 5px;
+    border-radius: 10px;
+    -webkit-animation-duration: 0.3s;
+    -webkit-animation-timing-function: ease-in-out;
+    -webkit-animation-iteration-count: 6;
+    -webkit-animation-direction: alternate;
+  }
+  .decreased{
+    -webkit-animation-name: flashRed;
+  }
+  .increased{
+    -webkit-animation-name: flashGreen;
   }
 }
 

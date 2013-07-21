@@ -76,7 +76,7 @@ function getReceivedByAddress(address, numconf) {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
   btcdClient.getReceivedByAddress(address, numconf, function(err, data) {
-    if (err) console.log(err);
+    if (err) console.error(err);
     fut.ret(btcToInt(data));
   });
   return fut.wait();
@@ -86,7 +86,7 @@ function validateAddress(address) {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
   btcdClient.validateAddress(address, function(err, data) {
-    if (err) console.log(err);
+    if (err) console.error(err);
     fut.ret(data.isvalid);
   });
   return fut.wait();
@@ -96,7 +96,7 @@ function getWalletBalance() {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
   btcdClient.getBalance('', 6, function(err, data) {
-    if (err) console.log(err);
+    if (err) console.error(err);
     fut.ret(btcToInt(data));
   });
   return fut.wait();
@@ -106,7 +106,7 @@ function sendToAddress(address, intAmount) {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
   btcdClient.sendToAddress(address, intToBtc(intAmount - process.env.TRX_FEE), function(err, trxId) { // new trx fee since 0.8.2 == 10000 satoshis
-    if (err) console.log(err);
+    if (err) console.error(err);
     fut.ret(trxId);
   });
   return fut.wait();

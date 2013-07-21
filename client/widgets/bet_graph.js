@@ -1,16 +1,8 @@
 $.widget("bto.betGraph",{ // base class for bet graphs. "abstract"
   _create: function(){
-    this._bets = [];
+    this._d3data = []; // bets!=d3data
   },
-  bets: function(bets){
-    if(bets){
-      this._bets = bets;
-      this.draw();
-    }
-    
-    return bets;
-  },
-  _updateColorRange: function(){
+  _setColorRange: function(){
     this._colorRange = d3.scale.category20();
   }
 });

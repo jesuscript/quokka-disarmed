@@ -6,17 +6,16 @@ Quokka = Class.extend({
   },
   bets: function(bets){
     if(bets){
+      // a bit duped based on the server check found in betting.js, but can't hurt
       _.each(bets, function(bet){
-        if(bet.amount < 0 || typeof bet.amount != "number"){
-          throw new Error("Bet amount is not a number or is less than 0: " + bet.amount);
+        if(bet.amount <= 0 || typeof bet.amount != "number"){
+          throw new Error("Bet amount is not a number or is less or equal to 0: " + bet.amount);
         }
-
-        if((bet.rangeMin < 0) || (bet.rangeMin > bet.rangeMax) || (bet.rangeMax > 100) ||
+        if((bet.rangeMin <= 0) || (bet.rangeMin > bet.rangeMax) || (bet.rangeMax > 100) ||
            (typeof bet.rangeMin != "number") || (typeof bet.rangeMax != "number")){
           throw new Error("Bet range values are incorrect: " + bet.rangeMin + " " + bet.rangeMax);
         }
       });
-      
       this._bets = bets;
       this._betsPerNum = this._getBetsPerNum();
       this._stakeSumsPerNum = this._getStakeSumsPerNum();
@@ -61,10 +60,7 @@ Quokka = Class.extend({
 
     for(var i=1; i<=100; i++){
       payout = this.computeResults(i)[playerId] || 0;
-
       if(payout > stats.maxToWin) stats.maxToWin = payout;
-      console.log(stake,payout);
-
       if(stake - payout > stats.maxToLose) stats.maxToLose = stake - payout;
       if(payout > stake) stats.chanceToWin++;
     }

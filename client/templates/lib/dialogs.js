@@ -1,32 +1,17 @@
 _.extend(TemplateHelpers, {
-  removeDialog: function(tmpl, callback){
-    var node = tmpl.firstNode;
+  removeDialog: function(opts, callback){
+    var tmpl = opts.tmpl;
+    var node = opts.tmpl.firstNode;
+  
+    var fadeOut = (typeof opts.fadeOut === 'undefined') ? true : opts.fadeOut;
 
-    $(node).addClass("fade-out");
-    
+    if (fadeOut) $(node).addClass("fade-out");
+
     setTimeout(function(){
       Spark.finalize(node);
       $(node).remove();
 
       callback && callback();
-    }, 500);
+    }, 300); // fade out is 0.3s
   },
-  bindKeyboard: function(tmpl){
-    // won't trigger a click event on a template :(
-
-    /*
-    var keyElMap = {};
-
-    _.each(tmpl.findAll("[data-key]"),function(el){
-      var $el = $(el);
-      keyElMap[$el.attr("data-key")] = $el;
-    });
-
-    $(tmpl.firstNode).keypress(function(e){
-
-      
-      keyElMap[e.charCode] && keyElMap[e.charCode].click();
-    });
-    */
-  }
 });

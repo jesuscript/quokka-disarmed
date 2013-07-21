@@ -1,9 +1,6 @@
 <template name="generalStats">
   <section id="general-stats" class="chrome-padded">
-    <div class="total-players">
-      <div class="desc">Players Live:</div>
-      <div class="indicator">{{playersLive}}</div>
-    </div>
+    <h1>24h Statistics</h1>
     {{#with allTimeStats}}
       <div>
         <div class="desc">Largest-win:</div>
@@ -13,6 +10,16 @@
         <div class="desc">Coins distributed:</div>
         <div class="indicator">฿{{coinsDistributed}}</div>
       </div>
+    {{/with}}
+    {{#with connections}}
+    <div>
+      <div class="desc">Logged In:</div>
+      <div class="indicator">{{usersLoggedIn}}</div>
+    </div>
+    <div>
+      <div class="desc">Observing:</div>
+      <div class="indicator">{{usersObserving}}</div>
+    </div>
     {{/with}}
   </section>
 </template>

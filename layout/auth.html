@@ -1,8 +1,10 @@
 <template name="signup_dialog">
   <div id="signup-dialog">
-    <div class="shroud">
-    </div>
-    <div class="modal chrome-padded">
+    {{#constant}}
+      <div class="shroud fade-in-03">
+      </div>
+    {{/constant}}
+    <div class="modal chrome-padded fade-in-1">
       <form>
       <div class="modal-header">
         <button type="button" class="close">&times;</button>
@@ -10,12 +12,13 @@
       </div>
       <div class="modal-body">
         {{#if error}}
-        <div class="alert alert-error">
+        <div class="alert alert-error fade-in-1">
           {{error}}
         </div>
         {{/if}}
         <div class="field">
           <input class="input-large" type="text" placeholder="Username" name="username"/>
+          <span class="help-inline">Must be at most 12 characters long</span>
         </div>
         <div class="field">
           <input class="input-large" type="password" placeholder="Password" name="password"/>
@@ -37,10 +40,12 @@
 
 
 <template name="signin_dialog">
-  <div id="signin-dialog" class="fade-in">
-    <div class="shroud">
-    </div>
-    <div class="modal chrome-padded">
+  <div id="signin-dialog">
+    {{#constant}}
+      <div class="shroud fade-in-03">
+      </div>
+    {{/constant}}
+    <div class="modal chrome-padded fade-in-1">
       <form>
       <div class="modal-header">
         <button type="button" class="close">&times;</button>
@@ -48,7 +53,7 @@
       </div>
       <div class="modal-body">
         {{#if error}}
-        <div class="alert alert-error fade-in">
+        <div class="alert alert-error fade-in-1">
           {{error}}
         </div>
         {{/if}}
@@ -58,6 +63,9 @@
         <div class="field">
           <input class="input-large" type="password" placeholder="Password" name="password"/>
         </div>
+      </div>
+      <div class="text-center">
+          Don't have an account? <a class="signup-btn" href="#">Create an account</span>.
       </div>
       <div class="modal-footer">
         <a class="btn" id="forgot">Forgot Password</a>
@@ -71,7 +79,7 @@
 
 
 <template name="reset_password">
-  <div id="reset-password" class="fade-in">
+  <div id="reset-password">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
@@ -82,7 +90,7 @@
       </div>
       <div class="modal-body">
         {{#if error}}
-        <div class="alert alert-error fade-in">
+        <div class="alert alert-error fade-in-1">
           {{error}}
         </div>
         {{/if}}
@@ -101,7 +109,7 @@
 </template>
 
 <template name="reset_password_confirmation">
-  <div id="reset-password-confirmation" class="fade-in">
+  <div id="reset-password-confirmation">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
@@ -121,9 +129,8 @@
 
 
 
-
 <template name="forgot_password">
-  <div id="forgot-password" class="fade-in">
+  <div id="forgot-password">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
@@ -134,7 +141,7 @@
       </div>
       <div class="modal-body">
         {{#if error}}
-        <div class="alert alert-error fade-in">
+        <div class="alert alert-error fade-in-1">
           {{error}}
         </div>
         {{/if}}
@@ -151,8 +158,10 @@
   </div>
 </template>
 
+
+
 <template name="forgot_password_confirmation">
-  <div id="forgot-password-confirmation" class="fade-in">
+  <div id="forgot-password-confirmation">
     <div class="shroud">
     </div>
     <div class="modal chrome-padded">
@@ -173,10 +182,12 @@
 
 
 <template name="verified_email">
-  <div id="verified-email" class="fade-in">
-    <div class="shroud">
-    </div>
-    <div class="modal chrome-padded">
+  <div id="verified-email">
+    {{#constant}}
+      <div class="shroud fade-in-03">
+      </div>
+    {{/constant}}
+    <div class="modal chrome-padded fade-in-1">
       <div class="modal-header">
         <button type="button" class="close">&times;</button>
         <h3>Email confirmed</h3>
@@ -191,6 +202,51 @@
   </div>
 </template>
 
+
+
+<template name="resend_verification_email_dialog">
+  <div id="resend-verification-email-dialog">
+    {{#constant}}
+      <div class="shroud fade-in-03">
+      </div>
+    {{/constant}}
+    <div class="modal chrome-padded fade-in-1">
+      <div class="modal-header">
+        <button type="button" class="close">&times;</button>
+        <h3>Verification email resent</h3>
+      </div>
+      <div class="modal-body">
+        We've resent the verification email. Please click the link contained inside to verify your email.
+      </div>
+      <div class="modal-footer">
+        <a class="btn" id="cancel">OK</a>
+      </div>
+    </div>
+  </div>
+</template>
+
+
+
+<template name="logout_dialog">
+  <div id="logout-dialog">
+    {{#constant}}
+      <div class="shroud fade-in-03">
+      </div>
+    {{/constant}}
+    <div class="modal chrome-padded fade-in-1">
+      <div class="modal-header">
+        <button type="button" class="close">&times;</button>
+        <h3>Signed out</h3>
+      </div>
+      <div class="modal-body">
+        You were successfully signed out.
+      </div>
+      <div class="modal-footer">
+        <a class="btn" id="cancel">OK</a>
+      </div>
+    </div>
+  </div>
+</template>
 
 
 

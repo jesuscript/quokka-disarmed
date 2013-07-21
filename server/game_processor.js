@@ -60,22 +60,25 @@ Meteor.startup(function(){
     }});
   };
   
+  console.log('invoking observe');
   Observe.currentGame({
-    gameUpdate: function(){
+    gameUpdate: function(){ 
       var currentGames = Collections.Games.find({completed: false}).fetch();
       
       if(currentGames.length > 1){
-        console.log("Two uncompleted games found:", currentGames);
+        console.warn("Two uncompleted games found:", currentGames);
       } 
       if(currentGames.length < 1){
-        console.log("0 games, creating a new one");
+        console.log("0 games, creating a new one"); //not a .warn cuz it's not a warning
         Collections.Games.insert({
           completed: false,
           createdAt: (new Date()).getTime()
         });
       } 
     },
-    betUpdate: function(){ return;
+    betUpdate: function(){ 
+      console.log('triggered bet update');
+
       var currentGame = DB.currentGame();
 
       if(!currentGame) return;
@@ -83,11 +86,14 @@ Meteor.startup(function(){
       var bets = DB.bets(currentGame);
 
       if(bets.length >= 2){
+        console.log('startin game');
         if(!gameTimeout){
+          //gameTimeout = Meteor.setTimeout(processGame, 60000);
           gameTimeout = Meteor.setTimeout(processGame, 3000);
           Collections.Games.update(currentGame, {$set:{startedAt: (new Date()).getTime()}});
         }
       }else{
+        console.log('ending  game');
         Meteor.clearTimeout(gameTimeout);
         gameTimeout = null;
         
@@ -95,6 +101,7 @@ Meteor.startup(function(){
       }
     }
   }, true);
+
 });
 
 

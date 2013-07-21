@@ -1,121 +1,157 @@
 $.widget("bto.wheelBetGraph",$.bto.betGraph,{
-  //draw is working but currently adding / revoking bets is broken. 
-  
+
   options:{
-    svgHeight: 250
+    svgHeight: 250,
+    svgWidth: 250,
   },
+
   _create: function(){
     this._super();
 
+    // properties (instance) definitions, jquery widget requires for them to be located here
+    this._bankRadius = this.options.svgHeight/2;
+    this._innerRadius = this._bankRadius-15;
+    this._previousBankBalance = 0; // starts from nill bank
+    this._previousBetCollection = []; // temporary fix for duplicate autorun trigger bug
+    this._gameHasStarted = false;
+    this._transitionDuration = 800; 
+    
     this._createSvg();
-    this.draw();
-  },
-  draw: function(){
-    this._updateColorRange();
-    this._createLayout();
-    this._createPath();
-  },
-  bets: function(bets){
-    if(bets){
-      this._bets = bets;
-      this._createPath();
-      this._updateTotalValue();
-    }
-    return this._bets;
-  },
-  users: function(users){
-    if(users){
-      this._users = users;
-    }
 
-    return this._users;
+    this._draw();
   },
+
+
   _createSvg: function(){
     var svgHeight = this.options.svgHeight;
-    
+    var svgWidth = this.options.svgWidth;
+
     this._svg = d3.select(this.element[0]).append("svg")
-      .attr("viewBox", "0 0 250 250")
-      .attr("preserveAspectRatio", "XmidYmid")
+      .attr("viewBox", "0 0 250 250") // <min-x> <min-y> <width> <height>
+      .attr("preserveAspectRatio", "xMidYMid")
       .attr("height", svgHeight)
       .append("g")
-      .attr("transform", "translate(" + svgHeight / 2 + "," + svgHeight / 2 + ")");
+        .attr("transform", "translate(" + svgHeight / 2 + "," + svgHeight / 2 + ")");
   },
-  _createLayout: function(){
-    this._bankRadius = this.options.svgHeight/2;
-    this._innerRadius = this._bankRadius-20;
-    
+
+
+  _draw: function(){
+    this._setColorRange();
+
     this._pie = d3.layout.pie()
       .sort(null)
-      .value(function(d) { return d.amount; });
+      .value(function(d) { return d.amount; }); // key
 
     this._arc = d3.svg.arc()
       .innerRadius(this._innerRadius)
       .outerRadius(this._bankRadius);
 
-    this._drawLayoutElements();
-  },
-  _drawLayoutElements: function(){
+    this._backgroundPath = this._svg.append("path")
+        .datum({startAngle:0, endAngle: 2 * Math.PI})
+        .attr("id", "waitingBackground")
+        .style("fill", "#C4C4C4")
+        .attr("d", this._arc);
+        //transition().delay(500).attr("transform", "scale(100)");
+
+
+
     this._centerGroup = this._svg.append("g")
       .attr("class", "center-group");
 
-    this._whiteCircle = this._centerGroup.append("circle")
-      .attr("fill", "white")
-      .attr("r", this._innerRadius);
-
     this._totalLabel = this._centerGroup.append("text")
-      .attr("class", "label")
-      .attr("dy", -15)
+      .attr("class", "wheel-bank-label")
+      .attr("dy", -32)
       .attr("text-anchor", "middle")
       .text("BANK");
 
-    this._drawTotalValue();
-
-    this._totalUnits = this._centerGroup.append("text")
-      .attr("class", "units")
-      .attr("dy", 21)
-      .attr("text-anchor", "middle")
-      .text("BTC");
-  },
-  _drawTotalValue: function(){
     this._totalValue = this._centerGroup.append("text")
-      .attr("class", "total")
-      .attr("dy", 7)
+      .attr("class", "wheel-bank-total")
+      .attr("dy", 0)
       .attr("text-anchor", "middle")
-      .text("Loading bets...");
-  },
-  _updateTotalValue: function(){
-    var cumulative = _.reduce(this._bets,function(memo,num){ 
-      return memo + intToBtc(num.amount);
-    },0,this);
-    
-    this._totalValue
-      .text(cumulative.toFixed(8))
-      .transition()
-      .duration(750)
-      .attr("x", function(d, i) { return i * 32; });
-  },
-  _createPath: function(){
-    this._updatePathData();
-    this._definePathEnter();
-    this._definePathExit();
+      .text("฿ 0.00000000");
 
-    this._pathData.transition().duration(750).attrTween("d", this._getArcTweenFunction());
+    this._timer = this._centerGroup.append("text")
+      .attr("class", "wheel-bank-timer")
+      .attr("dy", 50)
+      .attr("text-anchor", "middle")
+      .text("Place your bets please");
+
   },
-  _updatePathData: function(){
-    this._pathData = this._svg.selectAll("path").data(this._pie(this._bets), function (d) {
-      return d.data.playerId;
+  
+
+  redraw: function(betCollection){
+    if(betCollection) {
+      var duplicateCallDetected = this._previousBetCollection.compare(betCollection);
+      if (!duplicateCallDetected) {
+
+        this._d3data = this._convertBetsToWheelData(betCollection);
+
+        this._updateTotalValue();
+        this._wheelDefineD3Sequence();
+      } else { 
+         //console.log('duplicate autorun output ignored in stacked bet graph') 
+      ;} // TODO FIX OBSERVER? BUG
+    }
+    this._previousBetCollection = betCollection;
+  },
+
+
+  redrawTimer: function(countDown){
+    this._timer
+      .text('Roll in ' + countDown + ' seconds');
+  },
+
+
+  killTimer: function() {
+    this._timer
+      .text('Place your bets please');
+  },
+
+
+  _convertBetsToWheelData:function(betCollection){
+    return _.map(betCollection, function(bet){
+      return {
+          playerName: bet.playerName,
+          amount: bet.amount
+        };
     });
   },
-  _definePathEnter:function(){
-    var enterAntiClockwise = {
+
+
+  _updateTotalValue: function(){
+    var cumulative = _.reduce(this._d3data,function(memo,num){ 
+      return memo + num.amount;
+    }, 0, this);
+    
+    this._totalValue
+      .text(this._previousBankBalance)
+      .transition()
+        .duration(this._transitionDuration)
+        .ease('linear') // needed for custom tween on text
+        .tween("text", function() {
+          var i = d3.interpolate(this.textContent, cumulative);
+          return function(t) {
+            this.textContent = '฿ ' + intToBtc(i(t)).toFixed(8);
+          };
+        });
+
+    this._previousBankBalance = cumulative;
+  },
+
+
+  _wheelDefineD3Sequence: function(){
+    enterAntiClockwise = {
       startAngle: Math.PI * 2,
       endAngle: Math.PI * 2
     };
-    
+
+    this._path = this._svg.selectAll("path:not(#waitingBackground)");
+
+    this._pathData = this._path
+      .data(this._pie(this._d3data), function (d) { return d.data.playerName; });
+
     this._pathData.enter().append("path")
-      .attr("fill", function (d, i) {
-        return this._colorRange(i);
-      }.bind(this))
+      .attr("fill", function (d, i) { return this._colorRange(i); }.bind(this))
       .attr("d", this._arc(enterAntiClockwise))
       .each(function (d) {
         this._current = {
@@ -135,27 +171,24 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
             'color': '#fff',
             'border-radius': '2px',
             'font-family': 'Helvetica Neue, Helvetica, Arial, sans-serif'
-          }).text(function(d, i) {//TODO: replace playerId with username
-            var user;
-            var id = d.data.playerId;
-
-            if(this._users && (user = this._users.findOne({_id: id})) && user.username ){
-              user = user.username;
-            }else{
-              user = id;
-            }
-              
-            return user + '<br> BTC ' + d.value.toFixed(8); 
-          }.bind(this))
+          }).text(function(d, i) { return d.data.playerName + '<br> BTC ' + intToBtc(d.value).toFixed(8); })
       );
-  },
-  _definePathExit: function(){
+
     this._pathData.exit()
-      .transition()
-      .duration(750)
+    .transition()
+      .duration(this._transitionDuration * 1.5)
       .attrTween('d', this._getArcTweenOutFunction())
-      .remove();
+    .remove();
+
+    this._pathData
+    .transition()
+      .duration(this._transitionDuration * 1.5)
+      .attrTween("d", this._getArcTweenFunction());
+
   },
+
+
+
   _getArcTweenFunction: function() {
     var arc = this._arc;
     
@@ -168,6 +201,8 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       };
     };
   },
+
+
   _getArcTweenOutFunction: function() {
     var arc = this._arc;
     
