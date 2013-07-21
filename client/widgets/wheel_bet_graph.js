@@ -14,6 +14,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     this._previousBankBalance = 0; // starts from nill bank
     this._previousBetCollection = []; // temporary fix for duplicate autorun trigger bug
     this._gameHasStarted = false;
+    this._transitionDuration = 800; 
     
     this._createSvg();
 
@@ -125,7 +126,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     this._totalValue
       .text(this._previousBankBalance)
       .transition()
-        .duration(800)
+        .duration(this._transitionDuration)
         .ease('linear') // needed for custom tween on text
         .tween("text", function() {
           var i = d3.interpolate(this.textContent, cumulative);
@@ -170,22 +171,21 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
             'color': '#fff',
             'border-radius': '2px',
             'font-family': 'Helvetica Neue, Helvetica, Arial, sans-serif'
-          }).text(function(d, i) { return d.data.playerName + '<br> BTC ' + d.value; })
+          }).text(function(d, i) { return d.data.playerName + '<br> BTC ' + intToBtc(d.value).toFixed(8); })
       );
 
     this._pathData.exit()
-      .transition()
-        .duration(750)
-        .attrTween('d', this._getArcTweenOutFunction())
-      .remove();
+    .transition()
+      .duration(this._transitionDuration * 1.5)
+      .attrTween('d', this._getArcTweenOutFunction())
+    .remove();
 
-     this._pathData
-      .transition()
-        .duration(750)
-        .attrTween("d", this._getArcTweenFunction());
+    this._pathData
+    .transition()
+      .duration(this._transitionDuration * 1.5)
+      .attrTween("d", this._getArcTweenFunction());
 
   },
-
 
 
 
