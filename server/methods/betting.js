@@ -12,7 +12,6 @@ Meteor.methods({
       existingBet = Collections.Bets.findOne({playerId: Meteor.userId(), gameId: gameId});
 
       if(existingBet){
-        console.log('udpating bet request');
         Collections.Bets.update({_id: existingBet._id}, {
           $set: {
             amount: amount,
@@ -21,7 +20,6 @@ Meteor.methods({
           }
         });
       }else{
-        console.log('inserting bet request');
         Collections.Bets.insert({
           playerName: Meteor.user().username,
           playerId: Meteor.userId(),

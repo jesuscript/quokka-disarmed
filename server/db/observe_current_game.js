@@ -1,5 +1,5 @@
 Observe.currentGame = function(callbacks, runCallbacks){
-  console.log('inside observe function');
+  //console.log('inside observe function');
   var self = this;
   var gameCursor = Collections.Games.find({completed: false});
   var betsHandle, gameHandle;
@@ -16,20 +16,18 @@ Observe.currentGame = function(callbacks, runCallbacks){
     if(betsHandle) {
       betsHandle.stop();
     }
-
+    
     if(! currentGame) return;
 
     betsHandle = Collections.Bets.find({gameId: currentGame._id}).observe({ 
       added: callbacks.betUpdate,
-      removed: callbacks.betUpdate,
-      changed: callbacks.betUpdate
+      removed: callbacks.betUpdate
     });
-  }
+  };
 
   gameHandle = gameCursor.observe({
     added: observeBets,
-    removed: observeBets,
-    changed: observeBets
+    removed: observeBets
   });
 
   observeBets();
@@ -39,5 +37,5 @@ Observe.currentGame = function(callbacks, runCallbacks){
       betsHandle.stop();
       gameHandle.stop();
     } 
-  }
+  };
 }
