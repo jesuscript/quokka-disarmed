@@ -17,8 +17,8 @@ var initBetSlider = function(){
 
 var initBetStacked = function(){
   if(!$betStacked.data("btoStackedBetGraph")){
+    console.log('invoking autorun for stacked bet graph');
     $betStacked.stackedBetGraph();
-
     Deps.autorun(function(){
       $betStacked.stackedBetGraph("redraw", Collections.Bets.find().fetch());
     });

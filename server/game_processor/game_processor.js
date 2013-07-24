@@ -69,7 +69,7 @@ Meteor.startup(function(){
         console.warn("Two uncompleted games found:", currentGames);
       } 
       if(currentGames.length < 1){
-        console.log("0 games, creating a new one"); //not a .warn cuz it's not a warning
+        console.log("0 games, creating a new one");
         Collections.Games.insert({
           completed: false,
           createdAt: (new Date()).getTime()
@@ -88,8 +88,8 @@ Meteor.startup(function(){
       if(bets.length >= 2){
         //console.log('startin game');
         if(!gameTimeout){
-          gameTimeout = Meteor.setTimeout(processGame, 60000);
-          //gameTimeout = Meteor.setTimeout(processGame, 3000);
+          //gameTimeout = Meteor.setTimeout(processGame, 60000);
+          gameTimeout = Meteor.setTimeout(processGame, 3000);
           Collections.Games.update(currentGame, {$set:{startedAt: (new Date()).getTime()}});
 
           DB.activity("Timer started!", "game");

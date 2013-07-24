@@ -2,9 +2,7 @@
   <section id="personal-results">
     {{#with results}}
       <span class="lucky-num-copy">Lucky Number</span>
-      <span id="lucky-num">
-        {{luckyNum}}
-      </span>
+      <span id="lucky-num"></span>
       {{#if payout}}
         <div class="payout">
           <span class="payout-copy">You received:</span>
@@ -13,7 +11,7 @@
       {{/if}}
     {{/with}}
     <div>
-      <span id="timer-back-to-game"></span> <a href="#" id="skipTimer">(skip)</a>
+      <span id="timer-back-to-game">Initializing timer...</span> <a href="#" id="skipBtn">skip &gt;&gt;&gt;</a>
     </div>
   </section>
 </template>

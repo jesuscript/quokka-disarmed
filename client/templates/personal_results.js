@@ -38,9 +38,6 @@ var createBackToGameTimer = function(totalTime) {
 
 Template.personalResults.rendered = function(){
   $luckyNum = $(this.find("#lucky-num"));
-  createCounter(50, 800, function () {
-    $luckyNum.addClass("pulsate");
-  });
   $timer = $(this.find("#timer-back-to-game"));
   createBackToGameTimer(10000);
 };
@@ -58,15 +55,17 @@ Template.personalResults.helpers({
       payout = Collections.Payouts.findOne({gameId: lastGame._id, playerId: Meteor.user()._id});
     }
 
-    return {
-      luckyNum: lastGame ? lastGame.luckyNum : "",
-      payout: payout ? intToBtc(payout.payout) : 0
-    };
+    createCounter(lastGame.luckyNum , 800, function () {
+      $luckyNum.addClass("pulsate");
+    });
+
+    return { payout: payout ? intToBtc(payout.payout) : 0 };
   }
 });
 
+
 Template.personalResults.events({
-  "click #skipTimer": function(e){
+  "click #skipBtn": function(e){
     e.preventDefault();
     Session.set("displayResults", false);
   }

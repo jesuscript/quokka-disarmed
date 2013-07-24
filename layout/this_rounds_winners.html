@@ -1,0 +1,10 @@
+<template name="thisRoundsWinners">
+  <section id="this-rounds-winners" class="chrome-padded">
+    <h1>This round's winners</h1>
+    <ol class="winners-list">
+      {{#each winners}}
+        <li>{{username}}: ฿{{amount}}</li>
+      {{/each}}
+    </ol>
+  </section>
+</template>

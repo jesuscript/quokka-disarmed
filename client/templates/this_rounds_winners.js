@@ -1,7 +1,4 @@
-Template.topWinners.helpers({
-  displayResults: function() {
-    return Session.get("displayResults");
-  },
+Template.allTimeWinners.helpers({
   winners: function(){
     var lastGame = Collections.Games.findOne({completed: true}, {sort: {completedAt: -1}});
     

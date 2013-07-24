@@ -1,15 +1,23 @@
 <template name="resultsSwitcher">
-  <div class="span3">
-    {{> topWinners }}
-  </div>
-  <div class="span3">
-    {{#if displayResults}}
-      {{> personalResults }}
-    {{else}}
-      {{> gameWheel }}
-    {{/if}}
-  </div>
-  <div class="span3">
-    {{> generalStats}}
-  </div>
+  {{#if displayResults}}
+    <div class="span3">
+      {{> thisRoundsWinners}}
+    </div>
+    <div class="span3">
+      {{> personalResults}}
+    </div>
+    <div class="span3">
+      {{> thisRoundsStats}}
+    </div>
+  {{else}}
+    <div class="span3">
+      {{> allTimeWinners}}
+    </div>
+    <div class="span3">
+      {{> gameWheel}}
+    </div>
+    <div class="span3">
+      {{> generalStats}}
+    </div>
+  {{/if}}
 </template>

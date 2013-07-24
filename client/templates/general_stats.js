@@ -1,5 +1,3 @@
-/*global Template */
-
 Template.generalStats.helpers({
   allTimeStats: function(){
     var stats = Collections.AllTimeStats.findOne();
