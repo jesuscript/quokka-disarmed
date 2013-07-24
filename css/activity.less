@@ -60,12 +60,12 @@
   .terminal{
     border-top: 2px solid #222;
     border-left: 2px solid #222;
-    border-radius: 4px 0 0 0;
+    .border-radius(4px 0 0 0);
     height: 140px;
     background-color: rgba(255,255,255,0.8);
     padding: 5px 10px;
-    box-shadow: inset 0px 2px 6px 0px RGBA(0,0,0,0.2);
-    transition: all 0.5s ease-in-out;
+    .box-shadow(inset 0px 2px 6px 0px RGBA(0,0,0,0.2));
+    .transition(all 0.5s ease-in-out);
   }
   .output{
     height: 140px;
@@ -74,7 +74,7 @@
   }
   .tab-btn{
     text-transform: uppercase;
-    border-radius: 4px 4px 0px 0px;
+    .border-radius(4px 4px 0px 0px);
     border-bottom: 0;
     display: inline-block;
   }
@@ -85,7 +85,7 @@
     z-index:100;
     padding: 3px;
     border: 1px solid #222;
-    border-radius: 4px;
+    .border-radius(4px);
     .control{
       padding: 5px;
     }
@@ -99,7 +99,7 @@
     opacity: 0;
     .send-btn{
       display: block;
-      box-sizing: border-box;
+      .box-sizing(border-box);
       width: 100%;
     }
   }
