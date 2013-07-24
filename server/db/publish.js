@@ -12,7 +12,7 @@ Meteor.publish('games', function(){
   return Collections.Games.find({},{sort: {createdAt: -1}, limit: 100});
 });
 
-Meteor.publish('bets', function(){ //update to publish only for the current game
+Meteor.publish('bets', function(){ //updated to publish only for the current game
   return Collections.Bets.find({gameId: DB.currentGame()._id});
 });
 

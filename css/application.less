@@ -1,3 +1,5 @@
+@import "prefixer.lessimport";
+
 a:hover {
   cursor: pointer;
   text-decoration: none;
@@ -39,29 +41,26 @@ body a{
   color: #1f77b4;
 }
 
+//reminder:
+//-webkit-animation: animName duration easing-method delay iterationcount animation-direction;
 .fade-in-1{
-  -webkit-animation:fadeIn1 0.3s ease-in;
-  -moz-animation:fadeIn1 0.3s ease-in;
-  animation:fadeIn1 0.3s ease-in;
+  .animation(fadeIn1 0.3s ease-in);
 }
 
 .fade-in-03{ // for the shroud
-  -webkit-animation:fadeIn03 0.3s;
-  -moz-animation:fadeIn03 0.3s;
-  animation:fadeIn03 0.3s;
+  .animation(fadeIn03 0.3s);
 }
 
 .fade-out{
-  -webkit-animation:fadeOut 0.3s;
-  -moz-animation:fadeOut 0.3s;
-  animation:fadeOut 0.3s;
+  .animation(fadeOut 0.3s);
+}
+
+.pulsate{
+  .animation(pulse 1s ease-in-out 0s 5 alternate);
 }
 
 .unselectable {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  .touch-callout(none);
+  .user-select(none);
 }
+

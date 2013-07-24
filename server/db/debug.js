@@ -7,6 +7,7 @@
 //     var collectionName = this._name;
 
 //     cursor.observeChanges({
+//       _suppress_initial: true,
 //       added: function (id, fields) {
 //         console.log(collectionName, 'added', id, fields);
 //       },

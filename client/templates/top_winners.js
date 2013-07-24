@@ -1,4 +1,7 @@
 Template.topWinners.helpers({
+  displayResults: function() {
+    return Session.get("displayResults");
+  },
   winners: function(){
     var lastGame = Collections.Games.findOne({completed: true}, {sort: {completedAt: -1}});
     
@@ -19,5 +22,3 @@ Template.topWinners.helpers({
     });
   } 
 });
-
-

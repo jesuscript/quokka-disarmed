@@ -1,3 +1,5 @@
+@import "prefixer.lessimport";
+
 #top-winners{
   height: 220px;
   h1{
@@ -9,5 +11,22 @@
 
   .winners-list{
   }
+
+  @iterations: 10;
+
+    // looping class is a helper class, will never show up in resulting css
+    .loopingClass (@index) when (@index > 0) {
+
+      (~"li:nth-child(@{index})") {
+        opacity: 0;
+        .animation(fadeIn1 1s ease-in @index * 0.4s 1 forwards);
+      }
+
+      .loopingClass(@index - 1);
+    }
+
+    .loopingClass (0) {}
+    .loopingClass (@iterations);
+
 }
 

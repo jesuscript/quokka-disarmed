@@ -20,7 +20,7 @@ var calculateTimerState = function(game, serverTime, latency){
 
       if (!timerId) {
         var leftOnTimer = serverTime - game.startedAt + latency/2;
-        var timerValue = x_rounded = Math.round((60000 - leftOnTimer)/1000);
+        var timerValue = x_rounded = Math.round((10000 - leftOnTimer)/1000);
 
         timerId = Meteor.setInterval(function(){
           $betWheel.wheelBetGraph("redrawTimer", timerValue);
@@ -55,43 +55,15 @@ var initBetWheel = function(){
 
 
 Template.gameWheel.rendered = function(){
-  // console.log('rendered template');
   $betWheel = $(this.find(".bet-wheel"));
   templateRendered = true;
   if(windowLoaded) initBetWheel();
 };
 
+
 $(window).load(function(){
-  // console.log('window loaded');
   windowLoaded = true;
   if(templateRendered) initBetWheel();
 });
 
 
-Template.gameWheel.helpers({
-  justFinished: function(){
-    justFinished =  Collections.Games.find({
-      completed: true,
-      completedAt: {$gt: (new Date()).getTime() - 10000 }
-    }).count();
-
-    setTimeout(function(){ Session.set("game_wheel_just_finished"); }, 10001);
-
-    if(justFinished) Session.set("game_wheel_just_finished", true);
-
-    return !!justFinished && Session.get("game_wheel_just_finished");
-  },
-  results: function(){
-    var lastGame = Collections.Games.findOne({completed: true}, {sort: {completedAt: -1}});
-    var payout;
-
-    if(Meteor.user()){
-      payout = Collections.Payouts.findOne({gameId: lastGame._id, playerId: Meteor.user()._id});
-    }
-
-    return {
-      luckyNum: lastGame ? lastGame.luckyNum : "",
-      payout: payout ? intToBtc(payout.payout) : 0
-    };
-  }
-});

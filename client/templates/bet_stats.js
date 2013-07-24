@@ -30,16 +30,16 @@ Template.betStats.rendered = function() {
 
 Template.betStats.helpers({
   playing: function(){
-    return !!(Meteor.user() && Collections.Bets.findOne({playerId: Meteor.userId()}));
+    return !!(Meteor.user() && Collections.Bets.findOne({playerId: Meteor.userId()})); // bets only pull from the current game._id
   },
   activeBet: function(){
     var currentGame = Collections.Games.findOne({completed: false}, {_id: 1});
-    var activeBet = Meteor.user() && currentGame && Collections.Bets.findOne({playerId: Meteor.userId(), gameId: currentGame._id});
+    var playerBet = Meteor.user() && currentGame && Collections.Bets.findOne({playerId: Meteor.userId()});
 
     returnVal = {};
-    if(activeBet){
-      
-      var allBets = Collections.Bets.find({gameId: currentGame._id}).fetch();
+    if(playerBet){
+      // Session.set("anim_betStatsDetails", true); leave this in please for now.. thank you.
+      var allBets = Collections.Bets.find().fetch(); // bets only pull from the current game._id
       var betAggregates = (new Quokka(allBets)).getBetStats(Meteor.userId()); 
 
       if(allBets.length > 1) {
@@ -50,9 +50,9 @@ Template.betStats.helpers({
         });
       }
       return _.extend(returnVal, {
-        amountBtc: intToBtc(activeBet.amount),
-        rangeMin: activeBet.rangeMin,
-        rangeMax: activeBet.rangeMax
+        amountBtc: intToBtc(playerBet.amount),
+        rangeMin: playerBet.rangeMin,
+        rangeMax: playerBet.rangeMax
       });
     }
   }

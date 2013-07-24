@@ -1,21 +1,7 @@
 <template name="gameWheel">
-  <section id="game-wheel" class="{{#if justFinished}}results{{else}}wheel{{/if}}">
+  <section id="game-wheel">
     {{#constant}}
       <div class="bet-wheel"></div>
     {{/constant}}
-    {{#if justFinished}}
-      {{#with results}}
-        <span class="lucky-num-copy">Lucky Number</span>
-        <span class="lucky-num">
-          {{luckyNum}}
-        </span>
-        {{#if payout}}
-          <div class="payout">
-            <span class="payout-copy">You received:</span>
-            <span class="amount">฿{{payout}}</span>
-          </div>
-        {{/if}}
-      {{/with}}
-    {{/if}}
   </section>
 </template>

@@ -1,8 +1,11 @@
 <template name="topWinners">
   <section id="top-winners" class="chrome-padded">
-    <h1>All-time winners</h1>
+    {{#if displayResults}}
+      <h1>This round's winners</h1>
+    {{else}}
+      <h1>All-time winners</h1>
+    {{/if}}
     <ol class="winners-list">
-        <li>12characters: ฿333.3333</li> <!-- TODO: REMOVE testing container width -->
       {{#each winners}}
         <li>{{username}}: ฿{{amount}}</li>
       {{/each}}
