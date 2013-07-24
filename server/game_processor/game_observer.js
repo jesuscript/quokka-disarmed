@@ -19,13 +19,15 @@ Observe.currentGame = function(callbacks, runCallbacks){
     
     if(! currentGame) return;
 
-    betsHandle = Collections.Bets.find({gameId: currentGame._id}).observe({ 
+    betsHandle = Collections.Bets.find({gameId: currentGame._id}).observeChanges({ 
+      _suppress_initial: true,
       added: callbacks.betUpdate,
       removed: callbacks.betUpdate
     });
   };
 
-  gameHandle = gameCursor.observe({
+  gameHandle = gameCursor.observeChanges({
+    _suppress_initial: true,
     added: observeBets,
     removed: observeBets
   });
