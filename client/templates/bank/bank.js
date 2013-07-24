@@ -45,7 +45,7 @@ Template.bank.events({
   } 
 });
 
-Template.bank.preserve(["#bank .pull-down", ".shroud"]);
+Template.bank.preserve([".pull-down", ".shroud"]);
 
 function resetWithdrawInterface() {
   Session.set("withdraw_error");

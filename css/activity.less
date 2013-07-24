@@ -1,5 +1,116 @@
 #activity{
-  border: 2px solid #cccccc;
-  background-color: #ffffff;
-  height: 200px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 60px;
+  min-width: 1035;
+  z-index: 100;
+  &.min{
+    .terminal{
+      height: 40px;
+    }
+    .output{
+      height: 40px;
+      overflow: hidden;
+    }
+    .maximise{
+      cursor: pointer;
+    }
+  }
+  &.max{
+    .minimise{
+      cursor: pointer;
+    }
+  }
+  &.activity{
+    .activity-btn{
+      opacity: 1;
+    }
+  }
+  &.chat{
+    .chat-btn{
+      opacity: 1;
+    }
+  }
+  &.chat.max{
+    .chat-panel{
+      bottom: 0px;
+      opacity: 1;
+    }
+    .output{
+      height: 100px;
+    }
+  }
+  form{
+    margin: 0;
+    padding: 0;
+  }
+  .activity-tabs{
+    float:left;
+    margin: -29px 0 0 10px;
+  }
+  .activity-btn, .chat-btn{
+    opacity: 0.5;
+  }
+  .minimise, .maximise{
+    cursor: default;
+  }
+  .terminal{
+    border-top: 2px solid #222;
+    border-left: 2px solid #222;
+    border-radius: 4px 0 0 0;
+    height: 140px;
+    background-color: rgba(255,255,255,0.8);
+    padding: 5px 10px;
+    box-shadow: inset 0px 2px 6px 0px RGBA(0,0,0,0.2);
+    transition: all 0.5s ease-in-out;
+  }
+  .output{
+    height: 140px;
+    overflow:auto;
+    margin-right: 60px;
+  }
+  .tab-btn{
+    text-transform: uppercase;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 0;
+    display: inline-block;
+  }
+  .height-controls{
+    position: absolute;
+    right: 15px;
+    top: 18px;
+    z-index:100;
+    .control{
+      padding: 5px;
+    }
+  }
+  .chat-panel{
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: -40px;
+    transition: all 0.5s ease-in-out;
+    opacity: 0;
+    .send-btn{
+      display: block;
+      box-sizing: border-box;
+      width: 100%;
+    }
+  }
+  .output{
+    .game{
+      color: red;
+    }
+    .time{
+      color: #777;
+    }
+  }
+}
+
+.activity-placeholder{
+  height: 181px;
+  &.min{
+    height: 80px;
+  }
 }

@@ -1,5 +1,45 @@
 <template name="activity">
-  <div id="activity">
-    Activity
+  <section id="activity" class="{{size}} {{mode}}">
+    <div class="activity-tabs">
+      <span class="activity-btn tab-btn btn btn-inverse">Activity</span>
+      <span class="chat-btn btn tab-btn btn-inverse">Chat</span>
+    </div>
+    <div class="terminal">
+      <div class="output">
+        {{#if activityMode }}
+          {{#each activity }}
+            <div class="activity-item {{type}}">
+              <span class="time">[{{time}}]</span> {{message}}
+            </div>
+          {{/each}}
+        {{else}}
+          {{#each chatMsgs }}
+            <div class="message">
+              <strong>{{username}}</strong> <span class="time">[{{time}}]</span><strong>:</strong> {{message}}
+            </div>
+          {{/each}}
+        {{/if}}
+      </div>
+    </div>
+    <div class="height-controls">
+      <span class="maximise control"><i class="icon-plus"></i></span>
+      <span class="minimise control"><i class="icon-minus"></i></span>
+    </div>
+    <div class="chat-panel">
+      <form>
+        <div class="row-fluid">
+          <div class="span10">
+            {{#constant}}
+              <input type="text" class="input-block-level chat-input"/>
+            {{/constant}}
+          </div>
+          <div class="span2">
+            <input type="submit" class="btn btn-inverse send-btn" value="Send" />
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+  <div class="activity-placeholder {{size}}">
   </div>
 </template>

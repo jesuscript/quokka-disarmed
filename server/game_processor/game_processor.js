@@ -91,9 +91,14 @@ Meteor.startup(function(){
           gameTimeout = Meteor.setTimeout(processGame, 60000);
           //gameTimeout = Meteor.setTimeout(processGame, 3000);
           Collections.Games.update(currentGame, {$set:{startedAt: (new Date()).getTime()}});
+
+          DB.activity("Timer started!", "game");
         }
       }else{
         //console.log('ending  game');
+
+        if(gameTimeout) DB.activity("Timer stoped", "game");
+        
         Meteor.clearTimeout(gameTimeout);
         gameTimeout = null;
         
