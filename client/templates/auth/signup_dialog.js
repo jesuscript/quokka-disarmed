@@ -1,13 +1,12 @@
 Template.signup_dialog.rendered = function(){
   this.find("input").focus();
-}
+};
 
 Template.signup_dialog.helpers({
   error: function(){
     var err = Session.get("signup_error");
-    if(err){
-      return err.reason;
-    }
+
+    return err && err.reason;
   }
 });
 

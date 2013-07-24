@@ -8,6 +8,8 @@ Meteor.startup(function(){
   Meteor.subscribe("allTimeStats");
   Meteor.subscribe("connections");
   Meteor.subscribe("connectionsMonitor");
+  Meteor.subscribe("chatMsgs");
+  Meteor.subscribe("activity");
 
   var betsHandle;
   

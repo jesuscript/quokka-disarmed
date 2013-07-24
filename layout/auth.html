@@ -6,32 +6,32 @@
     {{/constant}}
     <div class="modal chrome-padded fade-in-1">
       <form>
-      <div class="modal-header">
-        <button type="button" class="close">&times;</button>
-        <h3>Create account</h3>
-      </div>
-      <div class="modal-body">
-        {{#if error}}
-        <div class="alert alert-error fade-in-1">
-          {{error}}
+        <div class="modal-header">
+          <button type="button" class="close">&times;</button>
+          <h3>Create account</h3>
         </div>
-        {{/if}}
-        <div class="field">
-          <input class="input-large" type="text" placeholder="Username" name="username"/>
-          <span class="help-inline">Must be at most 12 characters long</span>
+        <div class="modal-body">
+          {{#if error}}
+            <div class="alert alert-error fade-in-1">
+              {{error}}
+            </div>
+          {{/if}}
+          <div class="field">
+            <input class="input-large" type="text" placeholder="Username" name="username"/>
+            <span class="help-inline">Must be at most 12 characters long</span>
+          </div>
+          <div class="field">
+            <input class="input-large" type="password" placeholder="Password" name="password"/>
+            <span class="help-inline">Must be at least 6 characters long</span>
+          </div>
+          <div class="field">
+            <input class="input-large" type="text" placeholder="Email address" name="email"/>
+          </div>
         </div>
-        <div class="field">
-          <input class="input-large" type="password" placeholder="Password" name="password"/>
-          <span class="help-inline">Must be at least 6 characters long</span>
+        <div class="modal-footer">
+          <a class="btn" id="cancel">Cancel</a>
+          <button type="submit" class="btn btn-inverse">Create</button>
         </div>
-        <div class="field">
-          <input class="input-large" type="text" placeholder="Email address" name="email"/>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <a class="btn" id="cancel">Cancel</a>
-        <button type="submit" class="btn btn-inverse">Create</button>
-      </div>
       </form>
     </div>
   </div>
@@ -47,34 +47,34 @@
     {{/constant}}
     <div class="modal chrome-padded fade-in-1">
       <form>
-      <div class="modal-header">
-        <button type="button" class="close">&times;</button>
-        <h3>Sign in</h3>
-      </div>
-      <div class="modal-body">
-        {{#if error}}
-        <div class="alert alert-error fade-in-1">
-          {{error}}
+        <div class="modal-header">
+          <button type="button" class="close">&times;</button>
+          <h3>Sign in</h3>
         </div>
-        {{/if}}
-        <div class="field">
-          <input class="input-large" type="text" placeholder="Username or email" name="user"/>
+        <div class="modal-body">
+          {{#if error}}
+            <div class="alert alert-error fade-in-1">
+              {{error}}
+            </div>
+          {{/if}}
+          <div class="field">
+            <input class="input-large" type="text" placeholder="Username or email" name="user"/>
+          </div>
+          <div class="field">
+            <input class="input-large" type="password" placeholder="Password" name="password"/>
+          </div>
         </div>
-        <div class="field">
-          <input class="input-large" type="password" placeholder="Password" name="password"/>
-        </div>
-      </div>
-      <div class="text-center">
+        <div class="text-center">
           Don't have an account? <a class="signup-btn" href="#">Create an account</span>.
-      </div>
-      <div class="modal-footer">
-        <a class="btn" id="forgot">Forgot Password</a>
-        <a class="btn" id="cancel">Cancel</a>
-        <button type="submit" class="btn btn-inverse">Sign in</button>
-      </div>
-      </form>
-    </div>
-  </div>
+</div>
+<div class="modal-footer">
+  <a class="btn" id="forgot">Forgot Password</a>
+  <a class="btn" id="cancel">Cancel</a>
+  <button type="submit" class="btn btn-inverse">Sign in</button>
+</div>
+</form>
+</div>
+</div>
 </template>
 
 
@@ -84,25 +84,25 @@
     </div>
     <div class="modal chrome-padded">
       <form>
-      <div class="modal-header">
-        <button type="button" class="close">&times;</button>
-        <h3>Reset password</h3>
-      </div>
-      <div class="modal-body">
-        {{#if error}}
-        <div class="alert alert-error fade-in-1">
-          {{error}}
+        <div class="modal-header">
+          <button type="button" class="close">&times;</button>
+          <h3>Reset password</h3>
         </div>
-        {{/if}}
-        <div class="field">
-          <input class="input-large" type="text" placeholder="new password" name="newPassword"/>
-          <span class="help-inline">Must be at least 6 characters long</span>
+        <div class="modal-body">
+          {{#if error}}
+            <div class="alert alert-error fade-in-1">
+              {{error}}
+            </div>
+          {{/if}}
+          <div class="field">
+            <input class="input-large" type="text" placeholder="new password" name="newPassword"/>
+            <span class="help-inline">Must be at least 6 characters long</span>
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <a class="btn" id="cancel">Cancel</a>
-        <button type="submit" class="btn btn-inverse">Change Password</button>
-      </div>
+        <div class="modal-footer">
+          <a class="btn" id="cancel">Cancel</a>
+          <button type="submit" class="btn btn-inverse">Change Password</button>
+        </div>
       </form>
     </div>
   </div>
@@ -135,24 +135,24 @@
     </div>
     <div class="modal chrome-padded">
       <form>
-      <div class="modal-header">
-        <button type="button" class="close">&times;</button>
-        <h3>Reset password</h3>
-      </div>
-      <div class="modal-body">
-        {{#if error}}
-        <div class="alert alert-error fade-in-1">
-          {{error}}
+        <div class="modal-header">
+          <button type="button" class="close">&times;</button>
+          <h3>Reset password</h3>
         </div>
-        {{/if}}
-        <div class="field">
-          <input class="input-large" type="text" placeholder="email" name="email"/>
+        <div class="modal-body">
+          {{#if error}}
+            <div class="alert alert-error fade-in-1">
+              {{error}}
+            </div>
+          {{/if}}
+          <div class="field">
+            <input class="input-large" type="text" placeholder="email" name="email"/>
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <a class="btn" id="cancel">Cancel</a>
-        <button type="submit" class="btn btn-inverse">Send Reset Instructions</button>
-      </div>
+        <div class="modal-footer">
+          <a class="btn" id="cancel">Cancel</a>
+          <button type="submit" class="btn btn-inverse">Send Reset Instructions</button>
+        </div>
       </form>
     </div>
   </div>

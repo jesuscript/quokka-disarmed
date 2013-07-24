@@ -60,9 +60,7 @@ Meteor.startup(function(){
     }});
   };
   
-
-
-  console.log('invoking observe');
+  //console.log('invoking observe');
   Observe.currentGame({
     gameUpdate: function(){ 
       var currentGames = Collections.Games.find({completed: false}).fetch();
@@ -71,7 +69,7 @@ Meteor.startup(function(){
         console.warn("Two uncompleted games found:", currentGames);
       } 
       if(currentGames.length < 1){
-        console.warn("0 games, creating a new one");
+        console.log("0 games, creating a new one"); //not a .warn cuz it's not a warning
         Collections.Games.insert({
           completed: false,
           createdAt: (new Date()).getTime()
@@ -79,8 +77,8 @@ Meteor.startup(function(){
       } 
     },
     betUpdate: function(){ 
-      
-      //console.log('triggered bet update');
+      console.log('triggered bet update');
+
       var currentGame = DB.currentGame();
 
       if(!currentGame) return;
@@ -90,11 +88,17 @@ Meteor.startup(function(){
       if(bets.length >= 2){
         //console.log('startin game');
         if(!gameTimeout){
-          gameTimeout = Meteor.setTimeout(processGame, 3000);
+          gameTimeout = Meteor.setTimeout(processGame, 60000);
+          //gameTimeout = Meteor.setTimeout(processGame, 3000);
           Collections.Games.update(currentGame, {$set:{startedAt: (new Date()).getTime()}});
+
+          DB.activity("Timer started!", "game");
         }
       }else{
         //console.log('ending  game');
+
+        if(gameTimeout) DB.activity("Timer stoped", "game");
+        
         Meteor.clearTimeout(gameTimeout);
         gameTimeout = null;
         

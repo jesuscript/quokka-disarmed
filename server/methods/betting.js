@@ -12,7 +12,6 @@ Meteor.methods({
       existingBet = Collections.Bets.findOne({playerId: Meteor.userId(), gameId: gameId});
 
       if(existingBet){
-        //console.log('udpating bet request');
         Collections.Bets.update({_id: existingBet._id}, {
           $set: {
             amount: amount,
@@ -20,16 +19,21 @@ Meteor.methods({
             rangeMax: rangeMax
           }
         });
+        DB.activity("Bet updated by " + Meteor.user().username + ": " + "฿" + intToBtc(amount) +
+                   " on [" + rangeMin + "," + rangeMax + "]");
+
       }else{
-        //console.log('inserting bet request');
         Collections.Bets.insert({
           playerName: Meteor.user().username,
-          playerId: Meteor.userId(),
+          playerId: this.userId,
           gameId: gameId,
           amount: amount, 
           rangeMin: rangeMin,
           rangeMax: rangeMax
         });
+
+        DB.activity("New bet by " + Meteor.user().username + ": " + "฿" + intToBtc(amount) +
+                   " on [" + rangeMin + "," + rangeMax + "]");
       }
     }
   },
@@ -40,10 +44,12 @@ Meteor.methods({
     if(currentGame){
       bet = Collections.Bets.findOne({
         gameId: currentGame._id,
-        playerId: Meteor.userId()
+        playerId: this.userId
       });
 
       Collections.Bets.remove({_id: bet._id});
+
+      DB.activity("Bet revoked by " + Meteor.user().username);
     }
     
   }
