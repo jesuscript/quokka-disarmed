@@ -6,11 +6,7 @@ var templateRendered = false; // a better way of doing this
 
 var timerId;
 var calculateLag = function(game){
-  console.dir(game);
-
   if (game && game.startedAt) {
-
-    console.log('game started at is OK, calculating lag through the server');
     var latencyTestStart = (new Date).getTime();
     Meteor.call('getServerTime', function(error, serverTime) {
       roundTripLatency = (new Date).getTime() - latencyTestStart;
@@ -22,7 +18,6 @@ var calculateLag = function(game){
   } else { // timer interupted
 
     if (timerId) {
-      console.log('timer found, killing it');
       $betWheel.wheelBetGraph("killTimer");
       Meteor.clearInterval(timerId);
       timerId = undefined;
@@ -62,7 +57,6 @@ var initBetWheel = function(){
     
     gamesDep && gamesDep.stop();
     gamesDep = Deps.autorun(function(){
-      console.log('changes detected to games collection');
       // also pickups changes in game state, such as started at. This is fine and by design.
       // we could change it to an observer pattern
       calculateLag(Collections.Games.findOne({completed: false})); 
