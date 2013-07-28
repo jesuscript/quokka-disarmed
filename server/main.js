@@ -8,7 +8,7 @@ btcdClient = new BITCOIN.Client({ //none of this is accessible from outside the 
 });
 
 Meteor.startup(function(){
-  //   Collections.Connections.remove({});
+  Collections.Connections.remove({});
 
   if(! DB.currentGame()){ 
     Collections.Games.insert({
