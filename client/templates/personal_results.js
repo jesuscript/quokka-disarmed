@@ -19,7 +19,7 @@ var createCounter = function(theNum, totalTime, callback) {
 }
 
 
-var createBackToGameTimer = function(totalTime) {
+var createBackToGameTimer = function(totalTime) { 
   var interval = totalTime / 10;
   var intervalId;
   var firstStep = 10;
@@ -38,6 +38,7 @@ var createBackToGameTimer = function(totalTime) {
 
 
 Template.personalResults.rendered = function(){
+  console.log("rerender da biatch");
   $luckyNum = $(this.find("#lucky-num"));
   $timer = $(this.find("#timer-back-to-game"));
   createBackToGameTimer(10000);
@@ -51,6 +52,8 @@ Template.personalResults.helpers({
   results: function(){
     var lastGame = Collections.Games.findOne({completed: true}, {sort: {completedAt: -1}});
     var payout;
+
+    if(!lastGame) return;
 
     if(Meteor.userId()){
       payout = Collections.Payouts.findOne({gameId: lastGame._id, playerId: Meteor.userId()});

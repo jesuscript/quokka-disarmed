@@ -1,4 +1,5 @@
 Observe.currentGame = function(callbacks, runCallbacks){
+  console.log('invoking observe.currengame');
   var self = this;
   var gameCursor = Collections.Games.find({completed: false});
   var betsHandle, gameHandle;
@@ -7,8 +8,8 @@ Observe.currentGame = function(callbacks, runCallbacks){
 
 
   var observeBets = function(){
-    callbacks.gameUpdate && callbacks.gameUpdate();
-
+    // callbacks.gameUpdate && callbacks.gameUpdate();
+    console.log('observe bets invoked');
     var currentGame = gameCursor.fetch()[0];
     gameCursor.rewind(); //FFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUU
     
