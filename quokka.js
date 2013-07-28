@@ -1,10 +1,10 @@
 /*global Quokka, Class, _ */
 
 Quokka = Class.extend({
-  init: function(bets){
+  init: function(bets, commissionRate){
     this.bets(bets || []);
+    this.commissionRate = commissionRate || 0;
   },
-
 
   bets: function(bets){
     if(bets){
@@ -29,7 +29,7 @@ Quokka = Class.extend({
 
 
   computeResults: function(luckyNum){
-    var bank = this.getBank();
+    var bank = this.getBank() - this._computeCommissionTotal();
     var rewards = this._computeRewards(luckyNum, bank);
     var leftover = this._getLeftover(bank, rewards);
     var compensations = this._computeCompensations(leftover, bank);
@@ -61,23 +61,21 @@ Quokka = Class.extend({
 
   getBetStats: function(playerId){
     var stake = _.find(this._bets, function(bet){ return bet.playerId === playerId; }).amount;
-    var payout;
+    var payout, toWin;
     var stats = {
       maxToWin: 0,
       maxToLose: 0,
       chanceToWin: 0
     };
-
     for(var i=1; i<=100; i++){
       payout = this.computeResults(i)[playerId] || 0;
-      if(payout > stats.maxToWin) stats.maxToWin = payout;
+      if((toWin = payout - stake) > stats.maxToWin) stats.maxToWin = toWin;
       if(stake - payout > stats.maxToLose) stats.maxToLose = stake - payout;
       if(payout > stake) stats.chanceToWin++;
     }
 
     return stats;
   },
-
 
   _getBetsPerNum: function(){
     var betsPerNum = [];
@@ -90,7 +88,6 @@ Quokka = Class.extend({
     return betsPerNum;
   },
 
-
   _getStakeSumsPerNum: function(){
     return _.map(this._betsPerNum, function(bets, i){
       if(i === 0) return undefined;
@@ -101,11 +98,9 @@ Quokka = Class.extend({
     });
   },
 
-
   _getLeftover: function(bank, rewards){
     return bank - _.reduce(rewards, function(memo, reward){return memo + reward; },0);
   },
-
 
   _computeRewards: function(luckyNum, bank){
     var rewards = {};
@@ -128,7 +123,6 @@ Quokka = Class.extend({
     return rewards;
   },
 
-
   _computeCompensations: function(leftover, bank){
     var compensations = {};
 
@@ -146,5 +140,12 @@ Quokka = Class.extend({
     }
 
     return compensations;
+  },
+
+  _computeCommissionTotal: function(){
+    return _.reduce(this._bets, function(memo,bet){
+      console.log(memo + Math.floor(bet.amount * this.commissionRate));
+      return memo + Math.floor(bet.amount * this.commissionRate);
+    }, 0, this);
   }
 });

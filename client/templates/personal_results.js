@@ -38,9 +38,9 @@ var createBackToGameTimer = function(totalTime) {
 
 
 Template.personalResults.rendered = function(){
-  console.log("rerender da biatch");
   $luckyNum = $(this.find("#lucky-num"));
   $timer = $(this.find("#timer-back-to-game"));
+  // If you change this you also need to change the timer within result_switcher.js
   createBackToGameTimer(10000);
 };
 

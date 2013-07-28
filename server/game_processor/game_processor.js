@@ -4,7 +4,6 @@ Meteor.startup(function(){
   var gameTimeout = null;
 
   var processGame = function(){
-    console.log('processing game');
     var currentGame = DB.currentGame();
     var luckyNum = GetRandInt();
     var bets = DB.bets(currentGame);
@@ -49,10 +48,9 @@ Meteor.startup(function(){
     });
   };
   
-  console.log('invoking observe.currentgame');
+  
   Observe.currentGame({
     betUpdate: function(){ 
-      console.log('betsupdate called');
       var currentGame = DB.currentGame();
 
       if(!currentGame) return;
@@ -61,7 +59,8 @@ Meteor.startup(function(){
 
       if(bets.length >= 2){
         if(!gameTimeout){
-          gameTimeout = Meteor.setTimeout(processGame, 3000);
+          // if you change this, you must also change the client timer display in wheel_bet_graph.js
+          gameTimeout = Meteor.setTimeout(processGame, 20000); 
           //gameTimeout = Meteor.setTimeout(processGame, 3000);
           Collections.Games.update(currentGame, {$set:{startedAt: (new Date()).getTime()}});
 
