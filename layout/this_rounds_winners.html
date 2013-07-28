@@ -1,10 +1,14 @@
 <template name="thisRoundsWinners">
   <section id="this-rounds-winners" class="chrome-padded">
     <h1>This round's winners</h1>
-    <ol class="winners-list">
-      {{#each winners}}
-        <li>{{username}}: ฿{{amount}}</li>
-      {{/each}}
-    </ol>
+    {{#if winners}}
+      <ol class="winners-list">
+        {{#each winners}}
+          <li>{{playerName}}: ฿{{amount}}</li>
+        {{/each}}
+      </ol>
+    {{else}}
+      <div id="noWinners">No winners this round</p>
+    {{/if}}
   </section>
 </template>

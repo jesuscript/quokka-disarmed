@@ -18,6 +18,7 @@ var createCounter = function(theNum, totalTime, callback) {
   intervalId = setInterval(f, interval);
 }
 
+
 var createBackToGameTimer = function(totalTime) {
   var interval = totalTime / 10;
   var intervalId;
@@ -51,8 +52,8 @@ Template.personalResults.helpers({
     var lastGame = Collections.Games.findOne({completed: true}, {sort: {completedAt: -1}});
     var payout;
 
-    if(Meteor.user()){
-      payout = Collections.Payouts.findOne({gameId: lastGame._id, playerId: Meteor.user()._id});
+    if(Meteor.userId()){
+      payout = Collections.Payouts.findOne({gameId: lastGame._id, playerId: Meteor.userId()});
     }
 
     createCounter(lastGame.luckyNum , 800, function () {

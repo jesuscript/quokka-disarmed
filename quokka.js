@@ -5,6 +5,7 @@ Quokka = Class.extend({
     this.bets(bets || []);
   },
 
+
   bets: function(bets){
     if(bets){
       // a bit duped based on the server check found in betting.js, but can't hurt
@@ -26,6 +27,7 @@ Quokka = Class.extend({
     }
   },
 
+
   computeResults: function(luckyNum){
     var bank = this.getBank();
     var rewards = this._computeRewards(luckyNum, bank);
@@ -35,6 +37,7 @@ Quokka = Class.extend({
     return this.mergePayouts(rewards, compensations);
   },
 
+
   getBank: function(){
     return Math.round(
       _.reduce(this._bets, function(memo, bet){
@@ -42,6 +45,7 @@ Quokka = Class.extend({
       }, 0)
     );
   },
+
 
   mergePayouts: function(payout1, payout2){
     var payouts = {};
@@ -53,6 +57,7 @@ Quokka = Class.extend({
 
     return payouts;
   },
+
 
   getBetStats: function(playerId){
     var stake = _.find(this._bets, function(bet){ return bet.playerId === playerId; }).amount;
@@ -73,6 +78,7 @@ Quokka = Class.extend({
     return stats;
   },
 
+
   _getBetsPerNum: function(){
     var betsPerNum = [];
     for(var i=1; i<=100; i++){
@@ -84,6 +90,7 @@ Quokka = Class.extend({
     return betsPerNum;
   },
 
+
   _getStakeSumsPerNum: function(){
     return _.map(this._betsPerNum, function(bets, i){
       if(i === 0) return undefined;
@@ -94,9 +101,11 @@ Quokka = Class.extend({
     });
   },
 
+
   _getLeftover: function(bank, rewards){
     return bank - _.reduce(rewards, function(memo, reward){return memo + reward; },0);
   },
+
 
   _computeRewards: function(luckyNum, bank){
     var rewards = {};
@@ -119,6 +128,7 @@ Quokka = Class.extend({
     return rewards;
   },
 
+
   _computeCompensations: function(leftover, bank){
     var compensations = {};
 
@@ -134,7 +144,7 @@ Quokka = Class.extend({
         }
       });
     }
-    
+
     return compensations;
   }
 });

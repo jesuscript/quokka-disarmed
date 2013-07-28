@@ -1,3 +1,5 @@
+@import "prefixer.lessimport";
+
 #general-stats{
   height: 220px;
   text-align: center;
@@ -9,10 +11,27 @@
   } 
   .desc{
     font-size: 14px;
+    font-weight: bold;
   }
   .indicator{
-    font-size: 18px;
-    font-weight: bold;
-    padding-bottom: 5px;
+    font-size: 14px;
+    padding-bottom: 8px;
   }
+
+  @iterations: 10;
+
+    // looping class is a helper class, will never show up in resulting css
+    .loopingClass (@index) when (@index > 0) {
+
+      (~"div:nth-child(@{index})") {
+        opacity: 0;
+        .animation(fadeIn1 0.4s ease-in @index * 0.6s 1 forwards);
+      }
+
+      .loopingClass(@index - 1);
+    }
+
+    .loopingClass (0) {}
+    .loopingClass (@iterations);
+
 }

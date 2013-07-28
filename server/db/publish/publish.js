@@ -1,11 +1,19 @@
 Meteor.publish("activity", function(){
-  return Collections.Activity.find({},{sort: {timestamp: -1}, limit: 30});
+  return Collections.Activity.find({},{sort: {timestamp: -1}, limit: 100});
 });
 
 AddressPool = new Meteor.Collection('addressPool'); // server only
 
+Meteor.publish('allTimeNumbersStats', function(){
+  return Collections.AllTimeNumbersStats.find({});
+});
+
 Meteor.publish('allTimeStats', function(){
   return Collections.AllTimeStats.find({});
+});
+
+Meteor.publish('allTimeWinners', function(){
+  return Collections.AllTimeWinners.find({}, {sort: {totalReceived: -1}, limit: 10}, {fields: {playerName:1, totalReceived: 1}});
 });
 
 Meteor.publish('bets', function(){ //update to publish only for the current game
@@ -16,16 +24,16 @@ Meteor.publish("chatMsgs", function(){
   return Collections.ChatMsgs.find({},{sort: {timestamp: -1}, limit: 30});
 });
 
-Meteor.publish('connections', function(){
-  return Collections.Connections.find({});
-});
+// Meteor.publish('connections', function(){
+//   return Collections.Connections.find({});
+// });
 
 Meteor.publish('flags', function(){
   return Collections.Flags.find({});
 });
 
 Meteor.publish('games', function(){
-  return Collections.Games.find({},{sort: {createdAt: -1}, limit: 100});
+  return Collections.Games.find({},{sort: {createdAt: -1}, limit: 50}, {fields: {luckyNum:1, completed: 1}}); // even 1080p panels can only display 4x 'previous lucky nums' at a time
 });
 
 Meteor.publish('news', function(){
@@ -36,25 +44,16 @@ Meteor.publish('payouts', function(){
   return Collections.Payouts.find({},{sort: {timestamp: -1}, limit: 10});
 });
 
-Meteor.publish('users', function(){ // TODO - this publishes the entire list of usernames to the client, could grow to gigs!
-  return Meteor.users.find({}, {
-    fields: {
-      username: 1
-    }
-  });
-});
-
-// the user shouldn't have the right to modify anything within their user profiles
-Meteor.users.deny({update: function () { return true; }});
-
-Meteor.publish('userData', function(){  // built-in meteor collection
-  return Meteor.users.find({_id: this.userId}, 
+Meteor.publish('userData', function(){  // userdata is a built-in meteor collection
+  return Meteor.users.find({_id: this.userId}, // publishes extra fields beyond the default username, emails and profile fields
                            {fields: { 
                              'balance': 1,
                              'depositAddress': 1
                            }});
 });
 
+// the user shouldn't have the right to modify anything within their user profiles without going through our server methods first
+Meteor.users.deny({update: function () { return true; }});
 
 
 

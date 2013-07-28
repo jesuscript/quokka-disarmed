@@ -7,7 +7,6 @@ btcdClient = new BITCOIN.Client({ //none of this is accessible from outside the 
   pass: process.env.BTCD_PASS
 });
 
-Meteor.startup(function(){
-  Collections.Connections.remove({});
-});
-
+// Meteor.startup(function(){
+//   Collections.Connections.remove({});
+// });

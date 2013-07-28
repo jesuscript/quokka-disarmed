@@ -43,7 +43,6 @@ var calculateTimerState = function(game, serverTime, latency){
 
 var initBetWheel = function(){
   if(!$betWheel.data("btoWheelBetGraph")){
-    console.log('invoking autorun for wheel bet graph');
     $betWheel.wheelBetGraph();
     Deps.autorun(function(){
       $betWheel.wheelBetGraph("redraw", Collections.Bets.find().fetch());
