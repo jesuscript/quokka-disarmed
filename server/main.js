@@ -7,6 +7,12 @@ btcdClient = new BITCOIN.Client({ //none of this is accessible from outside the 
   pass: process.env.BTCD_PASS
 });
 
-// Meteor.startup(function(){
+Meteor.startup(function(){
 //   Collections.Connections.remove({});
-// });
+
+  if(! DB.currentGame()){         Collections.Games.insert({
+          completed: false,
+          createdAt: (new Date()).getTime()
+        });
+}
+});

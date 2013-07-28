@@ -41,25 +41,15 @@ Meteor.startup(function(){
       completed: true,
       luckyNum: luckyNum
     }});
+
+    Collections.Games.insert({
+      completed: false,
+      createdAt: (new Date()).getTime()
+    });
   };
   
   console.log('invoking observe.currentgame');
   Observe.currentGame({
-    gameUpdate: function(){ 
-      console.log('gameupdate triggered');
-      var currentGames = Collections.Games.find({completed: false}).fetch();
-      
-      if(currentGames.length > 1){
-        console.warn("Two uncompleted games found:", currentGames);
-      } 
-      if(currentGames.length < 1){
-        console.log("0 games, creating a new one");
-        Collections.Games.insert({
-          completed: false,
-          createdAt: (new Date()).getTime()
-        });
-      } 
-    },
     betUpdate: function(){ 
       var currentGame = DB.currentGame();
 
