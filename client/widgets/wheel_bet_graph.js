@@ -79,15 +79,18 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
   redraw: function(betCollection){
     if(betCollection) {
+      // With the fix to the subscribe to bets method, this is likely unnecessary. 
+      // In time, we'll remove it, however, at this stage we believe it only triggers on empty arrays so is harmless
       var duplicateCallDetected = this._previousBetCollection.compare(betCollection);
-      if (!duplicateCallDetected) {
+      if (!duplicateCallDetected) { 
 
         this._d3data = this._convertBetsToWheelData(betCollection);
 
         this._updateTotalValue();
         this._wheelDefineD3Sequence();
       } else { 
-        console.log('duplicate autorun output ignored in stacked bet graph');
+       // console.log('duplicate autorun output ignored in stacked bet graph');
+       // console.dir(betCollection);
       }
     }
     this._previousBetCollection = betCollection;
