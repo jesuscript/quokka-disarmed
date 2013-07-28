@@ -11,16 +11,19 @@ Meteor.methods({
 
       existingBet = Collections.Bets.findOne({playerId: Meteor.userId(), gameId: gameId});
 
-      if(existingBet){
-        Collections.Bets.update({_id: existingBet._id}, {
-          $set: {
-            amount: amount,
-            rangeMin: rangeMin,
-            rangeMax: rangeMax
-          }
-        });
-        DB.activity("Bet updated by " + Meteor.user().username + ": " + "฿" + intToBtc(amount) +
-                   " on [" + rangeMin + "," + rangeMax + "]");
+      if (existingBet) {
+        // only update bets if something has changed
+        if ((existingBet.amount !== amount) || (existingBet.rangeMin !== rangeMin) || (existingBet.rangeMax !== rangeMax)) {
+          Collections.Bets.update({_id: existingBet._id}, {
+            $set: {
+              amount: amount,
+              rangeMin: rangeMin,
+              rangeMax: rangeMax
+            }
+          });
+          DB.activity("Bet updated by " + Meteor.user().username + ": " + "฿" + intToBtc(amount) +
+                     " on [" + rangeMin + "," + rangeMax + "]");
+        } else { console.warn('SECWARN: Identical updated bet blocked'); }
 
       }else{
         Collections.Bets.insert({
