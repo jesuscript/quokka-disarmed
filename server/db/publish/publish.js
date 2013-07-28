@@ -25,9 +25,9 @@ Meteor.publish("chatMsgs", function(){
   return Collections.ChatMsgs.find({},{sort: {timestamp: -1}, limit: 30});
 });
 
-// Meteor.publish('connections', function(){
-//   return Collections.Connections.find({});
-// });
+Meteor.publish('connections', function(){
+  return Collections.Connections.find({});
+});
 
 Meteor.publish('flags', function(){
   return Collections.Flags.find({});

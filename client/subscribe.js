@@ -15,8 +15,8 @@ Meteor.startup(function(){
 
   Meteor.subscribe("betsAndGames"); 
   Meteor.subscribe("chatMsgs");
-  // Meteor.subscribe("connections");
-  // Meteor.subscribe("connectionsMonitor");
+  Meteor.subscribe("connections");
+  Meteor.subscribe("connectionsMonitor");
   Meteor.subscribe("flags");
   Meteor.subscribe("games");
   Meteor.subscribe("news");
