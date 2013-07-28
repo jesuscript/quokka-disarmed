@@ -10,42 +10,25 @@ Meteor.startup(function(){
     var game = new Quokka(bets);
     var payouts = game.computeResults(luckyNum);
     var decrements = {};
-    var allTimeStats = Collections.AllTimeStats.findOne();
-    var payoutSum  = 0;
-    var payoutMax = 0;
-
-    if(!allTimeStats){
-      Collections.AllTimeStats.insert(allTimeStats = {
-        payoutMax: 0,
-        payoutSum: 0
-      });
-    }
-
+    
     _.each(bets, function(bet){
       decrements[bet.playerId] = - bet.amount;
     });
 
     _.each(payouts, function(payout, id){
+      var player = Meteor.users.findOne({_id: id}, {fields: {username: 1}});
       Collections.Payouts.insert({
         gameId: currentGame._id,
         playerId: id,
+        playerName: player.username,
         payout: payout,
         timestamp: (new Date()).getTime()
       });
     });
 
-    payoutSum = _.reduce(payouts, function(memo, p){ return memo + p; }, 0, this);
-    payoutMax = _.max(payouts, function(p){ return p; });
-
-    Collections.AllTimeStats.update(allTimeStats, {
-      $set: {
-        payoutMax: (payoutMax > allTimeStats.payoutMax) ? payoutMax : allTimeStats.payoutMax
-      },
-      $inc: {
-        payoutSum: payoutSum
-      }
-    });
-    
+    _calculateAllTimeStats(payouts);
+    _calculateAllTimeWinners(payouts);
+    _calculateHotColdNumbers(luckyNum);
 
     payouts = game.mergePayouts(payouts, decrements);
     
@@ -58,27 +41,16 @@ Meteor.startup(function(){
       completed: true,
       luckyNum: luckyNum
     }});
+
+    Collections.Games.insert({
+      completed: false,
+      createdAt: (new Date()).getTime()
+    });
   };
   
-  //console.log('invoking observe');
+  console.log('invoking observe.currentgame');
   Observe.currentGame({
-    gameUpdate: function(){ 
-      var currentGames = Collections.Games.find({completed: false}).fetch();
-      
-      if(currentGames.length > 1){
-        console.warn("Two uncompleted games found:", currentGames);
-      } 
-      if(currentGames.length < 1){
-        console.log("0 games, creating a new one"); //not a .warn cuz it's not a warning
-        Collections.Games.insert({
-          completed: false,
-          createdAt: (new Date()).getTime()
-        });
-      } 
-    },
     betUpdate: function(){ 
-      console.log('triggered bet update');
-
       var currentGame = DB.currentGame();
 
       if(!currentGame) return;
@@ -86,18 +58,15 @@ Meteor.startup(function(){
       var bets = DB.bets(currentGame);
 
       if(bets.length >= 2){
-        //console.log('startin game');
         if(!gameTimeout){
-          gameTimeout = Meteor.setTimeout(processGame, 60000);
+          gameTimeout = Meteor.setTimeout(processGame, 10000);
           //gameTimeout = Meteor.setTimeout(processGame, 3000);
           Collections.Games.update(currentGame, {$set:{startedAt: (new Date()).getTime()}});
 
           DB.activity("Timer started!", "game");
         }
       }else{
-        //console.log('ending  game');
-
-        if(gameTimeout) DB.activity("Timer stoped", "game");
+        if(gameTimeout) DB.activity("Timer stopped", "game");
         
         Meteor.clearTimeout(gameTimeout);
         gameTimeout = null;

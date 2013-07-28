@@ -80,6 +80,8 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
   
 
   redraw: function(betCollection){
+    console.log('in wheel redraw');
+    console.dir(betCollection);
     if(betCollection) {
       var duplicateCallDetected = this._previousBetCollection.compare(betCollection);
       if (!duplicateCallDetected) {

@@ -1,8 +1,3 @@
-Template.betStats.created = function(){
-  Session.set("bet", { status: "new" });
-};
-
-
 Template.betStats.rendered = function() {
   var spinnerOpts = {
     lines: 6, // The number of lines to draw
@@ -38,7 +33,6 @@ Template.betStats.helpers({
 
     returnVal = {};
     if(playerBet){
-      // Session.set("anim_betStatsDetails", true); leave this in please for now.. thank you.
       var allBets = Collections.Bets.find().fetch(); // bets only pull from the current game._id
       var betAggregates = (new Quokka(allBets)).getBetStats(Meteor.userId()); 
 

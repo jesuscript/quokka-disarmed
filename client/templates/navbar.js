@@ -18,11 +18,11 @@ Template.navbar.events({
   "click .howto-btn": function(e){
     e.preventDefault();
     $("body").append(Meteor.render( Template.howto_dialog ));
-  },
-  "click .volume-switch": function(e){
-    e.preventDefault();
-    //TODO
-  }  
+  }//,
+  // "click .volume-switch": function(e){
+  //   e.preventDefault();
+  //   //TODO
+  // }  
 });
 
 

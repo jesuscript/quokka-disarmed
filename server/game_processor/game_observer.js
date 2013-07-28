@@ -1,5 +1,4 @@
 Observe.currentGame = function(callbacks, runCallbacks){
-  //console.log('inside observe function');
   var self = this;
   var gameCursor = Collections.Games.find({completed: false});
   var betsHandle, gameHandle;
@@ -18,16 +17,17 @@ Observe.currentGame = function(callbacks, runCallbacks){
     }
     
     if(! currentGame) return;
-
-    betsHandle = Collections.Bets.find({gameId: currentGame._id}).observe({ 
-      added: callbacks.betUpdate,
-      removed: callbacks.betUpdate
+    console.log('setting the observer on bets');
+    betsHandle = Collections.Bets.find({gameId: currentGame._id}).observeChanges({ 
+      _suppress_initial: true,
+      added: function () { callbacks.betUpdate(); console.log('observe: bet added'); },
+      removed: function () { callbacks.betUpdate(); console.log('observe: bet removed'); },
     });
   };
 
-  gameHandle = gameCursor.observe({
-    added: observeBets,
-    removed: observeBets
+  gameHandle = gameCursor.observeChanges({
+    _suppress_initial: true,
+    added: observeBets
   });
 
   observeBets();

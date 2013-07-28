@@ -1,0 +1,14 @@
+<template name="allTimeWinners">
+  <section id="all-time-winners" class="chrome-padded">
+    <h1>All-time winners</h1>
+    {{#if winners}}
+      <ol class="winners-list">
+        {{#each winners}}
+          <li>{{playerName}}: ฿{{totalReceived}}</li>
+        {{/each}}
+      </ol>
+    {{else}}
+      <div id="noWinners">Loading data...</p>
+    {{/if}}
+  </section>
+</template>

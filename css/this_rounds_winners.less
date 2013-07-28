@@ -1,21 +1,20 @@
 @import "prefixer.lessimport";
 
-#general-stats{
+#this-rounds-winners{
   height: 220px;
-  text-align: center;
   h1{
     font-size: 18px;
     line-height: normal;
     margin: 0 0 15px;
     text-align: center;
-  } 
-  .desc{
-    font-size: 14px;
-    font-weight: bold;
   }
-  .indicator{
-    font-size: 14px;
-    padding-bottom: 8px;
+
+  .winners-list{
+  }
+
+  #noWinners{
+    margin-top:80px;
+    text-align: center;
   }
 
   @iterations: 10;
@@ -23,7 +22,7 @@
     // looping class is a helper class, will never show up in resulting css
     .loopingClass (@index) when (@index > 0) {
 
-      (~"div:nth-child(@{index})") {
+      (~"li:nth-child(@{index})") {
         opacity: 0;
         .animation(fadeIn1 0.4s ease-in @index * 0.6s 1 forwards);
       }
@@ -35,3 +34,4 @@
     .loopingClass (@iterations);
 
 }
+
