@@ -11,6 +11,8 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     this._transitionDuration = 800; // time for bars to go up / down, other values recalcuted based on this
     this._previousBetCollection = []; // temporary fix for duplicate autorun trigger bug
 
+    this.throttledRedraw = _.throttle(this._liveRedraw.bind(this), this._transitionDuration + 100);
+
     $(window).resize(_.debounce(this._draw.bind(this), 100)); // debouncing at 100 seems to be enough to avoid re-rendering while mouse is still moving
 
     this._svg = d3.select(this.element[0]).append('svg');
@@ -154,24 +156,28 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
   redraw: function(betCollection) {
     if(betCollection) {
+      // With the fix to the subscribe to bets method, this is likely unnecessary. 
+      // In time, we'll remove it, however, at this stage we believe it only triggers on empty arrays so is harmless
       var duplicateCallDetected = this._previousBetCollection.compare(betCollection);
       if (!duplicateCallDetected) {
         this._d3data = this._convertBetsToStackData(betCollection);
-
-        this._drawNoBetsText();
-
-        this._udpdateStack();
-
-        this._transitionYAxis();
-
-        this._seriesDefineD3Sequence();
-
-        this._rectDefineD3Sequence();
+        this.throttledRedraw();
       } else { 
-        console.log('duplicate autorun output ignored in stacked bet graph');
+        // console.log('duplicate autorun output ignored in stacked bet graph');
+        // console.dir(betCollection)
       }
     } 
     this._previousBetCollection = betCollection;
+  },
+
+
+  // actual dynamic redraw function, throttled to permit the animations to complete
+  _liveRedraw: function() {
+    this._drawNoBetsText();
+    this._udpdateStack();
+    this._transitionYAxis();
+    this._seriesDefineD3Sequence();
+    this._rectDefineD3Sequence();
   },
 
 
@@ -204,7 +210,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     // exit behaviour
     this._series.exit()
       .transition()
-        .duration(this._transitionDuration)
+        .duration(this._transitionDuration/2)
         .style("opacity", '0')
         .remove();
   },
@@ -232,7 +238,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
       .attr("width", this._x.rangeBand()) 
       .attr("height", 0)
       .transition()
-        .delay(this._transitionDuration)
+        .delay(this._transitionDuration/2)
         .duration(this._transitionDuration)
         .attr("y", function(d) { return this._y(d.y0 + d.y); }.bind(this)) 
         .attr("height", function(d) { var h = this._y(d.y0) - this._y(d.y0 + d.y) -1; return (h>=0) ? h : 0; }.bind(this)); // -1 for pretty bar bottoms... mmmmm.....
