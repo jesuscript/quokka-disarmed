@@ -1,3 +1,5 @@
+/*global Meteor, Deps, Collections, Template, $ */
+
 var $betWheel;
 var windowLoaded = false; // we really need to find
 var templateRendered = false; // a better way of doing this
@@ -6,12 +8,12 @@ var calculateLag = function(game){
   console.log('calculate lag involed');
   var latencyTestStart = (new Date).getTime();
   Meteor.call('getServerTime', function(error, serverTime) {
-    roundTripLatency = (new Date).getTime() - latencyTestStart;
-    latency = (!isNaN(roundTripLatency/2)) ? (roundTripLatency/2) : 0;
+    var roundTripLatency = (new Date).getTime() - latencyTestStart;
+    var latency = (!isNaN(roundTripLatency/2)) ? (roundTripLatency/2) : 0;
     serverTime = serverTime;
     calculateTimerState(game, serverTime, latency);
   });
-}
+};
 
 
 var timerId;
@@ -20,6 +22,7 @@ var calculateTimerState = function(game, serverTime, latency){
     if (game.startedAt) {
 
       if (!timerId) {
+        var x_rounded;
         var leftOnTimer = serverTime - game.startedAt + latency/2;
         var timerValue = x_rounded = Math.round((10000 - leftOnTimer)/1000);
 

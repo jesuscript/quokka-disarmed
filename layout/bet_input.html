@@ -37,14 +37,18 @@
                 {{#if activeBet}}
                   <div class="row-fluid">
                     <div class="span6">
-                      <a class="btn btn-inverse update-btn" href="#">Update</a>
+                      <a class="btn btn-inverse update-btn  {{#if identicalBet}}disabled{{/if}}" href="#">
+                        Update
+                      </a>
                     </div>
                     <div class="span6">
                       <a class="btn revoke-btn" href="#">Revoke</a>
                     </div>
                   </div>
                 {{else}}
-                  <a class="btn btn-inverse bet-btn">Bet</a>
+                  <a class="btn btn-inverse bet-btn">
+                    Bet
+                  </a>
                 {{/if}}
               {{else}}
                 <a class="btn btn-inverse deposit-btn">Insufficient funds</a>

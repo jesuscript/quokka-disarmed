@@ -1,3 +1,5 @@
+/*global Deps, Collections, Template, $, Meteor, intToBtc, Session, btcToInt, Auth */
+
 var $betSlider;
 var $betStacked;
 
@@ -11,6 +13,10 @@ var initBetSlider = function(){
     $betSlider.rangeSlider({
       bounds:{min:1, max: 100},
       step: 1
+    });
+
+    $betSlider.on("valuesChanged", function(e,data){
+      Session.set("bet_input_slider_values", data.values);
     });
   }
 };
@@ -60,19 +66,41 @@ Template.betInput.helpers({
     var bal = Meteor.user().balance;
     var stake = Session.get("betInput_stake") || 0;
     return Meteor.user() &&  bal > 0 && bal >= btcToInt(stake);
+  },
+  identicalBet: function(){
+    var range;
+    if(!Meteor.user() || !(range = Session.get("bet_input_slider_values"))) return false;
+
+    if(!range) return false;
+    
+    var currentBet = Collections.Bets.findOne({playerId: Meteor.user()._id});
+
+    if(!currentBet) return false;
+    
+    var amount = btcToInt(Session.get("betInput_stake") || 0);
+
+    if(amount === currentBet.amount && range.min === currentBet.rangeMin &&
+       range.max === currentBet.rangeMax){
+      return true;
+    }
+
+    return false;
   }
 });
 
 
 
 Template.betInput.events({
-  "click .bet-btn, click .update-btn, submit form":function(e){
+  "click .bet-btn, click .update-btn, submit form":function(e, tmpl){
     e.preventDefault();
+    
+    if($(tmpl.find(".update-btn")).is(".disabled")) return;
+    
     var amount = $("input.stake").val() || 0;
     var range = $betSlider.rangeSlider("values");
     if (amount <= 0) {
-       $(".stake").parents('.control-group').addClass('error'); // thanks to meteor spark, field control group resets to the correct class after an element update!
-       $(".stake").focus().select();
+      $(".stake").parents('.control-group').addClass('error'); // thanks to meteor spark, field control group resets to the correct class after an element update!
+      $(".stake").focus().select();
     } 
     if ((amount > 0) && (range.min <= range.max)) {   
       Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
