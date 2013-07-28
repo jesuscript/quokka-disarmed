@@ -148,9 +148,11 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
     this._path = this._svg.selectAll("path:not(#waitingBackground)");
 
+    // feed data
     this._pathData = this._path
       .data(this._pie(this._d3data), function (d) { return d.data.playerName; });
 
+    // enter behaviour
     this._pathData.enter().append("path")
       .attr("fill", function (d, i) { return this._colorRange(i); }.bind(this))
       .attr("d", this._arc(enterAntiClockwise))
@@ -175,12 +177,14 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
           }).text(function(d, i) { return d.data.playerName + '<br> BTC ' + intToBtc(d.value).toFixed(8); })
       );
 
+    // exit behaviour
     this._pathData.exit()
     .transition()
       .duration(this._transitionDuration * 1.5)
       .attrTween('d', this._getArcTweenOutFunction())
     .remove();
 
+    // transition all arcs
     this._pathData
     .transition()
       .duration(this._transitionDuration * 1.5)
