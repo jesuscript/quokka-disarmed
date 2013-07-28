@@ -8,7 +8,6 @@ Meteor.startup(function(){
     
   Collections.Games.find({completed: false}).observeChanges({
     added: function(){
-      console.log('bets observechanges triggered, unsub/subing from bets', betsHandle, !!betsHandle);
       betsHandle && betsHandle.stop();
       betsHandle =  Meteor.subscribe("bets");      
     }

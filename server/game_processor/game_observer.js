@@ -1,5 +1,4 @@
 Observe.currentGame = function(callbacks, runCallbacks){
-  console.log('invoking observe.currengame');
   var self = this;
   var gameCursor = Collections.Games.find({completed: false});
   var betsHandle, gameHandle;
@@ -8,8 +7,6 @@ Observe.currentGame = function(callbacks, runCallbacks){
 
 
   var observeBets = function(){
-    // callbacks.gameUpdate && callbacks.gameUpdate();
-    console.log('observe bets invoked');
     var currentGame = gameCursor.fetch()[0];
     gameCursor.rewind(); //FFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUU
     
@@ -18,11 +15,11 @@ Observe.currentGame = function(callbacks, runCallbacks){
     }
     
     if(! currentGame) return;
-    console.log('setting the observer on bets');
+
     betsHandle = Collections.Bets.find({gameId: currentGame._id}).observeChanges({ 
       _suppress_initial: true,
-      added: function () { callbacks.betUpdate(); console.log('observe: bet added'); },
-      removed: function () { callbacks.betUpdate(); console.log('observe: bet removed'); },
+      added: callbacks.betUpdate,
+      removed: callbacks.betUpdate
     });
   };
 

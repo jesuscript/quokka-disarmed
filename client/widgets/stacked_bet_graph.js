@@ -168,8 +168,8 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
         this._rectDefineD3Sequence();
       } else { 
-         //console.log('duplicate autorun output ignored in stacked bet graph') 
-      ;} // TODO FIX OBSERVER? BUG
+        console.log('duplicate autorun output ignored in stacked bet graph');
+      }
     } 
     this._previousBetCollection = betCollection;
   },

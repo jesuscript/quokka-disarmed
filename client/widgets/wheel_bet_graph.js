@@ -51,9 +51,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
         .attr("id", "waitingBackground")
         .style("fill", "#C4C4C4")
         .attr("d", this._arc);
-        //transition().delay(500).attr("transform", "scale(100)");
-
-
+        //transition().delay(500).attr("transform", "scale(100)"); // not doing that because looks ugly
 
     this._centerGroup = this._svg.append("g")
       .attr("class", "center-group");
@@ -80,8 +78,6 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
   
 
   redraw: function(betCollection){
-    console.log('in wheel redraw');
-    console.dir(betCollection);
     if(betCollection) {
       var duplicateCallDetected = this._previousBetCollection.compare(betCollection);
       if (!duplicateCallDetected) {
@@ -91,8 +87,8 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
         this._updateTotalValue();
         this._wheelDefineD3Sequence();
       } else { 
-         //console.log('duplicate autorun output ignored in stacked bet graph') 
-      ;} // TODO FIX OBSERVER? BUG
+        console.log('duplicate autorun output ignored in stacked bet graph');
+      }
     }
     this._previousBetCollection = betCollection;
   },

@@ -17,9 +17,7 @@ Meteor.publish('allTimeWinners', function(){
 });
 
 Meteor.publish('bets', function(){ //update to publish only for the current game
-  console.log('calling publish');
   var game = DB.currentGame();
-
   return game && Collections.Bets.find({gameId: DB.currentGame()._id});
 });
 
