@@ -3,6 +3,7 @@ var windowLoaded = false; // we really need to find
 var templateRendered = false; // a better way of doing this
 
 var calculateLag = function(game){
+  console.log('calculate lag involed');
   var latencyTestStart = (new Date).getTime();
   Meteor.call('getServerTime', function(error, serverTime) {
     roundTripLatency = (new Date).getTime() - latencyTestStart;
@@ -40,14 +41,25 @@ var calculateTimerState = function(game, serverTime, latency){
   }
 };
 
+var betsDep;
+var gamesDep;
+
 
 var initBetWheel = function(){
   if(!$betWheel.data("btoWheelBetGraph")){
+    console.log('initbetwheel past data check');
     $betWheel.wheelBetGraph();
-    Deps.autorun(function(){
+    
+    betsDep && betsDep.stop();
+
+    betsDep = Deps.autorun(function(){
       $betWheel.wheelBetGraph("redraw", Collections.Bets.find().fetch());
     });
-    Deps.autorun(function(){
+
+    
+    gamesDep && gamesDep.stop();
+    
+    gamesDep = Deps.autorun(function(){
       calculateLag(Collections.Games.findOne({completed: false}));
     });       
   }

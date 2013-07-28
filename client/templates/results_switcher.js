@@ -5,13 +5,16 @@ Template.resultsSwitcher.helpers({
 });
 
 Deps.autorun(function(){
+
+  //console.log('calling deps autorun in result switcher');
   justFinished = Collections.Games.find({
       completed: true,
       completedAt: {$gt: (new Date()).getTime() - 10000 }
     }).count();
 
   if(justFinished) {
-    Session.set("displayResults", true);
-    setTimeout(function(){ Session.set("displayResults", false); }, 10001);
+      console.log('just finished');
+      Session.set("displayResults", true);
+     setTimeout(function(){ Session.set("displayResults", false); }, 10001);
   }
 });       
