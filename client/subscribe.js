@@ -1,6 +1,6 @@
 Meteor.startup(function(){
   Meteor.subscribe("activity");
-  Meteor.subscribe("allTimeNumbersStats");
+  // Meteor.subscribe("allTimeNumbersStats");
   Meteor.subscribe("allTimeStats");
   Meteor.subscribe("allTimeWinners");
 
@@ -19,6 +19,7 @@ Meteor.startup(function(){
   Meteor.subscribe("connectionsMonitor");
   Meteor.subscribe("flags");
   Meteor.subscribe("games");
+  Meteor.subscribe("hotColdStats");
   Meteor.subscribe("news");
   Meteor.subscribe("payouts");
   Meteor.subscribe("userData");

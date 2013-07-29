@@ -4,9 +4,9 @@ Meteor.publish("activity", function(){
 
 AddressPool = new Meteor.Collection('addressPool'); // server only
 
-Meteor.publish('allTimeNumbersStats', function(){
-  return Collections.AllTimeNumbersStats.find({});
-});
+// Meteor.publish('allTimeNumbersStats', function(){
+//   return Collections.AllTimeNumbersStats.find({});
+// });
 
 Meteor.publish('allTimeStats', function(){
   return Collections.AllTimeStats.find({});
@@ -35,6 +35,10 @@ Meteor.publish('flags', function(){
 
 Meteor.publish('games', function(){
   return Collections.Games.find({},{sort: {createdAt: -1}, limit: 50, fields: {luckyNum:1, completed: 1}}); // even 1080p panels can only display 4x 'previous lucky nums' at a time
+});
+
+Meteor.publish('hotColdStats', function(){
+  return Collections.HotColdStats.find({}); 
 });
 
 Meteor.publish('news', function(){

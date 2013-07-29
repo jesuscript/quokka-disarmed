@@ -49,7 +49,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
     // feed data
     this._rects = this._series.selectAll("rect")
-    .data(function(d) { return d; })
+    .data(function(d) { return d; });
 
     // enter behaviour
     this._rects.enter()
@@ -109,7 +109,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     .transition()
       .delay(this._transitionDuration) // time for the bars to go all the way down
       .duration(this._transitionDuration)
-      .style("opacity", '1')
+      .style("opacity", '1');
   },
 
   _removeNoBetsText: function() {
@@ -166,7 +166,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
         // console.log('duplicate autorun output ignored in stacked bet graph');
         // console.dir(betCollection)
       }
-    } 
+    }
     this._previousBetCollection = betCollection;
   },
 
@@ -192,7 +192,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
   _seriesDefineD3Sequence:function(){ 
     // feed data
     this._series = this._chartArea.selectAll(".series") // selections HAVE to be rerun, can't just refer to variable to update
-      .data(this._layers)
+      .data(this._layers);
 
     // update
     // (nothing to do)
@@ -219,7 +219,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
   _rectDefineD3Sequence:function(){ 
     // feed data
     this._rects = this._series.selectAll("rect") // selections HAVE to be rerun, can't just refer to variable to update
-      .data(function(d) { return d; })
+      .data(function(d) { return d; });
 
     // update behaviour
     this._rects
@@ -277,7 +277,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     var theArray = [1];
     for (var i = 1; i <= 100; i++) {
       if (i % modulo === 0  ) theArray.push(i);
-    };
+    }
     return theArray;
   }
 
