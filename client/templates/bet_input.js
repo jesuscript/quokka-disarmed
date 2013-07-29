@@ -14,9 +14,11 @@ var initBetSlider = function(){
       bounds:{min:1, max: 100},
       step: 1
     });
-
+    // for disabled behaviour - bet button still reads from the stake input
+    _.delay(function(){ Session.set("betInput_stake", $("input.stake").val()); }, 500);
+    Session.set("bet_input_slider_values", $betSlider.rangeSlider("values"));
     $betSlider.on("valuesChanged", function(e,data){
-      Session.set("bet_input_slider_values", data.values);
+      Session.set("bet_input_slider_values", data.values); 
     });
   }
 };
@@ -27,7 +29,7 @@ var initBetStacked = function(){
     Deps.autorun(function(){
       $betStacked.stackedBetGraph("redraw", Collections.Bets.find().fetch());
     });
-  };
+  }
 };
 
 var initPlugins = function(){
@@ -42,6 +44,7 @@ Template.betInput.rendered = function(){
   $(this.find('.stake')).click(function() { $(this).select(); });  
   templateRendered = true;
   if(windowLoaded) initPlugins(); // otherwise init in window load callback
+
 };
 
 $(window).load(function(){
@@ -53,6 +56,7 @@ Template.betInput.helpers({
   activeBet: function(){
     return Meteor.user() && Collections.Bets.findOne({playerId: Meteor.user()._id});
   },
+
   betAmount: function(){
     var bet = Meteor.user() && Collections.Bets.findOne({playerId: Meteor.user()._id});
     if(bet){
@@ -62,25 +66,24 @@ Template.betInput.helpers({
     }
     return bet || 0;
   },
+
   sufficientFunds: function(){
     var bal = Meteor.user().balance;
     var stake = Session.get("betInput_stake") || 0;
     return Meteor.user() &&  bal > 0 && bal >= btcToInt(stake);
   },
+
   identicalBet: function(){
-    var range;
-    if(!Meteor.user() || !(range = Session.get("bet_input_slider_values"))) return false;
+    if(!Meteor.user()) return false;
 
-    if(!range) return false;
-    
-    var currentBet = Collections.Bets.findOne({playerId: Meteor.user()._id});
+    var range = Session.get("bet_input_slider_values");
+    if (!range) return false;
 
-    if(!currentBet) return false;
-    
-    var amount = btcToInt(Session.get("betInput_stake") || 0);
+    var amount  = btcToInt(Session.get("betInput_stake"));
 
-    if(amount === currentBet.amount && range.min === currentBet.rangeMin &&
-       range.max === currentBet.rangeMax){
+    var currentBet = Collections.Bets.findOne({playerId: Meteor.userId()});
+
+    if(amount === currentBet.amount && range.min === currentBet.rangeMin && range.max === currentBet.rangeMax){
       return true;
     }
 
@@ -89,13 +92,13 @@ Template.betInput.helpers({
 });
 
 
-
 Template.betInput.events({
   "click .bet-btn, click .update-btn, submit form":function(e, tmpl){
     e.preventDefault();
     
     if($(tmpl.find(".update-btn")).is(".disabled")) return;
     
+    // these two lines for safety
     var amount = $("input.stake").val() || 0;
     var range = $betSlider.rangeSlider("values");
     if (amount <= 0) {
@@ -106,21 +109,26 @@ Template.betInput.events({
       Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
     }
   },
+
   "click .revoke-btn": function(e){
     e.preventDefault();
     Meteor.call("revokeBet");
   },
+  
   "click .signin-btn": function(e){
     e.preventDefault();
     Auth.showSigninDialog();
   },
+  
   "click .deposit-btn": function(e){
     e.preventDefault();
     Template.bank.toggleOpen();
   },
+  
   "keyup .stake": function(){
     Session.set("betInput_stake", $("input.stake").val());
   },
+  
   "click .stake-buttons .btn": function(e){
     var $btn = $(e.currentTarget);
     var oldStake = parseFloat($("input.stake").val(),10);
