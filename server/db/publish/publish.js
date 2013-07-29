@@ -13,7 +13,7 @@ Meteor.publish('allTimeStats', function(){
 });
 
 Meteor.publish('allTimeWinners', function(){
-  return Collections.AllTimeWinners.find({}, {sort: {totalReceived: -1}, limit: 10}, {fields: {playerName:1, totalReceived: 1}});
+  return Collections.AllTimeWinners.find({}, {sort: {totalReceived: -1}, limit: 10, fields: {playerName:1, totalReceived: 1}});
 });
 
 Meteor.publish('bets', function(){ //update to publish only for the current game
@@ -34,7 +34,7 @@ Meteor.publish('flags', function(){
 });
 
 Meteor.publish('games', function(){
-  return Collections.Games.find({},{sort: {createdAt: -1}, limit: 50}, {fields: {luckyNum:1, completed: 1}}); // even 1080p panels can only display 4x 'previous lucky nums' at a time
+  return Collections.Games.find({},{sort: {createdAt: -1}, limit: 50, fields: {luckyNum:1, completed: 1}}); // even 1080p panels can only display 4x 'previous lucky nums' at a time
 });
 
 Meteor.publish('news', function(){
