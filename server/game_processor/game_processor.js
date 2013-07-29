@@ -28,7 +28,8 @@ Meteor.startup(function(){
 
     _calculateAllTimeStats(payouts);
     _calculateAllTimeWinners(payouts);
-    _calculateHotColdNumbers(luckyNum);
+    _calculateHotColdNumbersAggregates(luckyNum);
+    _calculateHotColdNumbers();
 
     payouts = game.mergePayouts(payouts, decrements);
     
@@ -60,8 +61,8 @@ Meteor.startup(function(){
       if(bets.length >= 2){
         if(!gameTimeout){
           // if you change this, you must also change the client timer display in wheel_bet_graph.js
-          gameTimeout = Meteor.setTimeout(processGame, 20000); 
-          //gameTimeout = Meteor.setTimeout(processGame, 3000);
+          //gameTimeout = Meteor.setTimeout(processGame, 20000); 
+          gameTimeout = Meteor.setTimeout(processGame, 3000);
           Collections.Games.update(currentGame, {$set:{startedAt: (new Date()).getTime()}});
 
           DB.activity("Timer started!", "game");

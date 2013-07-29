@@ -36,4 +36,4 @@ Observe.currentGame = function(callbacks, runCallbacks){
       gameHandle.stop();
     } 
   };
-}
+};

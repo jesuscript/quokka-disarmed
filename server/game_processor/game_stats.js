@@ -54,7 +54,6 @@ _calculateHotColdNumbers = function() {
   var topThree = _.pluck(groups.slice(-3),0).reverse();
   var bottomThree = _.pluck(groups.slice(0, 3),0);
   var hotColdStats = Collections.HotColdStats.findOne();
-  console.dir(groups);
   if (!hotColdStats) {
     Collections.HotColdStats.insert(hotColdStats = {topThree: topThree, bottomThree: bottomThree});
   }

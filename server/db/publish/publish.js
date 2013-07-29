@@ -34,7 +34,7 @@ Meteor.publish('flags', function(){
 });
 
 Meteor.publish('games', function(){
-  return Collections.Games.find({},{sort: {createdAt: -1}, limit: 50, fields: {luckyNum:1, completed: 1}}); // even 1080p panels can only display 4x 'previous lucky nums' at a time
+  return Collections.Games.find({},{sort: {createdAt: -1}, limit: 50}); // even 1080p panels can only display 4x 'previous lucky nums' at a time
 });
 
 Meteor.publish('hotColdStats', function(){
