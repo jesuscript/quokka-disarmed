@@ -5,14 +5,14 @@ var windowLoaded = false; // we really need to find
 var templateRendered = false; // a better way of doing this
 
 var timerId;
-var calculateLag = function(game){
+var evaluateTimer = function(game){
   if (game && game.startedAt) {
     var latencyTestStart = (new Date()).getTime();
     Meteor.call('getServerTime', function(error, serverTime) {
       roundTripLatency = (new Date()).getTime() - latencyTestStart;
       latency = (!isNaN(roundTripLatency/2)) ? (roundTripLatency/2) : 0;
       serverTime = serverTime;
-      calculateTimerState(game, serverTime, latency);
+      startTimer(game, serverTime, latency);
     });
 
   } else { // timer interupted
@@ -28,7 +28,7 @@ var calculateLag = function(game){
 };
 
 
-var calculateTimerState = function(game, serverTime, latency){
+var startTimer = function(game, serverTime, latency){
   if (!timerId) {
     var leftOnTimer = serverTime - game.startedAt + latency/2;
     var timerValue = Math.round((BTO.TIMER_GAME_DURATION - leftOnTimer)/1000); 
@@ -36,7 +36,7 @@ var calculateTimerState = function(game, serverTime, latency){
     timerId = Meteor.setInterval(function(){
       $betWheel.wheelBetGraph("redrawTimer", timerValue);
       timerValue = timerValue - 1;
-    },1000);
+    }, 1000);
   }
 };
 
@@ -57,7 +57,7 @@ var initBetWheel = function(){
     gamesDep = Deps.autorun(function(){
       // also pickups changes in game state, such as started at. This is fine and by design.
       // we could change it to an observer pattern
-      calculateLag(Collections.Games.findOne({completed: false})); 
+      evaluateTimer(Collections.Games.findOne({completed: false})); 
     });
   }
 };
