@@ -92,10 +92,10 @@ Template.betInput.helpers({
 });
 
 
-Template.betInput.events({
-  "click .bet-btn, click .update-btn, submit form":function(e, tmpl){
-    e.preventDefault();
-    
+var throttledCall = function(action, tmpl) {
+  if (action === 'revoke') {
+    Meteor.call("revokeBet");
+  } else {
     if($(tmpl.find(".update-btn")).is(".disabled")) return;
     
     // these two lines for safety
@@ -108,11 +108,20 @@ Template.betInput.events({
     if ((amount > 0) && (range.min <= range.max)) {   
       Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
     }
+  }
+};
+var throttleClick = _.throttle(throttledCall, 1000);
+
+
+Template.betInput.events({
+  "click .bet-btn, click .update-btn, submit form":function(e, tmpl){
+    e.preventDefault();
+    throttleClick('bet', tmpl);
   },
 
   "click .revoke-btn": function(e){
     e.preventDefault();
-    Meteor.call("revokeBet");
+    throttleClick('revoke');
   },
   
   "click .signin-btn": function(e){
@@ -130,6 +139,8 @@ Template.betInput.events({
   },
   
   "click .stake-buttons .btn": function(e){
+    e.preventDefault();
+    
     var $btn = $(e.currentTarget);
     var oldStake = parseFloat($("input.stake").val(),10);
     var newStake = 0;
@@ -145,8 +156,6 @@ Template.betInput.events({
 
     $("input.stake").val(newStake);
     Session.set("betInput_stake", newStake);
-
-    e.preventDefault();
   }
 });
 
