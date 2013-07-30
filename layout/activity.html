@@ -8,8 +8,8 @@
       <div class="output">
         {{#if activityMode }}
           {{#each activity }}
-            <div class="activity-item {{type}}">
-              <span class="time">[{{time}}]</span> {{message}}
+            <div class="activity-item">
+              <span class="time">[{{time}}]</span> <span class="{{type}}">{{message}}</span>
             </div>
           {{/each}}
         {{else}}

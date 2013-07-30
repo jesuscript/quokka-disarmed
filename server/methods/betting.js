@@ -23,7 +23,7 @@ Meteor.methods({
           });
 
           var updateTextRange = (rangeMin === rangeMax) ? "single number " + rangeMin + "!" : rangeMin + "-" + rangeMax;
-          DB.activity(Meteor.user().username + " updates bet to ฿" + intToBtc(amount) + " on " + updateTextRange);
+          DB.activity(Meteor.user().username + " updates bet to ฿" + intToBtc(amount) + " on " + updateTextRange, 'user');
         } else { console.warn('SECWARN: Identical updated bet blocked'); }
 
       }else{
@@ -37,7 +37,7 @@ Meteor.methods({
         });
 
         var betTextRange = (rangeMin === rangeMax) ? "single number " + rangeMin + "!" : rangeMin + "-" + rangeMax;
-        DB.activity(Meteor.user().username + " bets ฿" + intToBtc(amount) + " on " + betTextRange);
+        DB.activity(Meteor.user().username + " bets ฿" + intToBtc(amount) + " on " + betTextRange, 'user');
       }
     }
   },
@@ -56,7 +56,7 @@ Meteor.methods({
       Collections.Bets.remove({_id: bet._id});
 
       var revokeTextRange = (bet.rangeMin === bet.rangeMax) ? "single number " + bet.rangeMin + "!" : bet.rangeMin + "-" + bet.rangeMax;
-      DB.activity(Meteor.user().username + " revokes bet (was ฿" + intToBtc(bet.amount) + " on " + revokeTextRange + ")");
+      DB.activity(Meteor.user().username + " revokes bet (was ฿" + intToBtc(bet.amount) + " on " + revokeTextRange + ")", 'user');
     }
     
   }

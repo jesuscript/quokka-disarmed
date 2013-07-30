@@ -7,16 +7,16 @@ var createCounter = function(theNum, totalTime, callback) {
   var f = function () {
     var randNum = Math.round(Math.random() * 100);
     $luckyNum.text(randNum);
-    if (firstStep == lastStep) {
+    if (firstStep === lastStep) {
       $luckyNum.text(theNum);
       clearInterval(intervalId);
       if (callback) callback();
     }
     ++firstStep;
-  } 
+  };
 
   intervalId = setInterval(f, interval);
-}
+};
 
 
 var createBackToGameTimer = function(totalTime) { 
@@ -27,21 +27,20 @@ var createBackToGameTimer = function(totalTime) {
 
   var f = function () {
     $timer.text("Back to game in: " + firstStep);
-    if (firstStep == lastStep) {
+    if (firstStep === lastStep) {
       clearInterval(intervalId);
     }
     --firstStep;
-  } 
+  };
 
   intervalId = setInterval(f, interval);
-}
+};
 
 
 Template.personalResults.rendered = function(){
   $luckyNum = $(this.find("#lucky-num"));
   $timer = $(this.find("#timer-back-to-game"));
-  // If you change this you also need to change the timer within result_switcher.js
-  createBackToGameTimer(10000);
+  createBackToGameTimer(BTO.TIMER_BACKTOGAME);
 };
 
 
@@ -59,7 +58,7 @@ Template.personalResults.helpers({
       payout = Collections.Payouts.findOne({gameId: lastGame._id, playerId: Meteor.userId()});
     }
 
-    createCounter(lastGame.luckyNum , 800, function () {
+    createCounter(lastGame.luckyNum , BTO.TIMER_ROLL_DURATION, function () {
       $luckyNum.addClass("pulsate");
     });
 

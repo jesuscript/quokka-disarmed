@@ -43,10 +43,18 @@ Meteor.startup(function(){
       luckyNum: luckyNum
     }});
 
+    DB.activity("The Lucky Number for game #" + currentGame.publicSeq + " is " + luckyNum, "luckyNum");
+    // DB.activity("Congratulations to this round's " + winnerCount + " winners", "game"); JD TODO once payout mechanism has been modified
+    // DB.activity("฿" + amountDistributed + " distributed this round", "game"); JD TODO once payout mechanism has been modified
+    
+    var newSeq = (typeof currentGame.publicSeq === "number") ? ++currentGame.publicSeq : 1;
     Collections.Games.insert({
       completed: false,
+      publicSeq: newSeq,
       createdAt: (new Date()).getTime()
     });
+
+    DB.activity("New game #" + newSeq + " starts", "game");
   };
   
   
@@ -57,21 +65,19 @@ Meteor.startup(function(){
       if(!currentGame) return;
       
       var bets = DB.bets(currentGame);
-
       if(bets.length >= 2){
         if(!gameTimeout){
           gameTimeout = Meteor.setTimeout(processGame, BTO.TIMER_GAME_DURATION);
+          DB.activity("We have enough players, " + BTO.TIMER_GAME_DURATION/1000 + " seconds countdown starts!", "game");
           Collections.Games.update(currentGame, {$set:{startedAt: (new Date()).getTime()}});
-
-          DB.activity("Timer started!", "game");
         }
       }else{
-        if(gameTimeout) DB.activity("Timer stopped", "game");
-        
-        Meteor.clearTimeout(gameTimeout);
-        gameTimeout = null;
-        
-        Collections.Games.update(currentGame, {$set:{startedAt: undefined}});
+        if(gameTimeout) { // sadly doesn't clear fast enough for the below not to process...
+          Meteor.clearTimeout(gameTimeout); 
+          DB.activity("Not enough players in game, countdown stopped", "game");
+          Collections.Games.update(currentGame, {$set:{startedAt: undefined}});
+          gameTimeout = null;
+        }
       }
     }
   }, true);
