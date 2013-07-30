@@ -21,8 +21,9 @@ Meteor.methods({
               rangeMax: rangeMax
             }
           });
-          DB.activity("Bet updated by " + Meteor.user().username + ": " + "฿" + intToBtc(amount) +
-                     " on [" + rangeMin + "," + rangeMax + "]");
+
+          var updateTextRange = (rangeMin === rangeMax) ? "single number " + rangeMin + "!" : rangeMin + "-" + rangeMax;
+          DB.activity(Meteor.user().username + " updates bet to ฿" + intToBtc(amount) + " on " + updateTextRange);
         } else { console.warn('SECWARN: Identical updated bet blocked'); }
 
       }else{
@@ -35,11 +36,13 @@ Meteor.methods({
           rangeMax: rangeMax
         });
 
-        DB.activity("New bet by " + Meteor.user().username + ": " + "฿" + intToBtc(amount) +
-                   " on [" + rangeMin + "," + rangeMax + "]");
+        var betTextRange = (rangeMin === rangeMax) ? "single number " + rangeMin + "!" : rangeMin + "-" + rangeMax;
+        DB.activity(Meteor.user().username + " bets ฿" + intToBtc(amount) + " on " + betTextRange);
       }
     }
   },
+
+
   revokeBet: function(){
     var currentGame = Collections.Games.findOne({completed: false});
     var bet;
@@ -52,43 +55,46 @@ Meteor.methods({
 
       Collections.Bets.remove({_id: bet._id});
 
-      DB.activity("Bet revoked by " + Meteor.user().username);
+      var revokeTextRange = (bet.rangeMin === bet.rangeMax) ? "single number " + bet.rangeMin + "!" : bet.rangeMin + "-" + bet.rangeMax;
+      DB.activity(Meteor.user().username + " revokes bet (was ฿" + intToBtc(bet.amount) + " on " + revokeTextRange + ")");
     }
     
   }
 });
 
+
+
 function validBet(amount, rangeMin, rangeMax){
-  var validBet = true;
+  var isValidBet = true;
   var reason = '';
 
   if (!Meteor.userId()) {
     reason = 'Invalid User'; 
-    validBet = false;
+    isValidBet = false;
   }
 
   if ((rangeMin <= 0) || (rangeMin > rangeMax) || (rangeMax > 100)) {
     reason = 'Invalid Range'; 
-    validBet = false;
+    isValidBet = false;
   }
 
   if (Meteor.user().balance < amount) {
     reason = 'Amount > User Balance';
-    validBet = false;
+    isValidBet = false;
   }
 
   if (amount <= 0) {
     reason = 'Amount <= 0';
-    validBet = false;
+    isValidBet = false;
   }
 
-  if ((!typeof rangeMin == "number") || (!typeof rangeMax == "number")) {
+  if ((typeof rangeMin !== "number") || (typeof rangeMax !== "number")) {
     reason = 'RangeMin or rangeMax of invalid type';
-    validBet = false;
+    isValidBet = false;
   }
 
-  if (!validBet) console.warn('SECWARN: Attempt to pass invalid bet detected. Reason: ' + reason);
+  if (!isValidBet) console.warn('SECWARN: Attempt to pass invalid bet detected. Reason: ' + reason);
 
-  return validBet;
+  return isValidBet;
 
 }
