@@ -60,9 +60,7 @@ Meteor.startup(function(){
 
       if(bets.length >= 2){
         if(!gameTimeout){
-          // if you change this, you must also change the client timer display in wheel_bet_graph.js
-          //gameTimeout = Meteor.setTimeout(processGame, 20000); 
-          gameTimeout = Meteor.setTimeout(processGame, 3000);
+          gameTimeout = Meteor.setTimeout(processGame, BTO.TIMER_GAME_DURATION);
           Collections.Games.update(currentGame, {$set:{startedAt: (new Date()).getTime()}});
 
           DB.activity("Timer started!", "game");
