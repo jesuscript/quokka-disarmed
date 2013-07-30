@@ -19,8 +19,8 @@ Template.betStats.rendered = function() {
     position: 'relative'  // element position
   };
   var spinnerTarget = document.getElementById('waiting-spinner');
-  var spinner = new Spinner(spinnerOpts).spin(spinnerTarget);
-}
+  new Spinner(spinnerOpts).spin(spinnerTarget);
+};
 
 
 Template.betStats.helpers({
@@ -31,13 +31,14 @@ Template.betStats.helpers({
     var currentGame = Collections.Games.findOne({completed: false}, {_id: 1});
     var playerBet = Meteor.user() && currentGame && Collections.Bets.findOne({playerId: Meteor.userId()});
 
-    returnVal = {};
+    var returnVal = {};
     if(playerBet){
       var allBets = Collections.Bets.find().fetch(); // bets only pull from the current game._id
       var betAggregates = (new Quokka(allBets)).getBetStats(Meteor.userId()); 
 
       if(allBets.length > 1) {
         _.extend(returnVal, {
+          extendedBetInfo: true,
           maxToWin: intToBtc(betAggregates.maxToWin),
           maxToLose: intToBtc(betAggregates.maxToLose),
           chanceToWin: betAggregates.chanceToWin
