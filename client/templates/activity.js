@@ -7,7 +7,7 @@ Template.activity.helpers({
   size: function(){ return Session.get("activity_tmpl_size");},
   mode: function(){ return Session.get("activity_tmpl_mode");},
   activityMode: function(){
-    return Session.get("activity_tmpl_mode") == "activity";
+    return Session.get("activity_tmpl_mode") === "activity";
   },
   chatMsgs: function(){
     return _.map(Collections.ChatMsgs.find({}, {sort: {timestamp: -1}}).fetch(), function(msg){
@@ -29,9 +29,17 @@ Template.activity.events({
     Session.set("activity_tmpl_size", "min");
   },
   "click .activity-btn": function(e){
+    if (Session.get("activity_tmpl_mode") === "activity") {
+      var expand = (Session.get("activity_tmpl_size") === "min") ? "max" : "min";
+      Session.set("activity_tmpl_size", expand);
+    }
     Session.set("activity_tmpl_mode", "activity");
   },
   "click .chat-btn": function(e){
+    if (Session.get("activity_tmpl_mode") === "chat") {
+      var expand = (Session.get("activity_tmpl_size") === "min") ? "max" : "min";
+      Session.set("activity_tmpl_size", expand);
+    }
     Session.set("activity_tmpl_mode", "chat");
   },
   "submit form": function(e,tmpl){
