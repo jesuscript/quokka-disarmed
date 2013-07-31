@@ -8,7 +8,7 @@
       <div class="output">
         {{#if activityMode }}
           {{#each activity }}
-            <div class="activity-item">
+            <div id="{{_id}}" class="activity-item fade-in-1">
               <span class="time">[{{time}}]</span> <span class="{{type}}">{{message}}</span>
             </div>
           {{/each}}

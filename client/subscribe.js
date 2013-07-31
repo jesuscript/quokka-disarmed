@@ -4,16 +4,17 @@ Meteor.startup(function(){
   Meteor.subscribe("allTimeStats");
   Meteor.subscribe("allTimeWinners");
 
-  var betsHandle;
+  var betsHandle, gameResultsHandle;
     
   Collections.Games.find({completed: false}).observeChanges({
     added: function(){
       betsHandle && betsHandle.stop();
-      betsHandle =  Meteor.subscribe("bets");      
+      betsHandle =  Meteor.subscribe("bets");
+      gameResultsHandle && gameResultsHandle.stop();
+      gameResultsHandle = Meteor.subscribe("gameResults");
     }
   });
 
-  Meteor.subscribe("betsAndGames"); 
   Meteor.subscribe("chatMsgs");
   Meteor.subscribe("connections");
   Meteor.subscribe("connectionsMonitor");
@@ -21,7 +22,6 @@ Meteor.startup(function(){
   Meteor.subscribe("games");
   Meteor.subscribe("hotColdStats");
   Meteor.subscribe("news");
-  Meteor.subscribe("gameResults");
   Meteor.subscribe("userData");
 });
 

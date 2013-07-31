@@ -163,7 +163,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
         this._d3data = this._convertBetsToStackData(betCollection);
         this.throttledRedraw();
       } else { 
-        // console.log('duplicate autorun output ignored in stacked bet graph');
+        // console.warn('duplicate autorun output ignored in stacked bet graph');
         // console.dir(betCollection)
       }
     }

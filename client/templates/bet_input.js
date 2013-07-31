@@ -95,7 +95,9 @@ Template.betInput.helpers({
 var throttledCall = function(action, tmpl) {
   if (action === 'revoke') {
     Meteor.call("revokeBet");
-  } else {
+  }
+  
+  if (action === 'bet') {
     if($(tmpl.find(".update-btn")).is(".disabled")) return;
     
     // these two lines for safety

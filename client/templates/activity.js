@@ -52,23 +52,10 @@ Template.activity.events({
   }
 });
 
+
 Template.activity.preserve([".terminal", ".chat-panel"]);
 
-
-// Template.activity.rendered = function() {
-//   // Ignore me... I'm here because I'm the last thing drawn.
-//   function logRenders() {
-//     _.each(Template, function (template, name) {
-//       var oldRender = template.rendered;
-//       var counter = 0;
-
-//       template.rendered = function () {
-//         console.log(name);
-//         // console.log(name, "render count: ", ++counter);
-//         oldRender && oldRender.apply(this, arguments);
-//       };
-//     });
-//   }
-
-//   logRenders();
-// }
+// for fading in activity items line by line
+Template.activity.preserve({
+  '.activity-item[id]': function (node) { return node.id; }
+});

@@ -10,7 +10,7 @@ Template.generalStats.helpers({
       hotNumbers: hotColdStats.topThree,
       coldNumbers: hotColdStats.bottomThree,
       largestWin: intToBtc(stats.winMax).toFixed(8),
-      coinsDistributed: intToBtc(stats.winSum).toFixed(8)
+      winTotal: intToBtc(stats.winSum).toFixed(8)
     };
   },
 

@@ -26,6 +26,7 @@ AutoPlay = {
     console.log("Started auto-play with balance multiplier set to " + balanceMultiplier);
 
     this.observer = Collections.Games.find({completed: false}).observeChanges({
+      _suppress_initial: true,
       added: function(){
         setTimeout(function(){
           if(user.balance === 0) {

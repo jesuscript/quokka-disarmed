@@ -1,14 +1,23 @@
 <template name="personalResults">
   <section id="personal-results">
     {{#with results}}
-      <span class="lucky-num-copy">Lucky Number</span>
+      <span class="lucky-num-copy">Lucky Number for game #{{publicSeq}}</span>
       <span id="lucky-num"></span>
-      {{#if win}}
-        <div class="payout">
-          <span class="payout-copy">You received:</span>
-          <span class="amount">฿{{win}}</span>
-        </div>
+      <div class="payout">
+      {{#if extendedResultInfo}}
+        {{#if outcome}}
+          {{#if hasWon}}
+            <span class="payout-copy">You won:</span>
+            <span class="amount">฿{{outcome}}</span>
+          {{else}}
+            <span class="payout-copy">You lost:</span>
+            <span class="amount">฿{{outcome}}</span>
+          {{/if}}
+        {{else}}
+          <span class="payout-copy">You didn't win or lose anything</span>
+        {{/if}}
       {{/if}}
+    </div>
     {{/with}}
     <div>
       <span id="timer-back-to-game">Initializing timer...</span> 
