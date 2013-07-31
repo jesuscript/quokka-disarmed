@@ -53,11 +53,13 @@ Meteor.methods({
         playerId: this.userId
       });
 
-      Collections.Bets.remove({_id: bet._id});
+      if (bet) {      
+        Collections.Bets.remove({_id: bet._id});
+        var revokeTextRange = (bet.rangeMin === bet.rangeMax) ? "single number " + bet.rangeMin + "!" : bet.rangeMin + "-" + bet.rangeMax;
+        DB.activity(Meteor.user().username + " revokes bet (was ฿" + intToBtc(bet.amount) + " on " + revokeTextRange + ")", 'user');
+      } else { console.warn('SECWARN: Trying to revoke a bet that didn\'t exist'); }
 
-      var revokeTextRange = (bet.rangeMin === bet.rangeMax) ? "single number " + bet.rangeMin + "!" : bet.rangeMin + "-" + bet.rangeMax;
-      DB.activity(Meteor.user().username + " revokes bet (was ฿" + intToBtc(bet.amount) + " on " + revokeTextRange + ")", 'user');
-    }
+    } else { console.warn('SECWARN: Trying to revoke a bet while there is no game in place'); }
     
   }
 });
