@@ -21,8 +21,7 @@ Meteor.startup(function(){
   Meteor.subscribe("games");
   Meteor.subscribe("hotColdStats");
   Meteor.subscribe("news");
-  Meteor.subscribe("payouts");
+  Meteor.subscribe("gameResults");
   Meteor.subscribe("userData");
-
 });
 

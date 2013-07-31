@@ -1,16 +1,17 @@
 Template.thisRoundsWinners.helpers({
   winners: function(){
-
     var lastGame = Collections.Games.findOne({completed: true}, {sort: {completedAt: -1}});
-    return [];
 
-    var payouts = Collections.Payouts.find({gameId: lastGame._id}, {sort: {payout: -1}, limit: 10}).fetch();
-    if(!payouts) return [];
+    var results = Collections.GameResults.find({gameId: lastGame._id},
+                                               {sort: {payout: -1}, limit: 10}).fetch();
 
-    return _.map(payouts, function(payout){
+    console.log(results);
+    if(!results) return [];
+
+    return _.map(results, function(r){
       return {
-        amount: intToBtc(payout.payout).toFixed(8),
-        playerName: payout.playerName
+        amount: intToBtc(r.payout-r.stake).toFixed(8),
+        playerName: r.playerName
       };
     });
 

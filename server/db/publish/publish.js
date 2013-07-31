@@ -45,8 +45,8 @@ Meteor.publish('news', function(){
   return Collections.News.find({}, {sort: {timestamp: -1}, limit: 10});
 });
 
-Meteor.publish('payouts', function(){
-  return Collections.Payouts.find({},{sort: {timestamp: -1}, limit: 10});
+Meteor.publish('gameResults', function(){
+  return Collections.GameResults.find({},{sort: {timestamp: -1}, limit: 10});
 });
 
 Meteor.publish('userData', function(){  // userdata is a built-in meteor collection

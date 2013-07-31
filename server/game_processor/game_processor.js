@@ -1,4 +1,4 @@
-/*global GetRandInt, Meteor, Observe, Collections */
+/*global GetRandInt, Meteor, Observe, Collections, GameStats */
 
 Meteor.startup(function(){
   var gameTimeout = null;
@@ -12,24 +12,21 @@ Meteor.startup(function(){
     var decrements = {};
     
     _.each(bets, function(bet){
-      decrements[bet.playerId] = - bet.amount;
-    });
+      var player = Meteor.users.findOne({_id: bet.playerId}, {fields: {username: 1}});
+      
+      decrements[player._id] = - bet.amount;
 
-    _.each(payouts, function(payout, id){
-      var player = Meteor.users.findOne({_id: id}, {fields: {username: 1}});
-      Collections.Payouts.insert({
+      Collections.GameResults.insert({
         gameId: currentGame._id,
-        playerId: id,
+        playerId: player._id,
         playerName: player.username,
-        payout: payout,
+        payout: payouts[player._id] || 0,
+        stake: bet.amount,
         timestamp: (new Date()).getTime()
       });
     });
 
-    _calculateAllTimeStats(payouts);
-    _calculateAllTimeWinners(payouts);
-    _calculateHotColdNumbersAggregates(luckyNum);
-    _calculateHotColdNumbers();
+    GameStats.recordStats(payouts, bets, luckyNum);
 
     payouts = game.mergePayouts(payouts, decrements);
     

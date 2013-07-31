@@ -1,62 +1,87 @@
-_calculateAllTimeStats = function(payouts) {
-  var allTimeStats = Collections.AllTimeStats.findOne();
-  var payoutSum  = 0;
-  var payoutMax = 0;
+/*global GameStats, Collections, _, Meteor */
 
-  if(!allTimeStats){
-    Collections.AllTimeStats.insert(allTimeStats = {
-      payoutMax: 0,
-      payoutSum: 0
+GameStats = {
+  recordStats: function(payouts, bets, luckyNum){
+    console.log(bets);
+    var wins = this.getWins(payouts, bets);
+    
+    this.recordAllTimeStats(wins);
+    this.recordAllTimeWinners(wins);
+    this.recordHotColdNumbersAggregates(luckyNum);
+    this.recordHotColdNumbers();
+  },
+
+  getWins: function(payouts,bets){
+    var wins = {};
+
+    _.each(bets, function(bet){
+      if(bet.amount < payouts[bet.playerId]){
+        wins[bet.playerId] = payouts[bet.playerId] - bet.amount;
+      }
     });
-  }
 
-  payoutSum = _.reduce(payouts, function(memo, p){ return memo + p; }, 0, this);
-  payoutMax = _.max(payouts, function(p){ return p; });
+    return wins;
+  },
+  
+  recordAllTimeStats: function(wins) {
+    var allTimeStats = Collections.AllTimeStats.findOne();
+    var winSum  = 0;
+    var winMax = 0;
 
-  Collections.AllTimeStats.update(allTimeStats, {
-    $set: {
-      payoutMax: (payoutMax > allTimeStats.payoutMax) ? payoutMax : allTimeStats.payoutMax
-    },
-    $inc: {
-      payoutSum: payoutSum
+    if(!allTimeStats){
+      Collections.AllTimeStats.insert(allTimeStats = {
+        winMax: 0,
+        winSum: 0
+      });
     }
-  });
-};
+
+    winSum = _.reduce(wins, function(memo, w){ return memo + w; }, 0);
+    winMax = _.max(wins, function(w){ return w; });
+
+    Collections.AllTimeStats.update(allTimeStats, {
+      $set: {
+        winMax: (winMax > allTimeStats.winMax) ? winMax : allTimeStats.winMax
+      },
+      $inc: {
+        winSum: winSum
+      }
+    });
+  },
 
 
-_calculateAllTimeWinners = function(payouts) {
-  _.each(payouts, function(amount, playerId) { // meteor doesn't support upserts yet
-    if (Collections.AllTimeWinners.find({playerId: playerId}).count() !== 0) {
-      Collections.AllTimeWinners.update({playerId: playerId}, {$inc: {totalReceived: amount}});
-    } else {
-      var player = Meteor.users.findOne({_id: playerId}, {fields: {username: 1}});
-      Collections.AllTimeWinners.insert({playerId: playerId, playerName: player.username, totalReceived: amount});
+  recordAllTimeWinners: function(wins) {
+    _.each(wins, function(amount, playerId) { // meteor doesn't support upserts yet
+      if (Collections.AllTimeWinners.find({playerId: playerId}).count() !== 0) {
+        Collections.AllTimeWinners.update({playerId: playerId}, {$inc: {totalReceived: amount}});
+      } else {
+        var player = Meteor.users.findOne({_id: playerId}, {fields: {username: 1}});
+        Collections.AllTimeWinners.insert({playerId: playerId, playerName: player.username, totalReceived: amount});
+      }
+    });
+  },
+
+
+  // this is aggregate data, leave this in even though hot/cold numbers uses a different query to display things on screen
+  recordHotColdNumbersAggregates: function(luckyNum) {
+    var allTimeNumbersStats = Collections.AllTimeNumbersStats.findOne();
+    if (!allTimeNumbersStats) {
+      for (var i = 1; i <= 100; i++) {
+        Collections.AllTimeNumbersStats.insert({num: i, frequency: 0});
+      }
     }
-  });
-};
+    Collections.AllTimeNumbersStats.update({num: luckyNum}, {$inc: {frequency: 1}});
+  },
 
 
-// this is aggregate data, leave this in even though hot/cold numbers uses a different query to display things on screen
-_calculateHotColdNumbersAggregates = function(luckyNum) {
-  var allTimeNumbersStats = Collections.AllTimeNumbersStats.findOne();
-  if (!allTimeNumbersStats) {
-    for (var i = 1; i <= 100; i++) {
-      Collections.AllTimeNumbersStats.insert({num: i, frequency: 0});
+  recordHotColdNumbers: function() {
+    var last200LuckyNums = Collections.Games.find({completed: true}, {sort: {createdAt: -1}, limit: 200, fields: {luckyNum: 1}}).fetch();
+    var groups = _.sortBy(_.groupBy(_.pluck(last200LuckyNums, 'luckyNum')), "length");
+    var topThree = _.pluck(groups.slice(-3),0).reverse();
+    var bottomThree = _.pluck(groups.slice(0, 3),0);
+    var hotColdStats = Collections.HotColdStats.findOne();
+    if (!hotColdStats) {
+      Collections.HotColdStats.insert(hotColdStats = {topThree: topThree, bottomThree: bottomThree});
     }
+    Collections.HotColdStats.update({}, {topThree: topThree, bottomThree: bottomThree});
   }
-  Collections.AllTimeNumbersStats.update({num: luckyNum}, {$inc: {frequency: 1}});
 };
-
-
-_calculateHotColdNumbers = function() {
-  var last200LuckyNums = Collections.Games.find({completed: true}, {sort: {createdAt: -1}, limit: 200, fields: {luckyNum: 1}}).fetch();
-  var groups = _.sortBy(_.groupBy(_.pluck(last200LuckyNums, 'luckyNum')), "length");
-  var topThree = _.pluck(groups.slice(-3),0).reverse();
-  var bottomThree = _.pluck(groups.slice(0, 3),0);
-  var hotColdStats = Collections.HotColdStats.findOne();
-  if (!hotColdStats) {
-    Collections.HotColdStats.insert(hotColdStats = {topThree: topThree, bottomThree: bottomThree});
-  }
-  Collections.HotColdStats.update({}, {topThree: topThree, bottomThree: bottomThree});
-};
-

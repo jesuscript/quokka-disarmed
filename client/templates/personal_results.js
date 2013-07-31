@@ -50,19 +50,26 @@ Template.personalResults.helpers({
   },
   results: function(){
     var lastGame = Collections.Games.findOne({completed: true}, {sort: {completedAt: -1}});
-    var payout;
+    var gameResult, win;
 
-    if(!lastGame) return;
+    if(!lastGame || !Meteor.userId()) return {};
 
-    if(Meteor.userId()){
-      payout = Collections.Payouts.findOne({gameId: lastGame._id, playerId: Meteor.userId()});
-    }
+    gameResult = Collections.GameResults.findOne({
+      gameId: lastGame._id,
+      playerId: Meteor.userId()
+    });
+
+    win = gameResult ? gameResult.payout - gameResult.stake : 0;
+
+    if(win<0) win = 0;
 
     createCounter(lastGame.luckyNum , BTO.TIMER_ROLL_DURATION, function () {
       $luckyNum.addClass("pulsate");
     });
 
-    return { payout: payout ? intToBtc(payout.payout) : 0 };
+    return {
+      win:  intToBtc(win)
+    };
   }
 });
 
