@@ -14,7 +14,7 @@
           {{/each}}
         {{else}}
           {{#each chatMsgs }}
-            <div class="message">
+            <div id="{{_id}}" class="message fade-in-1">
               <strong>{{username}}</strong> <span class="time">[{{time}}]</span><strong>:</strong> {{message}}
             </div>
           {{/each}}

@@ -72,3 +72,8 @@ Template.activity.preserve([".terminal", ".chat-panel"]);
 Template.activity.preserve({
   '.activity-item[id]': function (node) { return node.id; }
 });
+
+// for fading in chat items line by line
+Template.activity.preserve({
+  '.message[id]': function (node) { return node.id; }
+});
