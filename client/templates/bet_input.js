@@ -44,7 +44,6 @@ Template.betInput.rendered = function(){
   $(this.find('.stake')).click(function() { $(this).select(); });  
   templateRendered = true;
   if(windowLoaded) initPlugins(); // otherwise init in window load callback
-
 };
 
 $(window).load(function(){
