@@ -5,15 +5,19 @@ Template.activity.created = function(){
 
 Template.activity.helpers({
   size: function(){ return Session.get("activity_tmpl_size");},
+  
   mode: function(){ return Session.get("activity_tmpl_mode");},
+  
   activityMode: function(){
     return Session.get("activity_tmpl_mode") === "activity";
   },
+
   chatMsgs: function(){
     return _.map(Collections.ChatMsgs.find({}, {sort: {timestamp: -1}}).fetch(), function(msg){
       return _.extend(msg, {time: moment(msg.timestamp).format("HH:mm")});
     });
   },
+  
   activity: function(){
     return _.map(Collections.Activity.find({}, {sort: {timestamp: -1}}).fetch(), function(item){
       return _.extend(item, {time: moment(item.timestamp).format("HH:mm:ss")});
@@ -21,13 +25,24 @@ Template.activity.helpers({
   }
 });
 
+var throttledChat = function() {
+  var $input = $(".chat-input");
+  if ($input.val().length !== 0 && $input.val().length <= 130) {
+    Meteor.call("submitChatMsg", $input.val());
+    $input.val("").focus();
+  }
+};
+
+var throttleClick = _.throttle(throttledChat, 1000);
 Template.activity.events({
   "click .maximise": function(e){
     Session.set("activity_tmpl_size", "max");
   },
+
   "click .minimise": function(e){
     Session.set("activity_tmpl_size", "min");
   },
+
   "click .activity-btn": function(e){
     if (Session.get("activity_tmpl_mode") === "activity") {
       var expand = (Session.get("activity_tmpl_size") === "min") ? "max" : "min";
@@ -35,6 +50,7 @@ Template.activity.events({
     }
     Session.set("activity_tmpl_mode", "activity");
   },
+
   "click .chat-btn": function(e){
     if (Session.get("activity_tmpl_mode") === "chat") {
       var expand = (Session.get("activity_tmpl_size") === "min") ? "max" : "min";
@@ -42,13 +58,10 @@ Template.activity.events({
     }
     Session.set("activity_tmpl_mode", "chat");
   },
-  "submit form": function(e,tmpl){
-    var $input = $(tmpl.find(".chat-input"));
-    
-    Meteor.call("submitChatMsg", $input.val());
 
-    $input.val("").focus();
+  "submit form": function(e){
     e.preventDefault();
+    throttleClick();
   }
 });
 
