@@ -4,7 +4,7 @@
       <span class="lucky-num-copy">Lucky Number for game #{{publicSeq}}</span>
       <span id="lucky-num"></span>
       <div class="payout">
-      {{#if extendedResultInfo}}
+      {{#if hasPlayed}}
         {{#if outcome}}
           {{#if hasWon}}
             <span class="payout-copy">You won:</span>

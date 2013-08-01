@@ -50,7 +50,7 @@ Template.personalResults.helpers({
   },
   results: function(){
     var lastGame = Collections.Games.findOne({completed: true}, {sort: {completedAt: -1}}); // to retrieve lucky num and publicSeq
-    var personalResult, hasWon;
+    var personalResult, hasWon, outcome;
 
     createCounter(lastGame.luckyNum , BTO.TIMER_ROLL_DURATION, function () {
       $luckyNum.addClass("pulsate");
@@ -62,16 +62,14 @@ Template.personalResults.helpers({
 
     if (!personalResult) return { publicSeq: lastGame.publicSeq };
 
-    if (personalResult.won < 0) {
-      hasWon = false;
-    } else {
-      hasWon = true;
-    }
-
+    hasWon = (personalResult.won <= 0) ? hasWon = false : hasWon = true;
+    outcome = (personalResult.won === 0) ? 0 : intToBtc(Math.abs(personalResult.won)); // fucking handlebars doesn't understand floating points correctly, so this is necessary
+    
+    console.log(intToBtc(Math.abs(personalResult.won)));
     return {
-      extendedResultInfo: true,
+      hasPlayed: true,
       hasWon: hasWon,
-      outcome: intToBtc(Math.abs(personalResult.won)), // won can be negative!
+      outcome: outcome, // won can be negative!
       publicSeq: lastGame.publicSeq,
       stake: personalResult.stake,
       payout: personalResult.payout
