@@ -132,7 +132,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
         .tween("text", function() {
           var i = d3.interpolate(this.textContent, cumulative);
           return function(t) {
-            this.textContent = '฿ ' + intToBtc(i(t)).toFixed(8);
+            this.textContent = '฿ ' + intToBtc(i(t));
           };
         });
 
@@ -174,7 +174,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
             'color': '#fff',
             'border-radius': '2px',
             'font-family': 'Helvetica Neue, Helvetica, Arial, sans-serif'
-          }).text(function(d, i) { return d.data.playerName + '<br> BTC ' + intToBtc(d.value).toFixed(8); })
+          }).text(function(d, i) { return d.data.playerName + '<br> BTC ' + intToBtc(d.value); })
       );
 
     // exit behaviour

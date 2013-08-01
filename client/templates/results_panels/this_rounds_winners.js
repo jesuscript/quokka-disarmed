@@ -6,7 +6,7 @@ Template.thisRoundsWinners.helpers({
 
     return _.map(gameResults, function(result){
       return {
-        amount: intToBtc(result.won).toFixed(8),
+        amount: intToBtc(result.won),
         playerName: result.playerName
       };
     });

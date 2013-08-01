@@ -5,7 +5,7 @@ Template.allTimeWinners.helpers({
 
     return _.map(allTimeWinners, function(winner){
       return {
-        totalWon: intToBtc(winner.totalWon).toFixed(8),
+        totalWon: intToBtc(winner.totalWon),
         playerName: winner.playerName
       };
     });

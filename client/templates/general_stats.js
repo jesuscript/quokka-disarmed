@@ -9,8 +9,8 @@ Template.generalStats.helpers({
     return {
       hotNumbers: hotColdStats.topThree,
       coldNumbers: hotColdStats.bottomThree,
-      largestWin: intToBtc(stats.winMax).toFixed(8),
-      winTotal: intToBtc(stats.winSum).toFixed(8)
+      largestWin: intToBtc(stats.winMax),
+      winTotal: intToBtc(stats.winSum)
     };
   },
 
