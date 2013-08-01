@@ -40,11 +40,11 @@ function getNewBitcoinAddress() {
     if (err) console.error(err);
     fut.ret(data);
   });
-  var address = fut.wait()  
+  var address = fut.wait();
   if (address === undefined) {
     // if going live under load, this needs to be replaced with a call to findAndRemove()
     var addr = AddressPool.findOne();
-    AddressPool.remove({'_id': addr._id})
+    AddressPool.remove({'_id': addr._id});
     address = addr.address;
   }
   return address;
@@ -54,7 +54,7 @@ function getNewBitcoinAddress() {
 Meteor.methods({
   resendVerificationEmail: function(){
     if(Meteor.userId()) {
-      Accounts.sendVerificationEmail(Meteor.userId())
+      Accounts.sendVerificationEmail(Meteor.userId());
     }
   }
 });

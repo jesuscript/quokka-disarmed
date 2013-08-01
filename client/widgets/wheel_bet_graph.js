@@ -24,7 +24,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
   _createSvg: function(){
     var svgHeight = this.options.svgHeight;
-    var svgWidth = this.options.svgWidth;
+    // var svgWidth = this.options.svgWidth;
 
     this._svg = d3.select(this.element[0]).append("svg")
       .attr("viewBox", "0 0 250 250") // <min-x> <min-y> <width> <height>
@@ -211,10 +211,11 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
   _getArcTweenOutFunction: function() {
     var arc = this._arc;
     
-    return function(a){
+    return function(){
       var i = d3.interpolate(this._current, {
         startAngle: Math.PI * 2,
-        endAngle: Math.PI * 2, value: 0
+        endAngle: Math.PI * 2,
+        value: 0
       });
 
       this._current = i(0);

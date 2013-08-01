@@ -1,5 +1,5 @@
 Meteor.methods({
   getServerTime: function(){
-    return (new Date).getTime();
+    return (new Date()).getTime();
   }
 });

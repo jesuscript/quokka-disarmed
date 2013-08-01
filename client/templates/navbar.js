@@ -33,7 +33,7 @@ Template.navbar.rendered = function(){
   uv.src='//widget.uservoice.com/9ZCCMSCPqP7NR9ZWuQzteQ.js';
   var s=document.getElementsByTagName('script')[0];
   s.parentNode.insertBefore(uv,s);
-}
+};
 
 
 var previousBalance = null;
