@@ -63,9 +63,9 @@ Template.personalResults.helpers({
     if (!personalResult) return { publicSeq: lastGame.publicSeq };
 
     if (personalResult.won < 0) {
-      hasWon = true;
-    } else {
       hasWon = false;
+    } else {
+      hasWon = true;
     }
 
     return {
