@@ -13,7 +13,7 @@ Meteor.publish('allTimeStats', function(){
 });
 
 Meteor.publish('allTimeWinners', function(){
-  return Collections.AllTimeWinners.find({}, {sort: {totalReceived: -1}, limit: 10, fields: {playerName:1, totalWon: 1}});
+  return Collections.AllTimeWinners.find({}, {sort: {totalReceived: -1}, limit: 9, fields: {playerName:1, totalWon: 1}});
 });
 
 Meteor.publish('bets', function(){ //only publishes for the current game
@@ -43,7 +43,7 @@ Meteor.publish('gameResults', function(){ //only publishes for the previous game
   var previousGameId = Collections.Games.findOne({publicSeq: currentGame.publicSeq-1})._id;
   return Collections.GameResults.find(
     {gameId: previousGameId },
-    {sort: {won: -1}, limit: 10, fields: {publicSeq: 1, won: 1, payout: 1, stake: 1, playerName: 1, playerId: 1}}
+    {sort: {won: -1}, limit: 9, fields: {publicSeq: 1, won: 1, payout: 1, stake: 1, playerName: 1, playerId: 1}}
   );
 });
 
