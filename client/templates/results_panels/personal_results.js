@@ -64,8 +64,7 @@ Template.personalResults.helpers({
 
     hasWon = (personalResult.won <= 0) ? hasWon = false : hasWon = true;
     outcome = (personalResult.won === 0) ? 0 : intToBtc(Math.abs(personalResult.won)); // fucking handlebars doesn't understand floating points correctly, so this is necessary
-    
-    console.log(intToBtc(Math.abs(personalResult.won)));
+
     return {
       hasPlayed: true,
       hasWon: hasWon,
