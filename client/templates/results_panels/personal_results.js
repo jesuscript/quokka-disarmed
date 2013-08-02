@@ -22,7 +22,8 @@ var createCounter = function(theNum, totalTime, callback) {
 var createBackToGameTimer = function(totalTime) { 
   var interval = totalTime / 10;
   var intervalId;
-  var firstStep = 10;
+  var processingTime = 1; // takes one second for the full screen to render correctly
+  var firstStep = 10 - processingTime;
   var lastStep = 0;
 
   var f = function () {
