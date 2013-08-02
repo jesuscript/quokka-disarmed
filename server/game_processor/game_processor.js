@@ -10,7 +10,7 @@ Meteor.startup(function(){
     var game = new Quokka(bets);
     var payouts = game.computeResults(luckyNum);
     var decrements = {};
-    
+
     _.each(bets, function(bet){
       var player = Meteor.users.findOne({_id: bet.playerId}, {fields: {username: 1}});
       
@@ -22,16 +22,14 @@ Meteor.startup(function(){
         playerName: player.username,
         payout: payouts[player._id] || 0,
         stake: bet.amount,
+        won: (payouts[player._id] || 0) - bet.amount,
         timestamp: (new Date()).getTime()
       });
     });
 
-    GameStats.recordStats(payouts, bets, luckyNum);
-
-    payouts = game.mergePayouts(payouts, decrements);
-    
-    _.each(payouts, function(payout, id){
-      Meteor.users.update({_id: id},{$inc: {balance: payout}});
+    var finalAmounts = game.mergePayouts(payouts, decrements);
+    _.each(finalAmounts, function(finalAmount, id){
+      Meteor.users.update({_id: id}, {$inc: {balance: finalAmount}});
     });
     
     Collections.Games.update(currentGame, {$set:{
@@ -41,8 +39,8 @@ Meteor.startup(function(){
     }});
 
     DB.activity("The Lucky Number for game #" + currentGame.publicSeq + " is " + luckyNum, "luckyNum");
-    // DB.activity("Congratulations to this round's " + winnerCount + " winners", "game"); JD TODO once payout mechanism has been modified
-    // DB.activity("฿" + amountDistributed + " distributed this round", "game"); JD TODO once payout mechanism has been modified
+    
+    GameStats.recordStats(payouts, bets, luckyNum);// needs to be here so that DB.activity() calls follow a logical progression
     
     var newSeq = (typeof currentGame.publicSeq === "number") ? ++currentGame.publicSeq : 1;
     Collections.Games.insert({

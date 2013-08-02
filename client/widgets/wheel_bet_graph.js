@@ -1,8 +1,8 @@
 $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
   options:{
-    svgHeight: 250,
-    svgWidth: 250,
+    svgHeight: 245,
+    svgWidth: 245,
   },
 
   _create: function(){
@@ -24,10 +24,10 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
   _createSvg: function(){
     var svgHeight = this.options.svgHeight;
-    var svgWidth = this.options.svgWidth;
+    // var svgWidth = this.options.svgWidth;
 
     this._svg = d3.select(this.element[0]).append("svg")
-      .attr("viewBox", "0 0 250 250") // <min-x> <min-y> <width> <height>
+      .attr("viewBox", "0 0 245 245") // <min-x> <min-y> <width> <height>
       .attr("preserveAspectRatio", "xMidYMid")
       .attr("height", svgHeight)
       .append("g")
@@ -89,7 +89,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
         this._updateTotalValue();
         this._wheelDefineD3Sequence();
       } else { 
-       // console.log('duplicate autorun output ignored in stacked bet graph');
+       // console.warn('duplicate autorun output ignored in stacked bet graph');
        // console.dir(betCollection);
       }
     }
@@ -132,7 +132,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
         .tween("text", function() {
           var i = d3.interpolate(this.textContent, cumulative);
           return function(t) {
-            this.textContent = '฿ ' + intToBtc(i(t)).toFixed(8);
+            this.textContent = '฿ ' + intToBtc(i(t));
           };
         });
 
@@ -174,7 +174,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
             'color': '#fff',
             'border-radius': '2px',
             'font-family': 'Helvetica Neue, Helvetica, Arial, sans-serif'
-          }).text(function(d, i) { return d.data.playerName + '<br> BTC ' + intToBtc(d.value).toFixed(8); })
+          }).text(function(d, i) { return d.data.playerName + '<br> BTC ' + intToBtc(d.value); })
       );
 
     // exit behaviour
@@ -211,10 +211,11 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
   _getArcTweenOutFunction: function() {
     var arc = this._arc;
     
-    return function(a){
+    return function(){
       var i = d3.interpolate(this._current, {
         startAngle: Math.PI * 2,
-        endAngle: Math.PI * 2, value: 0
+        endAngle: Math.PI * 2,
+        value: 0
       });
 
       this._current = i(0);

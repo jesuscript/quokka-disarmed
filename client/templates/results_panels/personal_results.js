@@ -49,26 +49,29 @@ Template.personalResults.helpers({
     return remainingTime;
   },
   results: function(){
-    var lastGame = Collections.Games.findOne({completed: true}, {sort: {completedAt: -1}});
-    var gameResult, win;
-
-    if(!lastGame || !Meteor.userId()) return {};
-
-    gameResult = Collections.GameResults.findOne({
-      gameId: lastGame._id,
-      playerId: Meteor.userId()
-    });
-
-    win = gameResult ? gameResult.payout - gameResult.stake : 0;
-
-    if(win<0) win = 0;
+    var lastGame = Collections.Games.findOne({completed: true}, {sort: {completedAt: -1}}); // to retrieve lucky num and publicSeq
+    var personalResult, hasWon, outcome;
 
     createCounter(lastGame.luckyNum , BTO.TIMER_ROLL_DURATION, function () {
       $luckyNum.addClass("pulsate");
     });
 
+    if(!Meteor.userId()) return { publicSeq: lastGame.publicSeq }; // observers only see publicSeq and luckyNum
+
+    personalResult = Collections.GameResults.findOne({ playerId: Meteor.userId() });
+
+    if (!personalResult) return { publicSeq: lastGame.publicSeq };
+
+    hasWon = (personalResult.won <= 0) ? hasWon = false : hasWon = true;
+    outcome = (personalResult.won === 0) ? 0 : intToBtc(Math.abs(personalResult.won)); // fucking handlebars doesn't understand floating points correctly, so this is necessary
+
     return {
-      win:  intToBtc(win)
+      hasPlayed: true,
+      hasWon: hasWon,
+      outcome: outcome, // won can be negative!
+      publicSeq: lastGame.publicSeq,
+      stake: personalResult.stake,
+      payout: personalResult.payout
     };
   }
 });

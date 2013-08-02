@@ -65,8 +65,8 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
   // define axises. Called once on draw().
   _defineAxes: function() {
     this._x = d3.scale.ordinal()
-          .domain(d3.range(1,101))
-          .rangeBands([0, this._chartWidth], .3); // roundRangeBands creates significant rounding errors leading to a squeezed graphic
+      .domain(d3.range(1,101))
+      .rangeBands([0, this._chartWidth], .3); // roundRangeBands creates significant rounding errors leading to a squeezed graphic
 
     this._xAxis = d3.svg.axis()
       .scale(this._x)
@@ -163,7 +163,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
         this._d3data = this._convertBetsToStackData(betCollection);
         this.throttledRedraw();
       } else { 
-        // console.log('duplicate autorun output ignored in stacked bet graph');
+        // console.warn('duplicate autorun output ignored in stacked bet graph');
         // console.dir(betCollection)
       }
     }
@@ -226,22 +226,34 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
       .attr("x", function(d) { return this._x(d.x); }.bind(this))
       .transition()
         .duration(this._transitionDuration)
-        .attr("y", function(d) { return this._y(d.y0 + d.y); }.bind(this)) 
-        .attr("height", function(d) { var h = this._y(d.y0) - this._y(d.y0 + d.y) -1; return (h>=0) ? h : 0; }.bind(this)); // -1 for pretty bar bottoms
+        .attr("y", function(d) { 
+          var y = this._y(d.y0 + d.y);
+          return (y>=0) ? y : 0; 
+        }.bind(this)) 
+        .attr("height", function(d) {
+          var h = this._y(d.y0) - this._y(d.y0 + d.y) -1; // -1 for pretty bar bottoms
+          return (h>=0) ? h : 0;
+        }.bind(this)); 
 
     // enter behaviour
     this._rects.enter()
       .append("rect")
       .attr("class", "bar") // required so that subsequent selections have something to grab on to
-      .attr("x", function(d) { return this._x(d.x); }.bind(this))
+      .attr("x", function(d) { return this._x(d.x);}.bind(this))
       .attr("y", function(d) { return this._y(d.y0); }.bind(this)) 
       .attr("width", this._x.rangeBand()) 
       .attr("height", 0)
       .transition()
         .delay(this._transitionDuration/2)
         .duration(this._transitionDuration)
-        .attr("y", function(d) { return this._y(d.y0 + d.y); }.bind(this)) 
-        .attr("height", function(d) { var h = this._y(d.y0) - this._y(d.y0 + d.y) -1; return (h>=0) ? h : 0; }.bind(this)); // -1 for pretty bar bottoms... mmmmm.....
+        .attr("y", function(d) { 
+          var y = this._y(d.y0 + d.y);
+          return (y>=0) ? y : 0; 
+        }.bind(this))
+        .attr("height", function(d) {
+          var h = this._y(d.y0) - this._y(d.y0 + d.y) -1; // -1 for pretty bar bottoms... mmmmm.....
+          return (h>=0) ? h : 0; 
+        }.bind(this)); 
 
     // enter + update
     // (nothing to do)
@@ -255,7 +267,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     return _.map(betCollection, function(bet){
       return _.map(d3.range(1, 101),function(i){
         var inRange = (i >= bet.rangeMin) && (i <= bet.rangeMax);
-        var amountPerNumber = intToBtc(bet.amount / (bet.rangeMax - bet.rangeMin + 1));
+        var amountPerNumber = floatIntToBtc(bet.amount / (bet.rangeMax - bet.rangeMin + 1));
         return {
           x: i,
           y: inRange ? amountPerNumber : 0

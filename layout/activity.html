@@ -8,13 +8,13 @@
       <div class="output">
         {{#if activityMode }}
           {{#each activity }}
-            <div class="activity-item">
+            <div id="{{_id}}" class="activity-item fade-in-1">
               <span class="time">[{{time}}]</span> <span class="{{type}}">{{message}}</span>
             </div>
           {{/each}}
         {{else}}
           {{#each chatMsgs }}
-            <div class="message">
+            <div id="{{_id}}" class="message fade-in-1">
               <strong>{{username}}</strong> <span class="time">[{{time}}]</span><strong>:</strong> {{message}}
             </div>
           {{/each}}
@@ -32,7 +32,7 @@
         <div class="row-fluid">
           <div class="span10">
             {{#constant}}
-              <input type="text" class="input-block-level chat-input"/>
+              <input type="text" maxlength="130" class="input-block-level chat-input"/>
             {{/constant}}
           </div>
           <div class="span2">

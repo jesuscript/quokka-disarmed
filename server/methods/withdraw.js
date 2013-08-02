@@ -4,11 +4,11 @@ Meteor.methods({
     // this block bothers me - i use it to instantiate these vars across all withdraw methods
     // however it's likely not ideal because it requires the code to flow in a certain way for things to be defined
     received = [];
-    var depositAddress = Meteor.user().depositAddress
+    var depositAddress = Meteor.user().depositAddress;
     for (var i=0; i<=6; i++) {
       received[i] = getReceivedByAddress(depositAddress, i);
       if(isNaN(received[i])) { throw new Meteor.Error(503, "Could not connect to bitcoind"); }
-    };
+    }
     ret = ((received[6] - received[0]) >= 0) ? true : false;
     return ret;
   },
@@ -27,7 +27,7 @@ Meteor.methods({
       return false;
     } else {
       var txId = sendToAddress(address, intAmount);
-      if (txId.length == 64 && txId.search(/[a-fA-F0-9]{64}$/) == 0) {
+      if (txId.length === 64 && txId.search(/[a-fA-F0-9]{64}$/) === 0) {
         Meteor.users.update({_id: Meteor.userId()}, {$inc:{"balance": -intAmount}});
         return {
           amt: intToBtc(intAmount), // only will ever be used for display purposes
@@ -56,7 +56,7 @@ function alertExcessWithdrawal(address, intAmount){
 }
 
 function isInt(n) {
-  return typeof n === 'number' && parseFloat(n) == parseInt(n, 10) && !isNaN(n);
+  return typeof n === 'number' && parseFloat(n) === parseInt(n, 10) && !isNaN(n);
 }
 
 function validateWithdrawal(address, intAmount){

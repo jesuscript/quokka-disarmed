@@ -29,19 +29,22 @@ Template.signin_dialog.events({
       });
     }
   },
+
   "click #forgot": function(e,tmpl){
     TemplateHelpers.removeDialog({ tmpl:tmpl, fadeOut:false }, function(){
       Session.set("signin_error");
       $("body").append(Meteor.render(Template.forgot_password));
     });
   },
+
   "click .signup-btn": function(e,tmpl){
     e.preventDefault();
     TemplateHelpers.removeDialog({ tmpl:tmpl }, function(){
       Session.set("signin_error");
       $("body").append(Meteor.render(Template.signup_dialog));
     });
-  },  
+  }, 
+
   "click #cancel, click .close, click .shroud": function(e,tmpl){
     TemplateHelpers.removeDialog({ tmpl:tmpl }, function(){
       Session.set("signin_error");
@@ -49,11 +52,12 @@ Template.signin_dialog.events({
   }
 });
 
+
 Template.signin_dialog.helpers({
   error: function(){
     var err = Session.get("signin_error");
     if(err){
-      if(err.error == 400) return "Empty username or email"; // overrides default ugly meteor message
+      if(err.error === 400) return "Empty username or email"; // overrides default ugly meteor message
       return Session.get("signin_error").reason;
     }
   }

@@ -13,7 +13,7 @@ Template.alerts.helpers({
 
 
 Template.alerts.events({
-  "click .resendVerificationEmail-btn": function(e,tmpl){
+  "click .resendVerificationEmail-btn": function(e){
     e.preventDefault();
     Auth.resendVerificationEmail();
   }  

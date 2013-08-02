@@ -13,12 +13,12 @@ Meteor.publish('allTimeStats', function(){
 });
 
 Meteor.publish('allTimeWinners', function(){
-  return Collections.AllTimeWinners.find({}, {sort: {totalReceived: -1}, limit: 10, fields: {playerName:1, totalReceived: 1}});
+  return Collections.AllTimeWinners.find({}, {sort: {totalReceived: -1}, limit: 9, fields: {playerName:1, totalWon: 1}});
 });
 
-Meteor.publish('bets', function(){ //update to publish only for the current game
+Meteor.publish('bets', function(){ //only publishes for the current game
   var game = DB.currentGame();
-  return game && Collections.Bets.find({gameId: DB.currentGame()._id});
+  return game && Collections.Bets.find({gameId: game._id});
 });
 
 Meteor.publish("chatMsgs", function(){
@@ -37,16 +37,22 @@ Meteor.publish('games', function(){
   return Collections.Games.find({},{sort: {createdAt: -1}, limit: 50}); // even 1080p panels can only display 4x 'previous lucky nums' at a time
 });
 
+Meteor.publish('gameResults', function(){ //only publishes for the previous game
+  // boy do I wish Mongo had joins
+  var currentGame = DB.currentGame();
+  var previousGameId = Collections.Games.findOne({publicSeq: currentGame.publicSeq-1})._id;
+  return Collections.GameResults.find(
+    {gameId: previousGameId },
+    {sort: {won: -1}, limit: 9, fields: {publicSeq: 1, won: 1, payout: 1, stake: 1, playerName: 1, playerId: 1}}
+  );
+});
+
 Meteor.publish('hotColdStats', function(){
   return Collections.HotColdStats.find({}); 
 });
 
 Meteor.publish('news', function(){
   return Collections.News.find({}, {sort: {timestamp: -1}, limit: 10});
-});
-
-Meteor.publish('gameResults', function(){
-  return Collections.GameResults.find({},{sort: {timestamp: -1}, limit: 10});
 });
 
 Meteor.publish('userData', function(){  // userdata is a built-in meteor collection

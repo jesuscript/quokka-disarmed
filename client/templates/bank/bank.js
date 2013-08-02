@@ -7,17 +7,17 @@ Template.bank.helpers({
     return Session.get("bank_tmpl_open");
   },
   depositMode: function(){
-    return Session.get("bank_tmpl_mode") == "deposit";
+    return Session.get("bank_tmpl_mode") === "deposit";
   },
   withdrawMode: function(){
-    return Session.get("bank_tmpl_mode") == "withdraw";
+    return Session.get("bank_tmpl_mode") === "withdraw";
   }
 });
 
 Template.bank.toggleOpen = function(){
-    resetWithdrawInterface();
-    if (!Session.get("bank_tmpl_open")) Session.set("bank_tmpl_mode", "deposit"); // deposit is default view
-    Session.set("bank_tmpl_open", !Session.get("bank_tmpl_open"));
+  resetWithdrawInterface();
+  if (!Session.get("bank_tmpl_open")) Session.set("bank_tmpl_mode", "deposit"); // deposit is default view
+  Session.set("bank_tmpl_open", !Session.get("bank_tmpl_open"));
 };
 
 Template.bank.events({
@@ -73,4 +73,4 @@ function calculateWithdrawStatus(){
       Session.set('timeToValidateDeposits', timeToValidateDeposits);
     });
   }
-};
+}
