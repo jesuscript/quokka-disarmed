@@ -30,13 +30,13 @@ var evaluateTimer = function(game){
 
 var startTimer = function(game, serverTime, latency){
   if (!timerId) {
-    var leftOnTimer = serverTime - game.startedAt + latency/2;
-    var timerValue = Math.round((BTO.TIMER_GAME_DURATION - leftOnTimer)/1000); 
-
+    var processingTime = 500; // awfully high server + client processing time, but it is what it is
+    var elapsed = serverTime - game.startedAt + latency/2 + processingTime;
+    var timerValue = ((BTO.TIMER_GAME_DURATION - elapsed)/1000).toFixed(1); 
     timerId = Meteor.setInterval(function(){
       $betWheel.wheelBetGraph("redrawTimer", timerValue);
-      timerValue = timerValue - 1;
-    }, 1000);
+      timerValue = (timerValue - 0.1).toFixed(1);
+    }, 100);
   }
 };
 
@@ -55,7 +55,7 @@ var initBetWheel = function(){
     
     gamesDep && gamesDep.stop();
     gamesDep = Deps.autorun(function(){
-      // also pickups changes in game state, such as started at. This is fine and by design.
+      // also pickups changes in game state. This is fine and by design as we want to listen to changes to startedAt
       // we could change it to an observer pattern
       evaluateTimer(Collections.Games.findOne({completed: false})); 
     });

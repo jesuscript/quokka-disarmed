@@ -97,9 +97,10 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
   },
 
 
-  redrawTimer: function(countDown){
+  redrawTimer: function(countdown){
+    var countdownValue = (countdown >= 0) ? countdown : 0;
     this._timer
-      .text('Roll in ' + countDown + ' seconds');
+      .text('Roll in ' + countdownValue + ' seconds');
   },
 
 
