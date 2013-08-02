@@ -1,17 +1,20 @@
 <template name="alerts">
   <div id="site-alerts">
     {{#if alert}}
-    <div class="alert alert-error text-center ">
-      <strong>Warning!</strong> {{message}}
-    </div>
-    {{/if}}
-    {{#if currentUser}}
-    {{#if emailNotVerified}}
-      <div class="global-alert alert alert-info alert-block text-center">
-        <strong>Note:</strong> Please check your email and click the link we sent. A verified email is the only way to recover a lost password!<br/>
-        Didn't receive our email? <a class="resendVerificationEmail-btn" href="#">Click to resend</a>
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="alert alert-error text-center ">
+          <strong>Warning!</strong> {{message}}
+        </div>
+        {{/if}}
+        {{#if currentUser}}
+        {{#if emailNotVerified}}
+          <div class="global-alert alert alert-info text-center">
+            <strong>Note:</strong> Please check your email and click the link we sent - A verified email is the only way to recover a lost password! <a class="resendVerificationEmail-btn" href="#">Click to resend</a>
+          </div>
+        {{/if}}
       </div>
-    {{/if}}
+    </div>
     {{/if}}
   </div>
 </template>

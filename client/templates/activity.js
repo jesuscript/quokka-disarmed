@@ -1,5 +1,5 @@
 Template.activity.created = function(){
-  Session.set("activity_tmpl_size", "max");
+  Session.set("activity_tmpl_size", "min");
   Session.set("activity_tmpl_mode", "activity");
 };
 

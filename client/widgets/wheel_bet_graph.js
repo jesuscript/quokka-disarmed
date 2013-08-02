@@ -1,8 +1,8 @@
 $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
   options:{
-    svgHeight: 250,
-    svgWidth: 250,
+    svgHeight: 245,
+    svgWidth: 245,
   },
 
   _create: function(){
@@ -27,7 +27,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     // var svgWidth = this.options.svgWidth;
 
     this._svg = d3.select(this.element[0]).append("svg")
-      .attr("viewBox", "0 0 250 250") // <min-x> <min-y> <width> <height>
+      .attr("viewBox", "0 0 245 245") // <min-x> <min-y> <width> <height>
       .attr("preserveAspectRatio", "xMidYMid")
       .attr("height", svgHeight)
       .append("g")

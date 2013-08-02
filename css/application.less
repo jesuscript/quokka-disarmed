@@ -1,5 +1,13 @@
 @import "prefixer.lessimport";
 
+@media screen and (max-height: 660px) {
+  #header { display: none; }
+}
+
+@media screen and (min-height:660px) {
+  #header { display: block; }
+}
+
 a:hover {
   cursor: pointer;
   text-decoration: none;
