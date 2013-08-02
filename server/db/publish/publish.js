@@ -43,7 +43,7 @@ Meteor.publish('gameResults', function(){ //only publishes for the previous game
   var previousGameId = Collections.Games.findOne({publicSeq: currentGame.publicSeq-1})._id;
   return Collections.GameResults.find(
     {gameId: previousGameId },
-    {sort: {won: -1}, limit: 9, fields: {publicSeq: 1, won: 1, payout: 1, stake: 1, playerName: 1, playerId: 1}}
+    {sort: {won: -1}, limit: 9}
   );
 });
 
