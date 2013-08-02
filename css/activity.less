@@ -1,5 +1,37 @@
 @import "prefixer.lessimport";
 
+@media screen and (max-height: 660px) {
+  #activity{
+    .terminal {
+      height: 140px;
+    }
+    .output {
+      height: 140px;
+    }
+    &.chat.max{
+      .output{
+        height: 100px;
+      }
+    }
+  }
+}
+
+@media screen and (min-height:660px) {
+  #activity{
+    .terminal {
+      height: 240px;
+    }
+    .output {
+      height: 240px;
+    }
+    &.chat.max{
+      .output{
+        height: 200px;
+      }
+    }
+  }
+}
+
 #activity{
   position: fixed;
   bottom: 0;
@@ -44,9 +76,6 @@
       bottom: 0px;
       opacity: 1;
     }
-    .output{
-      height: 100px;
-    }
   }
   form{
     margin: 0;
@@ -66,14 +95,12 @@
     border-top: 2px solid #222;
     border-left: 2px solid #222;
     .border-radius(4px 0 0 0);
-    height: 140px;
     background-color: rgba(255,255,255,0.9);
     padding: 5px 10px;
     .box-shadow(inset 0px 2px 6px 0px rgba(0,0,0,0.2));
     .transition(all 0.5s ease-in-out);
   }
   .output{
-    height: 140px;
     overflow:auto;
     margin-right: 75px;
   }
