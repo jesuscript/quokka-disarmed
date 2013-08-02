@@ -1,5 +1,5 @@
 Template.activity.created = function(){
-  Session.set("activity_tmpl_size", "min");
+  Session.set("activity_tmpl_size", "max");
   Session.set("activity_tmpl_mode", "activity");
 };
 
@@ -22,6 +22,11 @@ Template.activity.helpers({
     return _.map(Collections.Activity.find({}, {sort: {timestamp: -1}}).fetch(), function(item){
       return _.extend(item, {time: moment(item.timestamp).format("HH:mm:ss")});
     });
+  },
+  playersOnline: function(){
+    var players = Collections.Connections.findOne();
+
+    return players && (players.usersLoggedIn + players.usersObserving);
   }
 });
 
