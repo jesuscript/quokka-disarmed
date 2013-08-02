@@ -13,7 +13,7 @@ Meteor.publish('allTimeStats', function(){
 });
 
 Meteor.publish('allTimeWinners', function(){
-  return Collections.AllTimeWinners.find({}, {sort: {totalReceived: -1}, limit: 9, fields: {playerName:1, totalWon: 1}});
+  return Collections.AllTimeWinners.find({}, {sort: {totalWon: -1}, limit: 9, fields: {playerName:1, totalWon: 1}});
 });
 
 Meteor.publish('bets', function(){ //only publishes for the current game
