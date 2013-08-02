@@ -7,7 +7,7 @@ Meteor.startup(function(){
     var currentGame = DB.currentGame();
     var luckyNum = GetRandInt();
     var bets = DB.bets(currentGame);
-    var game = new Quokka(bets);
+    var game = new Quokka(bets, BTO.COMMISSION_RATE);
     var payouts = game.computeResults(luckyNum);
     var decrements = {};
 
