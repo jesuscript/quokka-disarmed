@@ -15,7 +15,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
     $(window).resize(_.debounce(this._draw.bind(this), 100)); // debouncing at 100 seems to be enough to avoid re-rendering while mouse is still moving
 
-    this._svg = d3.select(this.element[0]).append('svg');
+    this._svg = d3.select(this.element[0]).append('svg').attr("width", "100%").attr("height", "100%"); // width+height required by firefox
 
     this._draw();
   },

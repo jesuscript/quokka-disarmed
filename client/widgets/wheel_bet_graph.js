@@ -30,6 +30,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       .attr("viewBox", "0 0 245 245") // <min-x> <min-y> <width> <height>
       .attr("preserveAspectRatio", "xMidYMid")
       .attr("height", svgHeight)
+      .attr("width", "100%") // required by ff
       .append("g")
         .attr("transform", "translate(" + svgHeight / 2 + "," + svgHeight / 2 + ")");
   },
