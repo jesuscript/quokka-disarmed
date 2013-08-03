@@ -34,7 +34,7 @@ Template.betStats.helpers({
     var returnVal = {};
     if(playerBet){
       var allBets = Collections.Bets.find().fetch(); // bets only pull from the current game._id
-      var betAggregates = (new Quokka(allBets)).getBetStats(Meteor.userId()); 
+      var betAggregates = (new Quokka(allBets,  BTO.COMMISSION_RATE)).getBetStats(Meteor.userId()); 
 
       if(allBets.length > 1) {
         _.extend(returnVal, {

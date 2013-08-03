@@ -3,7 +3,7 @@
 Meteor.startup(function(){
   var gameTimeout = null;
 
-  var processGame = function(){
+  var processGame = function(){ 
     var currentGame = DB.currentGame();
     var luckyNum = GetRandInt();
     var bets = DB.bets(currentGame);
@@ -54,7 +54,7 @@ Meteor.startup(function(){
   
   
   Observe.currentGame({
-    betUpdate: function(){ 
+    betUpdate: function(){  
       var currentGame = DB.currentGame();
 
       if(!currentGame) return;
