@@ -115,7 +115,8 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     return _.map(betCollection, function(bet){
       return {
           playerName: bet.playerName,
-          amount: bet.amount
+          amount: bet.amount,
+          playerId: bet.playerId
         };
     });
   },
