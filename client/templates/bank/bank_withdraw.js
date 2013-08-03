@@ -33,7 +33,7 @@ Template.bankWithdraw.events({
     e.preventDefault();
     var address = $(tmpl.find("[name=address]")).val();
     var amount = $(tmpl.find("[name=amount]")).val();
-    var regexp = /^\d+(\.\d{1,3})?$/;
+    var regexp = /^\d+(\.\d{1,8})?$/;
     if(address.length < 27 || address.length > 34){
       Session.set("withdraw_error", {
         error: 406,
