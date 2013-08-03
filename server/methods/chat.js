@@ -1,7 +1,8 @@
 Meteor.methods({
   submitChatMsg: function(msg){
+    check(msg, String);
+    
     if (!validMsg(msg)) return;
-
     Collections.ChatMsgs.insert({
       userId: this.userId,
       username: this.userId ? Meteor.user().username : "Anonymous",

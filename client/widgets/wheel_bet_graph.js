@@ -30,6 +30,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       .attr("viewBox", "0 0 245 245") // <min-x> <min-y> <width> <height>
       .attr("preserveAspectRatio", "xMidYMid")
       .attr("height", svgHeight)
+      .attr("width", "100%") // required by ff
       .append("g")
         .attr("transform", "translate(" + svgHeight / 2 + "," + svgHeight / 2 + ")");
   },
@@ -40,7 +41,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
     this._pie = d3.layout.pie()
       .sort(null)
-      .value(function(d) { return d.amount; }); // key
+      .value(function(d) { return d.amount; }); // key, required for object consistency
 
     this._arc = d3.svg.arc()
       .innerRadius(this._innerRadius)
@@ -114,7 +115,8 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     return _.map(betCollection, function(bet){
       return {
           playerName: bet.playerName,
-          amount: bet.amount
+          amount: bet.amount,
+          playerId: bet.playerId
         };
     });
   },
@@ -166,16 +168,8 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
         };
       }).call(
         d3.helper.tooltip()
-          .style({
-            'text-align':'center',
-            'font-size': '12px',
-            'line-height': '20px',
-            'padding': '4px 12px 4px 16px',
-            'background': 'rgba(0, 0, 0, 0.8)',
-            'color': '#fff',
-            'border-radius': '2px',
-            'font-family': 'Helvetica Neue, Helvetica, Arial, sans-serif'
-          }).text(function(d, i) { return d.data.playerName + '<br> BTC ' + intToBtc(d.value); })
+          .attr({'class': 'wheel-tooltip'})
+          .text(function(d, i) { return d.data.playerName + '<br> BTC ' + intToBtc(d.value); })
       );
 
     // exit behaviour

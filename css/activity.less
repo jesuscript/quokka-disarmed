@@ -1,6 +1,11 @@
 @import "prefixer.lessimport";
 
 @media screen and (max-height: 660px) {
+  #news-dialog, #howto-dialog{
+    .modal-body{
+      max-height: 325px;
+    }
+  }
   #activity{
     .terminal {
       height: 140px;
@@ -17,6 +22,11 @@
 }
 
 @media screen and (min-height:660px) {
+  #news-dialog, #howto-dialog{
+    .modal-body{
+      max-height: 400px;
+    }
+  }
   #activity{
     .terminal {
       height: 240px;

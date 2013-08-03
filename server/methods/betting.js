@@ -1,5 +1,9 @@
 Meteor.methods({
   submitBet: function(amount, rangeMin, rangeMax){
+    check(amount, Number);
+    check(rangeMin, Number);
+    check(rangeMax, Number);
+    
     if(validBet(amount, rangeMin, rangeMax)){
       var currentGame = Collections.Games.findOne({completed: false});
       var gameId = currentGame && currentGame._id;

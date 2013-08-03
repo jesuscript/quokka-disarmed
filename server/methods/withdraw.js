@@ -20,6 +20,9 @@ Meteor.methods({
     return (6 - lastConfirmation) * 10;
   },
   requestWithdrawal: function(address, intAmount) {
+    check(address, String);
+    check(intAmount, Number);
+    
     validateWithdrawal(address, intAmount);
     if (getWalletBalance() + 100000 < intAmount) { // added 100,000 satoshis (10x min fee) to cover very high trx fee (which could happen if loads of dust present in the wallet)
       alertExcessWithdrawal(address, intAmount);
@@ -28,6 +31,7 @@ Meteor.methods({
     } else {
       var txId = sendToAddress(address, intAmount);
       if (txId.length === 64 && txId.search(/[a-fA-F0-9]{64}$/) === 0) {
+        check(intAmount, Number);
         Meteor.users.update({_id: Meteor.userId()}, {$inc:{"balance": -intAmount}});
         return {
           amt: intToBtc(intAmount), // only will ever be used for display purposes
@@ -47,7 +51,7 @@ function alertExcessWithdrawal(address, intAmount){
     from: 'noreply@bittheodds.com',
     subject: 'Withdrawal request - ' + humanTimestamp(),
     text: 'amount (int): ' + (intAmount - process.env.TRX_FEE) + '\n' +
-      'amount (flt): ' + intToBtc(intAmount - process.env.TRX_FEE) + '\n' +
+      'amount (flt): ' + intToBtc(intAmount - process.env.TRX_FEE) + '\n' + // display purposes
       'address: ' + address + '\n\n' +
       'username: ' + Meteor.user().username + '\n' +
       'created at: ' + Meteor.user().createdAt + '\n' +
@@ -105,7 +109,7 @@ function getWalletBalance() {
 function sendToAddress(address, intAmount) {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
-  btcdClient.sendToAddress(address, intToBtc(intAmount - process.env.TRX_FEE), function(err, trxId) { // new trx fee since 0.8.2 == 10000 satoshis
+  btcdClient.sendToAddress(address, floatIntToBtc(intAmount - process.env.TRX_FEE), function(err, trxId) { // new trx fee since 0.8.2 == 10000 satoshis
     if (err) console.error(err);
     fut.ret(trxId);
   });

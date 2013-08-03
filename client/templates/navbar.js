@@ -54,7 +54,7 @@ Template.navbar.helpers({
     
     return {
       username: user.username,
-      balance: intToBtc(user.balance),
+      balance: intToBtc(user.balance || 0), // to avoid issue where NaN is display on initial load
       balanceClass: balanceClass
     };
   }
