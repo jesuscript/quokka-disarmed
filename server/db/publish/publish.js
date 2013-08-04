@@ -40,11 +40,13 @@ Meteor.publish('games', function(){
 Meteor.publish('gameResults', function(){ //only publishes for the previous game
   // boy do I wish Mongo had joins
   var currentGame = DB.currentGame();
-  var previousGameId = Collections.Games.findOne({publicSeq: currentGame.publicSeq-1})._id;
-  return Collections.GameResults.find(
-    {gameId: previousGameId },
-    {sort: {won: -1}, limit: 9}
-  );
+  if (currentGame) { // don't like doing this but have seen it fail before
+    var previousGameId = Collections.Games.findOne({publicSeq: currentGame.publicSeq-1})._id;
+    return Collections.GameResults.find(
+      {gameId: previousGameId },
+      {sort: {won: -1}, limit: 9}
+    );
+  }
 });
 
 Meteor.publish('hotColdStats', function(){
