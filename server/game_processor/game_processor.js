@@ -4,6 +4,8 @@ Meteor.startup(function(){
   var gameTimeout = null;
 
   var processGame = function(){
+    gameTimeout = null;
+    
     var currentGame = DB.currentGame();
     var luckyNum = GetRandInt();
     var bets = DB.bets(currentGame);
@@ -54,7 +56,7 @@ Meteor.startup(function(){
   
   
   Observe.currentGame({
-    betUpdate: function(){
+    betUpdate: function(){  
       var currentGame = DB.currentGame();
 
       if(!currentGame) return;
@@ -68,10 +70,10 @@ Meteor.startup(function(){
         }
       }else{
         if(gameTimeout) { // sadly doesn't clear fast enough for the below not to process...
-          Meteor.clearTimeout(gameTimeout); 
+          Meteor.clearTimeout(gameTimeout);
+          gameTimeout = null;
           DB.activity("Not enough players in game, countdown stopped", "game");
           Collections.Games.update(currentGame, {$set:{startedAt: undefined}});
-          gameTimeout = null;
         }
       }
     }
