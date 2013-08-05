@@ -16,7 +16,7 @@ var initBetSlider = function(){
     });
     // for disabled behaviour - bet button still reads from the stake input
     _.delay(function(){ 
-      Session.set("betInput_stake", parseFloat($("input.stake").val())); 
+      Session.set("betInput_stake", $("input.stake").val()); 
     }, 500);
     Session.set("bet_input_slider_values", $betSlider.rangeSlider("values"));
     $betSlider.on("valuesChanged", function(e,data){
