@@ -130,13 +130,13 @@ Quokka = Class.extend({
       if(leftover > bank) throw new Error("Leftover " + leftover + " is greater than bank " + bank);
       
       _.each(this._bets, function(bet){
-        var cmpn = Math.floor(leftover * bet.amount / bank);
+        var cmpn = Math.floor(leftover * bet.amount * (1-this.commissionRate) / bank);
 
         //always round down. remaining satoshis go to Quokka Freedom Foundation
         if(cmpn > 0){
           compensations[bet.playerId] = (compensations[bet.playerId] || 0 ) + cmpn;
         }
-      });
+      },this);
     }
 
     return compensations;
