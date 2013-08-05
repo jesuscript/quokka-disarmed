@@ -1,7 +1,35 @@
+/*global _, AutoPlay, Meteor, Collections, intToBtc, BTO */
+
+var profiles = {
+  normal: {
+    profile: 'normal',
+    balanceMultiplier: 0.04,
+    balanceMultiplierExtent: 20,
+    timerRange: 6000,
+    rangeTightness: 50
+  },
+  berserk: {
+    profile: 'bezerk',
+    balanceMultiplier: 0.06,
+    balanceMultiplierExtent: 100,
+    timerRange: 2000,
+    rangeTightness: 10
+  },
+  house:{
+    profile: "house",
+    balanceMultiplier: 0.2,
+    balanceMultiplierExtent: 0,
+    timerRange:0,
+    rangeTightness: null
+  }
+};
+
+
 var createRange = function(rangeTightness){
-  var a = _.random(1,100);
-  var bEnd = (a + _.random(1, rangeTightness));
-  var b = (bEnd >= 100) ? 100: bEnd;
+  if(!rangeTightness) return {min: 1, max: 100};
+  
+  var a = _.random(1,100 - rangeTightness + 1);
+  var b = (a + _.random(0, rangeTightness));
 
   return {
     min: a,
@@ -11,91 +39,25 @@ var createRange = function(rangeTightness){
 
 
 AutoPlay = {
-  _profile: '',
-  _balanceMultiplier: '',
-  _timerRange: '',
-  _rangeTightness: '',
-
-
   help: function() {
-    console.log('arguments: AutoPlay.([shy|normal|bezerk])');
+    console.log('arguments: AutoPlay.([shy|normal|berserk])');
   },
-
-
-  _setBehaviour: function(profile) {
-    if (!profile || !profile.match("shy|normal|bezerk")) {
-      console.log('Invalid profile specified, going shy');
-      _profile = 'shy';
-    } else {
-      _profile = profile;
-      console.log('Profile set to ' + _profile);
-    }
-    switch (_profile) {
-    case 'shy':
-      this._profile = 'shy';
-      this._balanceMultiplier = 0.02;
-      this._balanceMultiplierExtent = 5;
-      this._timerRange = 12000;
-      this._rangeTightness = 100;
-      break;
-    case 'normal':
-      this._profile = 'normal';
-      this._balanceMultiplier = 0.04;
-      this._balanceMultiplierExtent = 20;
-      this._timerRange = 6000;
-      this._rangeTightness = 50;
-      break;
-    case 'bezerk':
-      this._profile = 'bezerk';
-      this._balanceMultiplier = 0.06;
-      this._balanceMultiplierExtent = 100;
-      this._timerRange = 2000;
-      this._rangeTightness = 10;
-      break;
-    }
-  },
-
-
   start: function(profile){
-    var user = Meteor.user();
-    if(!user){
+    if(!Meteor.user()){
       throw new Error("You need to sign in in order to auto-play");
     }
 
-    var self = this;
+    if(this.observer){
+      console.log("Another instance of auto-play already running. Aborting");
 
+      return;
+    }
+    
     this._setBehaviour(profile);
     
-    this.observer && this.stop();
+    this._printConfig();
 
-    console.log('Started auto-play on profile ' + this._profile +
-      '\n balance multiplier set to ' + this._balanceMultiplier + 
-      '\n balance multiplier extent set to ' + this._balanceMultiplierExtent + '%' + 
-      '\n timer range set to ' + this._timerRange + 
-      '\n range tightness set to ' + this._rangeTightness);
-
-    this.observer = Collections.Games.find({completed: false}).observeChanges({
-      _suppress_initial: true,
-      added: function(){
-        setTimeout(function(){
-          if(user.balance === 0) {
-            console.log("Balance is zero, stopping auto-play.");
-            self.stop();
-          }
-
-          var baseAmount = user.balance * self._balanceMultiplier;
-          var amount = baseAmount + (baseAmount * (_.random(1, self._balanceMultiplierExtent)/100));
-          var range = createRange(self._rangeTightness);
-
-          console.log("Auto-play: betting ฿" + intToBtc(amount) +
-                      " on ["+range.min + "," + range.max + "]");
-
-          Meteor.call("submitBet", amount, range.min, range.max);
-        }, _.random(BTO.TIMER_BACKTOGAME, BTO.TIMER_BACKTOGAME + self._timerRange));
-      }
-    });
-
-    return 'OK';
+    this._startObserving();
   },
 
 
@@ -104,5 +66,47 @@ AutoPlay = {
     this.observer = null;
 
     console.log("Auto-play stopped");
+  },
+
+  _setBehaviour: function(profile) {
+    if(!_.has(profiles,profile)){
+      console.log("Unknown profile: " + profile);
+      profile = "shy";
+    }
+    
+    console.log("Profile set to " + profile);
+
+    _.extend(this, profiles[profile]);
+  },
+  _printConfig: function(){
+    console.log('Started auto-play on profile ' + this.profile +
+                '\n balance multiplier set to ' + this.balanceMultiplier + 
+                '\n balance multiplier extent set to ' + this.balanceMultiplierExtent + '%' + 
+                '\n timer range set to ' + this.timerRange + 
+                '\n range tightness set to ' + this.rangeTightness);
+  },
+  _startObserving: function(){
+    console.log(this);
+    this.observer = Collections.Games.find({completed: false}).observeChanges({
+      added: function(){
+        var user = Meteor.user();
+        
+        if(user.balance === 0) {
+          console.log("Balance is zero, stopping auto-play.");
+          this.stop();
+        }
+
+        var baseAmount = user.balance * this.balanceMultiplier;
+        var amount = baseAmount * (1 + _.random(0, this.balanceMultiplierExtent)/100);
+        var range = createRange(this.rangeTightness);
+
+        window.setTimeout(function(){
+          console.log("Auto-play: betting ฿" + intToBtc(amount) +
+                      " on ["+range.min + "," + range.max + "]");
+
+          Meteor.call("submitBet", amount, range.min, range.max);
+        }.bind(this), _.random(BTO.TIMER_BACKTOGAME, BTO.TIMER_BACKTOGAME + this.timerRange));
+      }.bind(this)
+    });
   }
 };

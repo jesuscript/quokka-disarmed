@@ -101,7 +101,7 @@ var throttledCall = function(action, tmpl) {
     if($(tmpl.find(".update-btn")).is(".disabled")) return;
     
     // these two lines for safety
-    var amount = $("input.stake").val() || 0;
+    var amount = parseFloat($("input.stake").val(),10) || 0;
     var range = $betSlider.rangeSlider("values");
     if (amount <= 0) {
       $(".stake").parents('.control-group').addClass('error'); // thanks to meteor spark, field control group resets to the correct class after an element update!
@@ -137,7 +137,7 @@ Template.betInput.events({
   },
   
   "keyup .stake": function(){
-    Session.set("betInput_stake", $("input.stake").val());
+    Session.set("betInput_stake", parseFloat($("input.stake").val(),10));
   },
   
   "click .stake-buttons .btn": function(e){
@@ -156,7 +156,7 @@ Template.betInput.events({
 
     newStake = Math.round(newStake * 100000000) / 100000000;
 
-    $("input.stake").val(newStake);
+    $("input.stake").val(newStake.toFixed(8));
     Session.set("betInput_stake", newStake);
   }
 });
