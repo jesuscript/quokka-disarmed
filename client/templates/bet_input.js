@@ -152,7 +152,7 @@ Template.betInput.events({
     if($btn.is(".btn-01")) newStake = 0.1 + oldStake;
     if($btn.is(".btn-001")) newStake = 0.01 + oldStake;
     if($btn.is(".btn-0001")) newStake = 0.001 + oldStake;
-    if($btn.is(".btn-max") && user) newStake = intToBtc(user.balance,true);
+    if($btn.is(".btn-max") && user) newStake = intToBtc(user.balance);
     if($btn.is(".btn-x2")) newStake = oldStake * 2;
 
     newStake = Math.round(newStake * 100000000) / 100000000;
