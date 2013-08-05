@@ -1,10 +1,15 @@
 Meteor.methods({
-  submitBet: function(amount, rangeMin, rangeMax){
-    check(amount, Number);
-    check(rangeMin, Number);
-    check(rangeMax, Number);
+  submitBet: function(argAmount, argRangeMin, argRangeMax){
+    check(argAmount, Number);
+    check(argRangeMin, Number);
+    check(argRangeMax, Number);
     
-    if(validBet(amount, rangeMin, rangeMax)){
+    if(validBet(argAmount, argRangeMin, argRangeMax)){
+      // nothing but integers should on in Mongo. 10.0 is not valid, and will be parsed as a float
+      var amount = parseInt(argAmount, 10); 
+      var rangeMin = parseInt(argRangeMin, 10);
+      var rangeMax = parseInt(argRangeMax, 10);
+
       var currentGame = Collections.Games.findOne({completed: false});
       var gameId = currentGame && currentGame._id;
       var existingBet;
@@ -89,12 +94,17 @@ function validBet(amount, rangeMin, rangeMax){
     isValidBet = false;
   }
 
+  if (!isValidInt(amount)) {
+    reason = 'Amount is of invalid type';
+    isValidBet = false;
+  }
+
   if (amount <= 0) {
     reason = 'Amount <= 0';
     isValidBet = false;
   }
 
-  if ((typeof rangeMin !== "number") || (typeof rangeMax !== "number")) {
+  if (!isValidInt(rangeMin) || !isValidInt(rangeMax)) {
     reason = 'RangeMin or rangeMax of invalid type';
     isValidBet = false;
   }

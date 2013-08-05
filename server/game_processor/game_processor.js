@@ -44,7 +44,7 @@ Meteor.startup(function(){
     
     GameStats.recordStats(payouts, bets, luckyNum);// needs to be here so that DB.activity() calls follow a logical progression
     
-    var newSeq = (typeof currentGame.publicSeq === "number") ? ++currentGame.publicSeq : 1;
+    var newSeq = (isValidInt(currentGame.publicSeq)) ? ++currentGame.publicSeq : 1; // this might fail on first game on a freshly reset server
     Collections.Games.insert({
       completed: false,
       publicSeq: newSeq,
