@@ -8,6 +8,15 @@
   #header { display: block; }
 }
 
+// icons need to have their path set as we have placed bootstrap in a subfolder
+[class^="icon-"],
+[class*=" icon-"] {
+  background-image: url("/img/glyphicons-halflings.png");
+}
+.icon-white {
+  background-image: url("/img/glyphicons-halflings-white.png");
+}
+
 a:hover {
   cursor: pointer;
   text-decoration: none;
