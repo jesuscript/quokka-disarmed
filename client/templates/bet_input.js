@@ -15,8 +15,9 @@ var initBetSlider = function(){
       step: 1
     });
     // for disabled behaviour - bet button still reads from the stake input
-    _.delay(function(){ Session.set("betInput_stake",
-                                    parseFloat($("input.stake").val()),10); }, 500);
+    _.delay(function(){ 
+      Session.set("betInput_stake", $("input.stake").val()); 
+    }, 500);
     Session.set("bet_input_slider_values", $betSlider.rangeSlider("values"));
     $betSlider.on("valuesChanged", function(e,data){
       Session.set("bet_input_slider_values", data.values); 
@@ -151,7 +152,7 @@ Template.betInput.events({
     if($btn.is(".btn-01")) newStake = 0.1 + oldStake;
     if($btn.is(".btn-001")) newStake = 0.01 + oldStake;
     if($btn.is(".btn-0001")) newStake = 0.001 + oldStake;
-    if($btn.is(".btn-max") && user) newStake = intToBtc(user.balance,true);
+    if($btn.is(".btn-max") && user) newStake = intToBtc(user.balance);
     if($btn.is(".btn-x2")) newStake = oldStake * 2;
 
     newStake = Math.round(newStake * 100000000) / 100000000;

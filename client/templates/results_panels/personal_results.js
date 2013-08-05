@@ -64,7 +64,7 @@ Template.personalResults.helpers({
     if (!personalResult) return { publicSeq: lastGame.publicSeq };
 
     hasWon = (personalResult.won <= 0) ? hasWon = false : hasWon = true;
-    outcome = (personalResult.won === 0) ? 0 : intToBtc(Math.abs(personalResult.won)); // fucking handlebars doesn't understand floating points correctly, so this is necessary
+    outcome = (personalResult.won === 0) ? 0 : intToBtc(Math.abs(personalResult.won)); // this should really be in a helper
 
     return {
       hasPlayed: true,
