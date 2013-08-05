@@ -267,7 +267,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     return _.map(betCollection, function(bet){
       return _.map(d3.range(1, 101),function(i){
         var inRange = (i >= bet.rangeMin) && (i <= bet.rangeMax);
-        var amountPerNumber = floatIntToBtc(bet.amount / (bet.rangeMax - bet.rangeMin + 1));
+        var amountPerNumber = intToBtcFloat(bet.amount / (bet.rangeMax - bet.rangeMin + 1));
         return {
           x: i,
           y: inRange ? amountPerNumber : 0

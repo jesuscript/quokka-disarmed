@@ -109,7 +109,7 @@ function getWalletBalance() {
 function sendToAddress(address, intAmount) {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
-  btcdClient.sendToAddress(address, floatIntToBtc(intAmount - process.env.TRX_FEE), function(err, trxId) { // new trx fee since 0.8.2 == 10000 satoshis
+  btcdClient.sendToAddress(address, intToBtcFloat(intAmount - process.env.TRX_FEE), function(err, trxId) { // new trx fee since 0.8.2 == 10000 satoshis
     if (err) console.error(err);
     fut.ret(trxId);
   });

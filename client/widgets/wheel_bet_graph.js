@@ -128,14 +128,14 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
     }, 0, this);
     
     this._totalValue
-      .text(this._previousBankBalance)
+      .text(intToBtc(this._previousBankBalance))
       .transition()
         .duration(this._transitionDuration)
         .ease('linear') // needed for custom tween on text
         .tween("text", function() {
-          var i = d3.interpolate(this.textContent, cumulative);
+          var i = d3.interpolate(this.textContent, intToBtc(cumulative));
           return function(t) {
-            this.textContent = '฿ ' + intToBtc(i(t));
+            this.textContent = '฿ ' + preciseRound(i(t), 8).toFixed(8); // interpolating strings is fine, but can't .toFixed on anything > 1e21, which interpolates does return at times
           };
         });
 
