@@ -1,6 +1,6 @@
 Template.allTimeWinners.helpers({
   winners: function(){
-    var allTimeWinners = Collections.AllTimeWinners.find({}).fetch();
+    var allTimeWinners = Collections.AllTimeWinners.find({}, {sort: {won: -1}}).fetch();
     if (!allTimeWinners) return [];
     
     return _.map(allTimeWinners, function(winner){
