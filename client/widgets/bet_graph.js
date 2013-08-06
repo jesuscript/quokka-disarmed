@@ -3,10 +3,6 @@ $.widget("bto.betGraph",{ // base class for bet graphs. "abstract"
     this._d3data = []; // bets!=d3data
   },
 
-  _setColorRange: function(){
-    this._colorRange = d3.scale.category20();
-  },
-
   // generates human friendly color that harmonize well. Will stick to each user as they are based on playerId hash
   _getPlayerColor: function(playerId){
     var hashInt  = playerId.split("").reduce(function(a,b){ // grab the 18 char mongoId and simulate java hashcode to get an int as close to unique as possible
@@ -18,7 +14,7 @@ $.widget("bto.betGraph",{ // base class for bet graphs. "abstract"
 
     var h = Math.round(Math.abs(hashInt/2147483634 * 360)); 
 
-    var rgbColor = hsvToRgb(h, 60, 90); // HSV is the only human-friendly color space when randomizing hue
+    var rgbColor = this._hsvToRgb(h, 60, 90); // HSV is the only human-friendly color space when randomizing hue
 
     return d3.rgb(rgbColor[0], rgbColor[1], rgbColor[2]); // D3 does not support HSV natively
 

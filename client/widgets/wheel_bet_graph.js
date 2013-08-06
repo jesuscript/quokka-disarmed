@@ -37,11 +37,9 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
 
   _draw: function(){
-    this._setColorRange();
-
     this._pie = d3.layout.pie()
       .sort(null)
-      .value(function(d) { return d.amount; }); // key, required for object consistency
+      .value(function(d) { return d.amount; });
 
     this._arc = d3.svg.arc()
       .innerRadius(this._innerRadius)
@@ -55,22 +53,22 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
         //transition().delay(500).attr("transform", "scale(100)"); // not doing that because looks ugly
 
     this._centerGroup = this._svg.append("g")
-      .attr("class", "center-group");
+      .attr("id", "center-group");
 
     this._totalLabel = this._centerGroup.append("text")
-      .attr("class", "wheel-bank-label")
+      .attr("id", "wheel-bank-label")
       .attr("dy", -32)
       .attr("text-anchor", "middle")
       .text("BANK");
 
     this._totalValue = this._centerGroup.append("text")
-      .attr("class", "wheel-bank-total")
+      .attr("id", "wheel-bank-total")
       .attr("dy", 0)
       .attr("text-anchor", "middle")
       .text("฿ 0.00000000");
 
     this._timer = this._centerGroup.append("text")
-      .attr("class", "wheel-bank-timer")
+      .attr("id", "wheel-bank-timer")
       .attr("dy", 50)
       .attr("text-anchor", "middle")
       .text("Place your bets please");
@@ -89,7 +87,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
         this._updateTotalValue();
         this._wheelDefineD3Sequence();
-      } else { 
+      //} else { 
        // console.warn('duplicate autorun output ignored in stacked bet graph');
        // console.dir(betCollection);
       }
@@ -144,6 +142,8 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
 
   _wheelDefineD3Sequence: function(){
+    var self = this;
+
     enterAntiClockwise = {
       startAngle: Math.PI * 2,
       endAngle: Math.PI * 2
@@ -153,11 +153,11 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
 
     // feed data
     this._pathData = this._path
-      .data(this._pie(this._d3data), function (d) { return d.data.playerName; });
+      .data(this._pie(this._d3data), function (d) { return d.data.playerId; }); //key for object consistency
 
     // enter behaviour
     this._pathData.enter().append("path")
-      .attr("fill", function (d, i) { return this._colorRange(i); }.bind(this))
+      .attr("fill", function (d) { return self._getPlayerColor(d.data.playerId); })
       .attr("d", this._arc(enterAntiClockwise))
       .each(function (d) {
         this._current = {
@@ -169,7 +169,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
       }).call(
         d3.helper.tooltip()
           .attr({'class': 'wheel-tooltip'})
-          .text(function(d, i) { return d.data.playerName + '<br> BTC ' + intToBtc(d.value); })
+          .text(function(d) { return d.data.playerName + '<br>฿ ' + intToBtc(d.value); })
       );
 
     // exit behaviour
