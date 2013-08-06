@@ -1,6 +1,5 @@
 _.extend(TemplateHelpers, {
   removeDialog: function(opts, callback){
-    //var tmpl = opts.tmpl;
     var node = opts.tmpl.firstNode;
   
     var fadeOut = (typeof opts.fadeOut === 'undefined') ? true : opts.fadeOut;
