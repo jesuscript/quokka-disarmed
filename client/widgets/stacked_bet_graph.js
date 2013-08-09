@@ -1,6 +1,8 @@
 $.widget('bto.stackedBetGraph',$.bto.betGraph,{
   
   _create: function(){
+    var self = this;
+
     this._super();
 
     // properties (instance) definitions, jquery widget requires for them to be located here
@@ -11,9 +13,10 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     this._transitionDuration = 800; // time for bars to go up / down, other values recalcuted based on this
     this._previousBetCollection = []; // temporary fix for duplicate autorun trigger bug
 
-    this.throttledRedraw = _.throttle(this._liveRedraw.bind(this), this._transitionDuration + 100);
+    this.throttledRedraw = _.throttle(self._liveRedraw, this._transitionDuration + 100);
 
-    $(window).resize(_.debounce(this._draw.bind(this), 100)); // debouncing at 100 seems to be enough to avoid re-rendering while mouse is still moving
+    // we can't use a view box because the rescale wouldn't be smart enough to recalculate and redistribute the x tickmarks
+    $(window).resize(_.debounce(self._draw, 100)); // debouncing at 100 seems to be enough to avoid re-rendering while mouse is still moving
 
     this._svg = d3.select(this.element[0]).append('svg').attr("width", "100%").attr("height", "100%"); // width+height required by firefox
 
@@ -22,8 +25,6 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
 
   _draw: function() {
-    this._setColorRange();
-
     this._chartWidth = this.element.width() - this._margin.left - this._margin.right - this._yAxisLabelShift; // due to lag in rendering this needs to be placed here to be accurate, and not on _create
 
     this._udpdateStack();
@@ -45,20 +46,25 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
 
   _staticRedraw: function() { // behaviour for resize-driven draw. Doens't contain transitions.
-    this._seriesDefineD3Sequence();
+    var self = this;
+    self._seriesDefineD3Sequence();
 
     // feed data
-    this._rects = this._series.selectAll("rect")
-    .data(function(d) { return d; });
+    self._rects = self._series.selectAll("rect")
+    .data(function(d) { return d.values; });
 
     // enter behaviour
-    this._rects.enter()
+    self._rects.enter()
       .append("rect")
       .attr("class", "bar")
-      .attr("x", function(d) { return this._x(d.x); }.bind(this))
-      .attr("y", function(d) { return Math.ceil(this._y(d.y0 + d.y)); }.bind(this)) // Anti Aliasing on y
-      .attr("width", Math.floor(this._x.rangeBand())) // AA on width
-      .attr("height", function(d) { return Math.floor(this._y(d.y0) - this._y(d.y0 + d.y)); }.bind(this)); // Anti Aliasing on height
+      .attr("x", function(d) { return self._x(d.x); })
+      .attr("y", function(d) { return self._y(d.y0 + d.y); })
+      .attr("width", self._x.rangeBand())
+      .attr("height", function(d) {
+        var theHeight = self._y(d.y0) - self._y(d.y0 + d.y);
+        var h = (d.y0 === 0) ? theHeight : theHeight -1; // -1 for pretty bar bottoms... mmmmm.....
+        return (h>=0) ? h : 0; 
+      }); 
   },
 
 
@@ -145,10 +151,10 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     this._layers = [];
 
     if (this._d3data.length) {  
-      this._layers = d3.layout.stack()(this._d3data); // calculate x, y0 and y for each series
+      this._layers = d3.layout.stack().values(function(d) { return d.values; })(this._d3data); // calculate x, y0 and y for each series
       
       this._yStackMax = d3.max(this._layers, function(layer) {
-        return d3.max(layer, function(d) { return d.y0 + d.y; }); // highest y0 + y == top most point on chart
+        return d3.max(layer.values, function(d) { return d.y0 + d.y; }); // highest y0 + y == top most point on chart
       });
     }
   },
@@ -162,7 +168,7 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
       if (!duplicateCallDetected) {
         this._d3data = this._convertBetsToStackData(betCollection);
         this.throttledRedraw();
-      } else { 
+      //} else { 
         // console.warn('duplicate autorun output ignored in stacked bet graph');
         // console.dir(betCollection)
       }
@@ -190,9 +196,11 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
 
   _seriesDefineD3Sequence:function(){ 
+    var self = this;
+
     // feed data
     this._series = this._chartArea.selectAll(".series") // selections HAVE to be rerun, can't just refer to variable to update
-      .data(this._layers);
+      .data(this._layers, function (d) { return d.playerId; }); //key for object consistency
 
     // update
     // (nothing to do)
@@ -202,7 +210,12 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
       .append("g")
         .attr("class", "series")
         .attr("transform", "translate(" + this._yAxisLabelShift + ",0)")
-        .style("fill", function(d, i) { return this._colorRange(i); }.bind(this));
+        .style("fill", function(d) { return self._getPlayerColor(d.playerId); })
+        .call(
+        d3.helper.tooltip()
+          .attr({'class': 'wheel-tooltip'})
+          .text(function(d) { return d.playerName + '<br>฿ ' + intToBtc(d.totalAmount); })
+        );
 
     // enter + update
     // (nothing to do)
@@ -217,43 +230,47 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
 
   _rectDefineD3Sequence:function(){ 
+    var self = this;
+
     // feed data
-    this._rects = this._series.selectAll("rect") // selections HAVE to be rerun, can't just refer to variable to update
-      .data(function(d) { return d; });
+    self._rects = self._series.selectAll("rect") // selections HAVE to be rerun, can't just refer to variable to update
+      .data(function(d) { return d.values; });  //key for object consistency
 
     // update behaviour
-    this._rects
-      .attr("x", function(d) { return this._x(d.x); }.bind(this))
+    self._rects
+      .attr("x", function(d) { return self._x(d.x); })
       .transition()
-        .duration(this._transitionDuration)
+        .duration(self._transitionDuration)
         .attr("y", function(d) { 
-          var y = this._y(d.y0 + d.y);
+          var y = self._y(d.y0 + d.y);
           return (y>=0) ? y : 0; 
-        }.bind(this)) 
+        }) 
         .attr("height", function(d) {
-          var h = this._y(d.y0) - this._y(d.y0 + d.y) -1; // -1 for pretty bar bottoms
+          var theHeight = self._y(d.y0) - self._y(d.y0 + d.y);
+          var h = (d.y0 === 0) ? theHeight : theHeight -1; // -1 for pretty bar bottoms... mmmmm.....
           return (h>=0) ? h : 0;
-        }.bind(this)); 
+        }); 
 
     // enter behaviour
-    this._rects.enter()
+    self._rects.enter()
       .append("rect")
       .attr("class", "bar") // required so that subsequent selections have something to grab on to
-      .attr("x", function(d) { return this._x(d.x);}.bind(this))
-      .attr("y", function(d) { return this._y(d.y0); }.bind(this)) 
-      .attr("width", this._x.rangeBand()) 
+      .attr("x", function(d) { return self._x(d.x);})
+      .attr("y", function(d) { return self._y(d.y0); }) 
+      .attr("width", self._x.rangeBand()) 
       .attr("height", 0)
       .transition()
-        .delay(this._transitionDuration/2)
-        .duration(this._transitionDuration)
+        .delay(self._transitionDuration/2)
+        .duration(self._transitionDuration)
         .attr("y", function(d) { 
-          var y = this._y(d.y0 + d.y);
+          var y = self._y(d.y0 + d.y);
           return (y>=0) ? y : 0; 
-        }.bind(this))
+        })
         .attr("height", function(d) {
-          var h = this._y(d.y0) - this._y(d.y0 + d.y) -1; // -1 for pretty bar bottoms... mmmmm.....
+          var theHeight = self._y(d.y0) - self._y(d.y0 + d.y);
+          var h = (d.y0 === 0) ? theHeight : theHeight -1; // -1 for pretty bar bottoms... mmmmm.....
           return (h>=0) ? h : 0; 
-        }.bind(this)); 
+        }); 
 
     // enter + update
     // (nothing to do)
@@ -265,14 +282,20 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
 
   _convertBetsToStackData:function(betCollection){
     return _.map(betCollection, function(bet){
-      return _.map(d3.range(1, 101),function(i){
+      var valueArray = _.map(d3.range(1, 101),function(i){
         var inRange = (i >= bet.rangeMin) && (i <= bet.rangeMax);
-        var amountPerNumber = intToBtc(bet.amount / (bet.rangeMax - bet.rangeMin + 1, {datatype: 'float'}));
+        var amountPerNumber = intToBtc(bet.amount / (bet.rangeMax - bet.rangeMin + 1), {datatype: 'float'});
         return {
           x: i,
           y: inRange ? amountPerNumber : 0
         };
       });
+      return {
+        playerName: bet.playerName,
+        playerId: bet.playerId,
+        totalAmount: bet.amount,
+        values: valueArray
+      };
     });
   },
 

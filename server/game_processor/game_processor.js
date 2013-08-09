@@ -56,7 +56,7 @@ Meteor.startup(function(){
   
   
   Observe.currentGame({
-    betUpdate: function(){  
+    betUpdate: function(){
       var currentGame = DB.currentGame();
 
       if(!currentGame) return;

@@ -8,6 +8,15 @@
   #header { display: block; }
 }
 
+// icons need to have their path set as we have placed bootstrap in a subfolder
+[class^="icon-"],
+[class*=" icon-"] {
+  background-image: url("/img/glyphicons-halflings.png");
+}
+.icon-white {
+  background-image: url("/img/glyphicons-halflings-white.png");
+}
+
 a:hover {
   cursor: pointer;
   text-decoration: none;
@@ -72,3 +81,14 @@ body a{
   .user-select(none);
 }
 
+// unfortunately, tooltip helper for d3 attaches to the body div and not the parent div
+.wheel-tooltip {
+  text-align: center;
+  font-size: 12px;
+  line-height: 20px;
+  padding: 4px 12px 4px 16px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+}
