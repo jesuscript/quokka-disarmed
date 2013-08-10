@@ -14,9 +14,9 @@ var initBetSlider = function(){
       bounds:{min:1, max: 100},
       step: 1
     });
-    // for disabled behaviour - bet button still reads from the stake input
+    // for disabled behaviour - bet button still reads from the stake input directly
     _.delay(function(){ 
-      Session.set("betInput_stake", $("input.stake").val()); 
+      Session.set("betInput_stake", btcToInt($("input.stake").val())); 
     }, 500);
     Session.set("bet_input_slider_values", $betSlider.rangeSlider("values"));
     $betSlider.on("valuesChanged", function(e,data){
@@ -63,15 +63,16 @@ Template.betInput.helpers({
     if(bet){
       bet = intToBtc(bet.amount);
     }else{
-      bet = Session.get("betInput_stake");
+      bet = intToBtc(Session.get("betInput_stake"));
     }
+    if (isNaN(bet)) bet = 0; // can happen due to the use of reactivity on the page to read from the stake
     return bet || 0;
   },
 
   sufficientFunds: function(){
     var bal = Meteor.user().balance;
     var stake = Session.get("betInput_stake") || 0;
-    return Meteor.user() &&  bal > 0 && bal >= btcToInt(stake,true);
+    return Meteor.user() &&  bal > 0 && bal >= stake;
   },
 
   identicalBet: function(){
@@ -80,11 +81,11 @@ Template.betInput.helpers({
     var range = Session.get("bet_input_slider_values");
     if (!range) return false;
 
-    var amount  = btcToInt(Session.get("betInput_stake"));
+    var stake  = Session.get("betInput_stake");
 
     var currentBet = Collections.Bets.findOne({playerId: Meteor.userId()});
 
-    if(amount === currentBet.amount && range.min === currentBet.rangeMin && range.max === currentBet.rangeMax){
+    if(stake === currentBet.amount && range.min === currentBet.rangeMin && range.max === currentBet.rangeMax){
       return true;
     }
 
@@ -102,14 +103,14 @@ var throttledCall = function(action, tmpl) {
     if($(tmpl.find(".update-btn")).is(".disabled")) return;
     
     // these two lines for safety
-    var amount = parseFloat($("input.stake").val(),10) || 0;
+    var amount = btcToInt($("input.stake").val()) || 0;
     var range = $betSlider.rangeSlider("values");
     if (amount <= 0) {
       $(".stake").parents('.control-group').addClass('error'); // thanks to meteor spark, field control group resets to the correct class after an element update!
       $(".stake").focus().select();
     } 
     if ((amount > 0) && (range.min <= range.max)) {   
-      Meteor.call("submitBet", btcToInt(amount), range.min, range.max);
+      Meteor.call("submitBet", amount, range.min, range.max);
     }
   }
 };
@@ -138,27 +139,25 @@ Template.betInput.events({
   },
   
   "keyup .stake": function(){
-    Session.set("betInput_stake", parseFloat($("input.stake").val(),10));
+    Session.set("betInput_stake", btcToInt($("input.stake").val()));
   },
   
   "click .stake-buttons .btn": function(e){
     e.preventDefault();
     
     var $btn = $(e.currentTarget);
-    var oldStake = parseFloat($("input.stake").val(),10);
+    var oldStake = btcToInt($("input.stake").val());
     var newStake = 0;
     var user = Meteor.user();
-    
-    if($btn.is(".btn-01")) newStake = 0.1 + oldStake;
-    if($btn.is(".btn-001")) newStake = 0.01 + oldStake;
-    if($btn.is(".btn-0001")) newStake = 0.001 + oldStake;
-    if($btn.is(".btn-max") && user) newStake = intToBtc(user.balance);
+    if($btn.is(".btn-01")) newStake = 10000000 + oldStake;
+    if($btn.is(".btn-001")) newStake = 1000000 + oldStake;
+    if($btn.is(".btn-0001")) newStake = 100000 + oldStake;
+    if($btn.is(".btn-max") && user) newStake = user.balance;
     if($btn.is(".btn-x2")) newStake = oldStake * 2;
 
-    newStake = Math.round(newStake * 100000000) / 100000000;
-
-    $("input.stake").val(newStake.toFixed(8));
     Session.set("betInput_stake", newStake);
+
+    $("input.stake").val(intToBtc(newStake));
   }
 });
 
