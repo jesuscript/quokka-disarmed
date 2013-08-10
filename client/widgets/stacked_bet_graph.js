@@ -1,8 +1,6 @@
 $.widget('bto.stackedBetGraph',$.bto.betGraph,{
   
   _create: function(){
-    var self = this;
-
     this._super();
 
     // properties (instance) definitions, jquery widget requires for them to be located here
@@ -13,10 +11,10 @@ $.widget('bto.stackedBetGraph',$.bto.betGraph,{
     this._transitionDuration = 800; // time for bars to go up / down, other values recalcuted based on this
     this._previousBetCollection = []; // temporary fix for duplicate autorun trigger bug
 
-    this.throttledRedraw = _.throttle(self._liveRedraw, this._transitionDuration + 100);
+    this.throttledRedraw = _.throttle(this._liveRedraw, this._transitionDuration + 100).bind(this);
 
     // we can't use a view box because the rescale wouldn't be smart enough to recalculate and redistribute the x tickmarks
-    $(window).resize(_.debounce(self._draw, 100)); // debouncing at 100 seems to be enough to avoid re-rendering while mouse is still moving
+    $(window).resize(_.debounce(this._draw, 100).bind(this)); // debouncing at 100 seems to be enough to avoid re-rendering while mouse is still moving
 
     this._svg = d3.select(this.element[0]).append('svg').attr("width", "100%").attr("height", "100%"); // width+height required by firefox
 
