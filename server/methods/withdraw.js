@@ -59,16 +59,12 @@ function alertExcessWithdrawal(address, intAmount){
   });
 }
 
-function isInt(n) {
-  return typeof n === 'number' && parseFloat(n) === parseInt(n, 10) && !isNaN(n);
-}
-
 function validateWithdrawal(address, intAmount){
   if (!validateAddress(address)) throw new Meteor.Error(406, "Address is invalid");
   if (intAmount > Meteor.user().balance) {
     throw new Meteor.Error(406, "You cannot withdraw more than your balance");
   }
-  if (!isInt(intAmount)) {
+  if (!isValidInt(intAmount)) {
     throw new Meteor.Error(406, "Amount is invalid");
   }
   if (intAmount < 100000) {
