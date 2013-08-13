@@ -19,6 +19,7 @@ Template.activity.helpers({
   },
   
   activity: function(){
+    // meteor doesn't seem to obey natural sort order of capped collections, so a timestamp sort is still required
     return _.map(Collections.Activity.find({}, {sort: {timestamp: -1}}).fetch(), function(item){
       return _.extend(item, {time: moment(item.timestamp).format("HH:mm:ss")});
     });

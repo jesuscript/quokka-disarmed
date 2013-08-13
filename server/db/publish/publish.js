@@ -1,3 +1,4 @@
+// meteor doesn't seem to obey natural sort order of capped collections, so a timestamp sort is still required
 Meteor.publish("activity", function(){
   return Collections.Activity.find({},{sort: {timestamp: -1}, limit: 100});
 });
