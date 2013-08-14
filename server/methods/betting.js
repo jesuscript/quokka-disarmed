@@ -1,8 +1,8 @@
 Meteor.methods({
   submitBet: function(argAmount, argRangeMin, argRangeMax){
-    check(argAmount, Number);
-    check(argRangeMin, Number);
-    check(argRangeMax, Number);
+    check(argAmount, Match.Integer);
+    check(argRangeMin, Match.Integer);
+    check(argRangeMax, Match.Integer);
     
     if(validBet(argAmount, argRangeMin, argRangeMax)){
       // nothing but integers should on in Mongo. 10.0 is not valid, and will be parsed as a float and casted to a long (bizarrely)

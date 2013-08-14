@@ -21,7 +21,7 @@ Meteor.methods({
   },
   requestWithdrawal: function(address, intAmount) {
     check(address, String);
-    check(intAmount, Number);
+    check(intAmount, Match.Integer);
     
     validateWithdrawal(address, intAmount);
     if (getWalletBalance() + 100000 < intAmount) { // added 100,000 satoshis (10x min fee) to cover very high trx fee (which could happen if loads of dust present in the wallet)
@@ -31,7 +31,7 @@ Meteor.methods({
     } else {
       var txId = sendToAddress(address, intAmount);
       if (txId.length === 64 && txId.search(/[a-fA-F0-9]{64}$/) === 0) {
-        check(intAmount, Number);
+        check(intAmount, Match.Integer);
         Meteor.users.update({_id: Meteor.userId()}, {$inc:{"balance": -intAmount}});
         return {
           amt: intToBtc(intAmount), // only will ever be used for display purposes
