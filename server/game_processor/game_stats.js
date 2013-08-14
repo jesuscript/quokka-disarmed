@@ -12,14 +12,14 @@ GameStats = {
 
   getWins: function(payouts,bets){
     var wins = {};
-    var winnerCount = 0;
 
     _.each(bets, function(bet){
       if(bet.amount < payouts[bet.playerId]){
-        winnerCount ++;
         wins[bet.playerId] = payouts[bet.playerId] - bet.amount;
       }
     });
+    
+    var winnerCount = _.size(wins);
 
     if (winnerCount>0) {
       if (winnerCount > 1) {
@@ -46,8 +46,10 @@ GameStats = {
       });
     }
 
-    winSum = _.reduce(wins, function(memo, w){ return memo + w; }, 0);
-    winMax = _.max(wins, function(w){ return w; });
+    if (!_.isEmpty(wins)) { // because _max returns -Infinity on an empty object
+      winSum = _.reduce(wins, function(memo, w){ return memo + w; }, 0);
+      winMax = _.max(wins, function(w){ return w; });
+    }
     coinsDist = _.reduce(payouts, function(memo, w){ return memo + w; }, 0);
 
     Collections.AllTimeStats.update(allTimeStats, {
@@ -63,14 +65,16 @@ GameStats = {
 
 
   recordAllTimeWinners: function(wins) {
-    _.each(wins, function(amount, playerId) { // meteor doesn't support upserts yet
-      if (Collections.AllTimeWinners.find({playerId: playerId}).count() !== 0) {
-        Collections.AllTimeWinners.update({playerId: playerId}, {$inc: {totalWon: amount}});
-      } else {
-        var player = Meteor.users.findOne({_id: playerId}, {fields: {username: 1}});
-        Collections.AllTimeWinners.insert({playerId: playerId, playerName: player.username, totalWon: amount});
-      }
-    });
+    if (!_.isEmpty(wins)) { // because _max returns -Infinity on an empty object
+      _.each(wins, function(amount, playerId) { // meteor doesn't support upserts yet
+        if (Collections.AllTimeWinners.find({playerId: playerId}).count() !== 0) {
+          Collections.AllTimeWinners.update({playerId: playerId}, {$inc: {totalWon: amount}});
+        } else {
+          var player = Meteor.users.findOne({_id: playerId}, {fields: {username: 1}});
+          Collections.AllTimeWinners.insert({playerId: playerId, playerName: player.username, totalWon: amount});
+        }
+      });
+    }
   },
 
 
