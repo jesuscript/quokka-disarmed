@@ -38,7 +38,7 @@ function getNewBitcoinAddress() {
   var fut = new Future();
   btcdClient.getNewAddress(function(err, data) {
     if (err) console.error(err);
-    fut.ret(data);
+    fut.return(data);
   });
   var address = fut.wait();
   if (address === undefined) {

@@ -87,7 +87,7 @@ function validateAddress(address) {
   var fut = new Future();
   btcdClient.validateAddress(address, function(err, data) {
     if (err) console.error(err);
-    fut.ret(data.isvalid);
+    fut.return(data.isvalid);
   });
   return fut.wait();
 }
@@ -97,7 +97,7 @@ function getWalletBalance() {
   var fut = new Future();
   btcdClient.getBalance('', 6, function(err, data) {
     if (err) console.error(err);
-    fut.ret(btcToInt(data));
+    fut.return(btcToInt(data));
   });
   return fut.wait();
 }
@@ -107,7 +107,7 @@ function sendToAddress(address, intAmount) {
   var fut = new Future();
   btcdClient.sendToAddress(address, intToBtc(intAmount - process.env.TRX_FEE, {datatype: 'float'}), function(err, trxId) { // new trx fee since 0.8.2 == 10000 satoshis
     if (err) console.error(err);
-    fut.ret(trxId);
+    fut.return(trxId);
   });
   return fut.wait();
 }
