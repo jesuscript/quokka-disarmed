@@ -37,7 +37,7 @@ var profiles = {
 
 AutoPlay = {
   help: function() {
-    console.log('arguments: AutoPlay.([shy|normal|berserk])');
+    Log.info('arguments: AutoPlay.([shy|normal|berserk])');
   },
 
 
@@ -47,7 +47,7 @@ AutoPlay = {
     }
 
     if(this.observer){
-      console.log("Another instance of auto-play already running. Aborting");
+      Log.info("Another instance of auto-play already running. Aborting");
       return;
     }
     
@@ -63,13 +63,13 @@ AutoPlay = {
     this.observer.stop();
     this.observer = null;
     if (this.autoPlayTimeout) clearTimeout(this.autoPlayTimeout);
-    console.log("Auto-play stopped");
+    Log.info("Auto-play stopped");
     return 'OK';
   },
 
 
   _printConfig: function(){
-    console.log('Started auto-play on profile ' + this.profile +
+    Log.info('Started auto-play on profile ' + this.profile +
                 '\n balance multiplier set to ' + this.balanceMultiplier + 
                 '\n balance multiplier extent set to ' + this.balanceMultiplierExtent + '%' + 
                 '\n timer range set to ' + this.timerRange + 
@@ -92,11 +92,11 @@ AutoPlay = {
 
   _setBehaviour: function(profile) {
     if(!_.has(profiles,profile)){
-      console.log("Unknown profile: " + profile);
+      Log.info("Unknown profile: " + profile);
       profile = "shy";
     }
     
-    console.log("Profile set to " + profile);
+    Log.info("Profile set to " + profile);
 
     _.extend(this, profiles[profile]);
   },
@@ -111,7 +111,7 @@ AutoPlay = {
         var user = Meteor.user();
         
         if(user.balance === 0) {
-          console.log("Balance is zero, stopping auto-play.");
+          Log.info("Balance is zero, stopping auto-play.");
           this.stop();
         }
 
@@ -120,7 +120,7 @@ AutoPlay = {
         var range = this._createRange();
 
         this.autoPlayTimeout = window.setTimeout(function(){
-          console.log("Auto-play: betting ฿" + intToBtc(intAmount) + " on ["+range.min + "," + range.max + "]");
+          Log.info("Auto-play: betting ฿" + intToBtc(intAmount) + " on ["+range.min + "," + range.max + "]");
           Meteor.call("submitBet", intAmount, range.min, range.max);
         }.bind(this), _.random(BTO.TIMER_BACKTOGAME, BTO.TIMER_BACKTOGAME + this.timerRange));
       }.bind(this)

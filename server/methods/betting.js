@@ -32,7 +32,7 @@ Meteor.methods({
 
           var updateTextRange = (rangeMin === rangeMax) ? "single number " + rangeMin + "!" : rangeMin + "-" + rangeMax;
           DB.activity(Meteor.user().username + " updates bet to ฿" + intToBtc(amount) + " on " + updateTextRange, 'user');
-        } else { console.warn('SECWARN: Identical updated bet blocked'); }
+        } else { Log.warn('SECWARN: Identical updated bet blocked'); }
 
       }else{
         Collections.Bets.insert({
@@ -65,9 +65,9 @@ Meteor.methods({
         Collections.Bets.remove({_id: bet._id});
         var revokeTextRange = (bet.rangeMin === bet.rangeMax) ? "single number " + bet.rangeMin + "!" : bet.rangeMin + "-" + bet.rangeMax;
         DB.activity(Meteor.user().username + " revokes bet (was ฿" + intToBtc(bet.amount) + " on " + revokeTextRange + ")", 'user');
-      } else { console.warn('SECWARN: Trying to revoke a bet that didn\'t exist'); }
+      } else { Log.warn('SECWARN: Trying to revoke a bet that didn\'t exist'); }
 
-    } else { console.warn('SECWARN: Trying to revoke a bet while there is no game in place'); }
+    } else { Log.warn('SECWARN: Trying to revoke a bet while there is no game in place'); }
     
   }
 });
@@ -109,7 +109,7 @@ function validBet(amount, rangeMin, rangeMax){
   }
 
   var userName = (Meteor.user().username) ? Meteor.user().username : 'Unknown user';
-  if (!isValidBet) console.warn('SECWARN: ' + userName + ' attempted to pass an invalid bet. Reason(s):' + reason);
+  if (!isValidBet) Log.warn('SECWARN: ' + userName + ' attempted to pass an invalid bet. Reason(s):' + reason);
 
   return isValidBet;
 

@@ -4,7 +4,7 @@ Template.bankDeposit.helpers({
       return Session.get('qrCodeImg');
     } else {
       Meteor.call('getQrImg', function(err, qrCode) {
-        if (err) console.error(err);
+        if (err) Log.error(err);
         Session.set('qrCodeImg', qrCode); // contains the img tag
       });
     }

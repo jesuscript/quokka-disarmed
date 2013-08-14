@@ -24,7 +24,7 @@ Meteor.publish('connectionsMonitor', function() {
         Collections.Connections.update({}, {$inc: {usersObserving: 1}});
       }
     }, function(e) {
-      console.error(e);
+      Log.error(e);
     }));
 
     this._session.socket.on('close', Meteor.bindEnvironment(function() {
@@ -34,7 +34,7 @@ Meteor.publish('connectionsMonitor', function() {
         Collections.Connections.update({}, {$inc: {usersLoggedIn: -1}});
       }
     }, function(e) {
-      console.error('close error', e);
+      Log.error('close error', e);
     }));
   }
 });

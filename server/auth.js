@@ -37,7 +37,7 @@ function getNewBitcoinAddress() {
   var Future = Npm.require("fibers/future");
   var fut = new Future();
   btcdClient.getNewAddress(function(err, data) {
-    if (err) console.error(err);
+    if (err) Log.error(err);
     fut.return(data);
   });
   var address = fut.wait();

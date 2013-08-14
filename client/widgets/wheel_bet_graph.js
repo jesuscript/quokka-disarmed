@@ -88,7 +88,7 @@ $.widget("bto.wheelBetGraph",$.bto.betGraph,{
         this._updateTotalValue();
         this._wheelDefineD3Sequence();
       //} else { 
-       // console.warn('duplicate autorun output ignored in stacked bet graph');
+       // Log.warn('duplicate autorun output ignored in stacked bet graph');
        // console.dir(betCollection);
       }
     }

@@ -28,7 +28,7 @@ function validMsg(msg){
     isValidMsg = false;
   }
 
-  if (!isValidMsg) console.warn('SECWARN: Attempt to pass invalid chat message detected. Reason: ' + reason);
+  if (!isValidMsg) Log.warn('SECWARN: Attempt to pass invalid chat message detected. Reason: ' + reason);
 
   return isValidMsg;
 }
