@@ -5,7 +5,7 @@ Meteor.methods({
     check(argRangeMax, Number);
     
     if(validBet(argAmount, argRangeMin, argRangeMax)){
-      // nothing but integers should on in Mongo. 10.0 is not valid, and will be parsed as a float
+      // nothing but integers should on in Mongo. 10.0 is not valid, and will be parsed as a float and casted to a long (bizarrely)
       var amount = parseInt(argAmount, 10); 
       var rangeMin = parseInt(argRangeMin, 10);
       var rangeMax = parseInt(argRangeMax, 10);
@@ -80,36 +80,37 @@ function validBet(amount, rangeMin, rangeMax){
   var reason = '';
 
   if (!Meteor.userId()) {
-    reason = 'Invalid User'; 
+    reason = reason + '\n' + '* invalid user'; 
     isValidBet = false;
   }
 
   if ((rangeMin <= 0) || (rangeMin > rangeMax) || (rangeMax > 100)) {
-    reason = 'Invalid Range'; 
+    reason = reason + '\n' + '* invalid range: ' + rangeMin + '-' + rangeMax; 
     isValidBet = false;
   }
 
   if (Meteor.user().balance < amount) {
-    reason = 'Amount > User Balance';
+    reason = reason + '\n' + '* amount > user balance: ' + Meteor.user().balance + ' < ' + amount;
     isValidBet = false;
   }
 
   if (!isValidInt(amount)) {
-    reason = 'Amount is of invalid type';
+    reason = reason + '\n' + '* amount is of invalid type: ' + amount;
     isValidBet = false;
   }
 
   if (amount <= 0) {
-    reason = 'Amount <= 0';
+    reason = reason + '\n' + '* amount <= 0: ' + amount;
     isValidBet = false;
   }
 
   if (!isValidInt(rangeMin) || !isValidInt(rangeMax)) {
-    reason = 'RangeMin or rangeMax of invalid type';
+    reason = reason + '\n' + '* rangeMin or rangeMax of invalid type: ' + rangeMin + '-' + rangeMax;
     isValidBet = false;
   }
 
-  if (!isValidBet) console.warn('SECWARN: Attempt to pass invalid bet detected. Reason: ' + reason);
+  var userName = (Meteor.user().username) ? Meteor.user().username : 'Unknown user';
+  if (!isValidBet) console.warn('SECWARN: ' + userName + ' attempted to pass an invalid bet. Reason(s):' + reason);
 
   return isValidBet;
 
