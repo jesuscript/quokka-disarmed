@@ -80,7 +80,7 @@ AutoPlay = {
   _createRange: function(){
     if(!this.rangeTightness) return {min: 1, max: 100};
     
-    var a = _.random(1,100 - this.rangeTightness + 1);
+    var a = _.random(1, 100 - this.rangeTightness);
     var b = (a + _.random(0, this.rangeTightness));
 
     return {
