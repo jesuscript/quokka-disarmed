@@ -5,7 +5,6 @@ Meteor.methods({
     check(argRangeMax, Match.Integer);
     
     if(validBet(argAmount, argRangeMin, argRangeMax)){
-      // nothing but integers should on in Mongo. 10.0 is not valid, and will be parsed as a float and casted to a long (bizarrely)
       var amount = parseInt(argAmount, 10); 
       var rangeMin = parseInt(argRangeMin, 10);
       var rangeMax = parseInt(argRangeMax, 10);
