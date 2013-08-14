@@ -13,7 +13,8 @@ Meteor.startup(function(){
   if(! DB.currentGame()){ 
     Collections.Games.insert({
       completed: false,
-      createdAt: (new Date()).getTime()
+      createdAt: (new Date()).getTime(),
+      publicSeq: 1
     });
   }
 });

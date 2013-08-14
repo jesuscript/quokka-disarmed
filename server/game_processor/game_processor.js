@@ -43,8 +43,7 @@ Meteor.startup(function(){
     DB.activity("The Lucky Number for game #" + currentGame.publicSeq + " is " + luckyNum, "luckyNum");
     
     GameStats.recordStats(payouts, bets, luckyNum);// needs to be here so that DB.activity() calls follow a logical progression
-    
-    var newSeq = (isValidInt(currentGame.publicSeq)) ? ++currentGame.publicSeq : 1; // this might fail on first game on a freshly reset server
+    var newSeq = ++currentGame.publicSeq;
     Collections.Games.insert({
       completed: false,
       publicSeq: newSeq,
