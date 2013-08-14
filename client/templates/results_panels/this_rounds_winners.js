@@ -1,6 +1,5 @@
 Template.thisRoundsWinners.helpers({
   winners: function(){
-
     var gameResults = Collections.GameResults.find({won: {$gt: 0}}, {sort: {won: -1}}).fetch();
     if(!gameResults) return [];
 
