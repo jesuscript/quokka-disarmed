@@ -7,3 +7,6 @@ preserve-inputs
 less
 accounts-password
 audit-argument-checks
+standard-app-packages
+bitcoin
+qrcode-npm
