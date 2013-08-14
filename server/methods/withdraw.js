@@ -77,7 +77,7 @@ function getReceivedByAddress(address, numconf) {
   var fut = new Future();
   btcdClient.getReceivedByAddress(address, numconf, function(err, data) {
     if (err) console.error(err);
-    fut.ret(btcToInt(data));
+    fut.return(btcToInt(data));
   });
   return fut.wait();
 }
