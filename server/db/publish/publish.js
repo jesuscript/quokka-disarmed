@@ -45,10 +45,7 @@ Meteor.publish('gameResults', function(){ //only publishes for the previous game
     var previousGame = Collections.Games.findOne({publicSeq: currentGame.publicSeq-1});
     if (!previousGame) return; // again I don't like this but it's possible for meteor to throw during the gap between a game ending and the new game creation
     var previousGameId = previousGame._id;
-    return Collections.GameResults.find(
-      {gameId: previousGameId },
-      {sort: {won: -1}, limit: 9}
-    );
+    return Collections.GameResults.find({gameId: previousGameId});
   }
 });
 
