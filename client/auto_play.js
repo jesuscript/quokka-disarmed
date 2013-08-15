@@ -5,21 +5,21 @@ var profiles = {
     profile: 'shy', // profile name
     balanceMultiplier: 0.02, // what % of current bal the bot will play per bet
     balanceMultiplierExtent: 5, // what max % of the placed bet the bot will play on top of the current bet
-    timerRange: 10000, // will wait 0-timerange after the back to game timer has expired to rebet
+    timerRange: 90, // will wait 0-timerange % of game duration after the back to game timer has expired to rebet
     rangeTightness: 70 // will play 1-rangeTightness number per bet
   },
   normal: {
     profile: 'normal',
     balanceMultiplier: 0.04,
     balanceMultiplierExtent: 20,
-    timerRange: 6000,
+    timerRange: 60,
     rangeTightness: 50
   },
-  berserk: {
+  nuts: {
     profile: 'bezerk',
     balanceMultiplier: 0.06,
     balanceMultiplierExtent: 100,
-    timerRange: 2000,
+    timerRange: 20,
     rangeTightness: 10
   },
   // house should be a bot file we run separetely and privately
@@ -28,7 +28,7 @@ var profiles = {
     profile: "house",
     balanceMultiplier: 0.2,
     balanceMultiplierExtent: 0,
-    timerRange:0,
+    timerRange: 1, // 0 leads to throws due to known Deps bug in collection publishing
     rangeTightness: null
   }
 };
@@ -37,7 +37,7 @@ var profiles = {
 
 AutoPlay = {
   help: function() {
-    Log.info('arguments: AutoPlay.([shy|normal|berserk])');
+    Log.info('arguments: AutoPlay.([shy|normal|nuts])');
   },
 
 
@@ -72,7 +72,7 @@ AutoPlay = {
     Log.info('Started auto-play on profile ' + this.profile +
                 '\n balance multiplier set to ' + this.balanceMultiplier + 
                 '\n balance multiplier extent set to ' + this.balanceMultiplierExtent + '%' + 
-                '\n timer range set to ' + this.timerRange + 
+                '\n timer range % set to ' + this.timerRange + '%' + 
                 '\n range tightness set to ' + this.rangeTightness);
   },
 
@@ -122,7 +122,7 @@ AutoPlay = {
         this.autoPlayTimeout = window.setTimeout(function(){
           Log.info("Auto-play: betting ฿" + intToBtc(intAmount) + " on ["+range.min + "," + range.max + "]");
           Meteor.call("submitBet", intAmount, range.min, range.max);
-        }.bind(this), _.random(BTO.TIMER_BACKTOGAME, BTO.TIMER_BACKTOGAME + this.timerRange));
+        }.bind(this), _.random(BTO.TIMER_BACKTOGAME, BTO.TIMER_BACKTOGAME + (BTO.TIMER_GAME_DURATION * this.timerRange / 100)));
       }.bind(this)
     });
   }
