@@ -136,11 +136,11 @@ def app_deploy():
       sudo('tar xzf bto.tgz -C /var/www')
       cmt('Deleting remote bundle')
       sudo('rm -f bto.tgz')
-    with cd('/var/www/bundle/server/node_modules/'):
+    with cd('/var/www/bundle/programs/server/node_modules/'):
       cmt('Deleting native fibers from the untarred bundle')
       sudo('rm -rf ./fibers')
       cmt('Recreating native fibers')
-      sudo('/root/.nave/installed/0.8.25/bin/npm install fibers@1.0.0')
+      sudo('/root/.nave/installed/0.8.25/bin/npm install fibers@1.0.1')
     cmt('Restarting meteor-app service')
     sudo('start meteor-app')
     cmt('Script Completed Successfully')
