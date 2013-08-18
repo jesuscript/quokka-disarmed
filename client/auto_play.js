@@ -1,4 +1,4 @@
-/*global _, AutoPlay, Meteor, Collections, intToBtc, BTO */
+/*global _, AutoPlay, Meteor, Collections, intToBtc, BTO, Log */
 
 var profiles = {
   shy: {
@@ -16,7 +16,7 @@ var profiles = {
     rangeTightness: 50
   },
   nuts: {
-    profile: 'bezerk',
+    profile: 'nuts',
     balanceMultiplier: 0.06,
     balanceMultiplierExtent: 100,
     timerRange: 20,
@@ -25,7 +25,7 @@ var profiles = {
   // house should be a bot file we run separetely and privately
   // This file is just a sample bot to give people ideas
   house:{
-    profile: "house",
+    profile: 'house',
     balanceMultiplier: 0.2,
     balanceMultiplierExtent: 0,
     timerRange: 1, // 0 leads to throws due to known Deps bug in collection publishing
@@ -43,11 +43,11 @@ AutoPlay = {
 
   start: function(profile){
     if(!Meteor.user()){
-      throw new Error("You need to sign in in order to auto-play");
+      throw new Error('You need to sign in in order to auto-play');
     }
 
     if(this.observer){
-      Log.info("Another instance of auto-play already running. Aborting");
+      Log.info('Another instance of auto-play already running. Aborting');
       return;
     }
     
@@ -63,7 +63,7 @@ AutoPlay = {
     this.observer.stop();
     this.observer = null;
     if (this.autoPlayTimeout) clearTimeout(this.autoPlayTimeout);
-    Log.info("Auto-play stopped");
+    Log.info('Auto-play stopped');
     return 'OK';
   },
 
@@ -92,11 +92,11 @@ AutoPlay = {
 
   _setBehaviour: function(profile) {
     if(!_.has(profiles,profile)){
-      Log.info("Unknown profile: " + profile);
-      profile = "shy";
+      Log.info('Unknown profile: ' + profile);
+      profile = 'shy';
     }
     
-    Log.info("Profile set to " + profile);
+    Log.info('Profile set to ' + profile);
 
     _.extend(this, profiles[profile]);
   },
@@ -104,14 +104,11 @@ AutoPlay = {
 
   _startObserving: function(){
     this.observer = Collections.Games.find({completed: false}).observeChanges({
-      // we suppress initial or else bots stat betting immediately, which would be fine if 
-      // if we had written code to handle things like sniffing were the timer is at, but is brand
-      // new feature in itself and will therefore wait for v2
       added: function(){
         var user = Meteor.user();
         
         if(user.balance === 0) {
-          Log.info("Balance is zero, stopping auto-play.");
+          Log.info('Balance is zero, stopping auto-play.');
           this.stop();
         }
 
@@ -120,8 +117,8 @@ AutoPlay = {
         var range = this._createRange();
 
         this.autoPlayTimeout = window.setTimeout(function(){
-          Log.info("Auto-play: betting ฿" + intToBtc(intAmount) + " on ["+range.min + "," + range.max + "]");
-          Meteor.call("submitBet", intAmount, range.min, range.max);
+          Log.info('Auto-play: betting ฿' + intToBtc(intAmount) + ' on ['+range.min + ',' + range.max + ']');
+          Meteor.call('submitBet', intAmount, range.min, range.max);
         }.bind(this), _.random(BTO.TIMER_BACKTOGAME, BTO.TIMER_BACKTOGAME + (BTO.TIMER_GAME_DURATION * this.timerRange / 100)));
       }.bind(this)
     });
