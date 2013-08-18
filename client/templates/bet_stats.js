@@ -1,3 +1,5 @@
+/*global Meteor, Collections, Template, Spinner, Quokka, BTO, intToBtc, _ */
+
 Template.betStats.rendered = function() {
   var spinnerOpts = {
     lines: 6, // The number of lines to draw
@@ -34,8 +36,8 @@ Template.betStats.helpers({
     var returnVal = {};
     if(playerBet){
       var allBets = Collections.Bets.find().fetch(); // bets only pull from the current game._id
-      var betAggregates = (new Quokka(allBets,  BTO.COMMISSION_RATE)).getBetStats(Meteor.userId()); 
-
+      var betAggregates = (new Quokka(allBets, BTO.COMMISSION_RATE)).getBetStats(Meteor.userId());
+      
       if(allBets.length > 1) {
         _.extend(returnVal, {
           extendedBetInfo: true,
