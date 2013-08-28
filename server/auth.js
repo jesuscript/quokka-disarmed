@@ -1,3 +1,5 @@
+/*global Accounts, Meteor, Npm, btcdClient, AddressPool, Log, validEmail, _ */
+
 Accounts.config({sendVerificationEmail: true, forbidClientAccountCreation: false}); 
 
 Accounts.onCreateUser(function(options,user){
@@ -11,19 +13,19 @@ Accounts.onCreateUser(function(options,user){
 
 Accounts.validateNewUser(function(user){
   if(Meteor.users.find({username: user.username}).count()){
-    throw new Meteor.Error(409, "Username is in use");
+    throw new Meteor.Error(409, 'Username is in use');
   }
 
   if(user.username === undefined || user.username.length < 1){
-    throw new Meteor.Error(400, "Empty username");
+    throw new Meteor.Error(400, 'Empty username');
   }
 
   if(user.username.length > 12){
-    throw new Meteor.Error(406, "Username too long");
+    throw new Meteor.Error(406, 'Username too long');
   }
 
   if(!validEmail(user.emails[0].address)){
-    throw new Meteor.Error(417, "Invalid email address");
+    throw new Meteor.Error(417, 'Invalid email address');
   }
 
   Meteor.users.remove({_id: user._id});
@@ -34,7 +36,7 @@ Accounts.validateNewUser(function(user){
 
 
 function getNewBitcoinAddress() {
-  var Future = Npm.require("fibers/future");
+  var Future = Npm.require('fibers/future');
   var fut = new Future();
   btcdClient.getNewAddress(function(err, data) {
     if (err) Log.error(err);
