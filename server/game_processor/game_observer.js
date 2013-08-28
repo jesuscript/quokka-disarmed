@@ -8,7 +8,7 @@ Observe.currentGame = function(callbacks, runCallbacks){
   var observeBets = function(){
     var currentGame = gameCursor.fetch()[0];
     gameCursor.rewind(); //FFFFFFFFFFFFFUUUUUUUUUUUUUUUUUUUUUUUUUUUU
-    
+
     if(betsHandle) {
       betsHandle.stop();
     }
@@ -16,14 +16,12 @@ Observe.currentGame = function(callbacks, runCallbacks){
     if(! currentGame) return;
 
     betsHandle = Collections.Bets.find({gameId: currentGame._id}).observeChanges({ 
-      _suppress_initial: true,
       added: callbacks.betUpdate,
       removed: callbacks.betUpdate
     });
   };
 
   gameHandle = gameCursor.observeChanges({
-    _suppress_initial: true,
     added: observeBets
   });
 

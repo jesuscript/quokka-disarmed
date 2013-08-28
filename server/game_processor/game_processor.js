@@ -33,22 +33,28 @@ Meteor.startup(function(){
     _.each(finalAmounts, function(finalAmount, id){
       Meteor.users.update({_id: id}, {$inc: {balance: finalAmount}});
     });
-    
-    Collections.Games.update(currentGame, {$set:{
+
+    Collections.Games.update({completed: false}, {$set:{
       completedAt: (new Date()).getTime(),
       completed: true,
       luckyNum: luckyNum
-    }});
+    }},{
+      multi: true
+    });
 
     DB.activity("The Lucky Number for game #" + currentGame.publicSeq + " is " + luckyNum, "luckyNum");
     
     GameStats.recordStats(payouts, bets, luckyNum);// needs to be here so that DB.activity() calls follow a logical progression
     var newSeq = ++currentGame.publicSeq;
+
+
     Collections.Games.insert({
       completed: false,
       publicSeq: newSeq,
       createdAt: (new Date()).getTime()
     });
+
+
 
     DB.activity("New game #" + newSeq + " starts", "game");
   };
